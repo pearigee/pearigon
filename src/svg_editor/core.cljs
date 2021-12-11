@@ -15,14 +15,17 @@
 
 (defn shape->svg [shape]
   (case (:type shape)
-    :circle [:circle {:cx (:x shape) :cy (:y shape) :r (:r shape)}]))
+    :circle [:circle {:cx (+ (:x shape) (:offset-x shape)) 
+                      :cy (+ (:y shape) (:offset-y shape)) 
+                      :r (:r shape)
+                      :opacity (if (:selected shape) 0.5 1)}]))
 
 (defn editor []
   [:div {:style {:height "100%"}}
-   [:div "Mouse position: " (str (:mouse @state))]
    [:svg {:width "100%" :height "100%"}
     (for [shape (:shapes @state)]
-      ^{:key shape} [shape->svg shape])]])
+      ^{:key shape} [shape->svg shape])]
+   [:div "Mouse position: " (str (:mouse @state))]])
 
 (defn set-tool [tool]
   (swap! state assoc :tool tool))
@@ -36,12 +39,13 @@
 (defn eval-hotkey [key]
   (let [mouse (:mouse @state)]
     (case key
-      :a (add-shape (shapes/circle (:page-x mouse) (:page-y mouse) 40)))))
+      :a (add-shape (shapes/circle (:page-x mouse) (:page-y mouse) 40))
+      :g (set-tool (tools/grab mouse)))))
 
 (defn eval-mouse-tool [mouse-state]
   (case (:type (:tool @state))
     :grab (if (:left mouse-state) 
-            (swap! state assoc :tool nil)
+            (tools/finish-grab state)
             (tools/apply-grab state mouse-state))
     nil))
 

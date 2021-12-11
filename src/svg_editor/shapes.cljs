@@ -5,9 +5,17 @@
   (swap! id-state inc)
   @id-state)
 
+(defn shape [value]
+  (merge {:id (next-id)
+          :x 0
+          :y 0
+          :offset-x 0
+          :offset-y 0}
+         value))
+
 (defn circle [x y r]
-  {:id (next-id)
-   :type :circle
-   :x x
-   :y y
-   :r r})
+  (shape {:id (next-id)
+          :type :circle
+          :x x
+          :y y
+          :r r}))

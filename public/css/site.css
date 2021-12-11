@@ -1,6 +1,8 @@
 body {
   font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
   height: 100vh;
+  padding: 0;
+  margin: 0;
 }
 
 #app {
