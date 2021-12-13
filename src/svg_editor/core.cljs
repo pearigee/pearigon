@@ -4,14 +4,9 @@
    [reagent.dom :as d]
    [svg-editor.shapes :as shapes]
    [svg-editor.tools :as tools]
-   [svg-editor.selection :as selection]))
+   [svg-editor.state :as state]))
 
-(def state
-  (r/atom {:shapes []
-           :mouse {:page-x 0
-                   :page-y 0}
-           :tool nil
-           :next-id 0}))
+(def s (state/initial-state))
 
 (defn shape->svg [shape]
   (case (:type shape)
@@ -23,30 +18,22 @@
 (defn editor []
   [:div {:style {:height "100%"}}
    [:svg {:width "100%" :height "100%"}
-    (for [shape (:shapes @state)]
+    (for [shape (:shapes @s)]
       ^{:key shape} [shape->svg shape])]
-   [:div "Mouse position: " (str (:mouse @state))]])
-
-(defn set-tool [tool]
-  (swap! state assoc :tool tool))
-
-(defn add-shape [shape]
-  (selection/deselect-all state)
-  (swap! state update-in [:shapes] conj
-         (merge shape {:selected true}))
-  (set-tool (tools/grab (:mouse @state))))
+   [:div "Mouse position: " (str (:mouse @s))]])
 
 (defn eval-hotkey [key]
-  (let [mouse (:mouse @state)]
+  (let [mouse (:mouse @s)]
     (case key
-      :a (add-shape (shapes/circle (:page-x mouse) (:page-y mouse) 40))
-      :g (set-tool (tools/grab mouse)))))
+      :a (do (state/add-shape s (shapes/circle (:page-x mouse) (:page-y mouse) 40))
+             (state/set-tool s (tools/grab mouse)))
+      :g (state/set-tool s (tools/grab mouse)))))
 
 (defn eval-mouse-tool [mouse-state]
-  (case (:type (:tool @state))
+  (case (:type (:tool @s))
     :grab (if (:left mouse-state) 
-            (tools/finish-grab state)
-            (tools/apply-grab state mouse-state))
+            (tools/finish-grab s)
+            (tools/apply-grab s mouse-state))
     nil))
 
 (defn bind-keys []
@@ -56,22 +43,24 @@
 
 (defn bind-mouse []
   (let [body (aget js/document "body")]
-    (.addEventListener body
-                       "mousemove"
-                       (fn [event]
-                         (let [mouse-state {:page-x (aget event "pageX")
-                                            :page-y (aget event "pageY")}]
-                           (swap! state assoc :mouse
-                                  mouse-state)
-                           (eval-mouse-tool mouse-state))))
-    (.addEventListener body
-                       "click"
-                       (fn [event]
-                         (let [mouse-state {:page-x (aget event "pageX")
-                                            :page-y (aget event "pageY")
-                                            :left (= (aget event "button") 0)}]
-                           (js/console.log event)
-                           (eval-mouse-tool mouse-state))))))
+    (.addEventListener
+     body
+     "mousemove"
+     (fn [event]
+       (let [mouse-state {:page-x (aget event "pageX")
+                          :page-y (aget event "pageY")}]
+         (state/set-mouse-state s mouse-state)
+         (eval-mouse-tool mouse-state))))
+    (.addEventListener
+     body
+     "click"
+     (fn [event]
+       (let [mouse-state {:page-x (aget event "pageX")
+                          :page-y (aget event "pageY")
+                          :left (= (aget event "button") 0)}]
+         (state/set-mouse-state s (select-keys mouse-state
+                                              [:page-x :page-y]))
+         (eval-mouse-tool mouse-state))))))
 
 (defn mount-root []
   (d/render [editor] (.getElementById js/document "app")))
