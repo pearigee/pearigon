@@ -13,8 +13,7 @@
      #(if (:selected %)
         (merge % {:offset-x (- (:page-x mouse-state) (:x grab))
                   :offset-y (- (:page-y mouse-state) (:y grab))})
-        %))
-    (js/console.log (:shapes @state))))
+        %))))
 
 (defn finish-grab [state]
   (state/map-shapes
@@ -25,5 +24,4 @@
                 :y (+ (:y %) (:offset-y %))
                 :offset-y 0})
       %))
-  (js/console.log (:shapes @state))
   (state/set-tool state nil))

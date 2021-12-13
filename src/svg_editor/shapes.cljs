@@ -3,7 +3,7 @@
 (def id-state (atom 0))
 (defn next-id []
   (swap! id-state inc)
-  @id-state)
+  (str "shape-" @id-state))
 
 (defn shape [value]
   (merge {:id (next-id)

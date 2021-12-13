@@ -16,6 +16,12 @@
 (defn deselect-all [state]
   (map-shapes state #(assoc % :selected false)))
 
+(defn select-id
+  ([state id selected?] (map-shapes state #(if (= id (:id %))
+                                                (merge % {:selected selected?})
+                                                %)))
+  ([state id] (select-id state id true)))
+
 (defn set-tool [state tool]
   (swap! state assoc :tool tool))
 
