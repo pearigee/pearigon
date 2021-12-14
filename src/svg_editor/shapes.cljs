@@ -14,8 +14,14 @@
          value))
 
 (defn circle [x y r]
-  (shape {:id (next-id)
-          :type :circle
+  (shape {:type :circle
           :x x
           :y y
           :r r}))
+
+(defn rect [x y w h]
+  (shape {:type :rect 
+          :x x 
+          :y y
+          :w w 
+          :h h}))

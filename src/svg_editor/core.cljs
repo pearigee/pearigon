@@ -3,11 +3,10 @@
    [reagent.core :as r]
    [reagent.dom :as d]
    [clojure.string :as str]
-   [svg-editor.shapes :as shapes]
    [svg-editor.tools :as tools]
    [svg-editor.state :as state]))
 
-(def s (state/initial-state))
+(def s (r/atom (state/initial-state)))
 
 (comment (defn shape-onclick [shape]
            (fn [event]
@@ -17,16 +16,25 @@
                (state/select s shape (not (:selected shape))))))
          )
 
+(defn apply-selected-style [shape]
+  (if (:selected shape)
+    {:stroke "lime"
+     :stroke-width  "5px"}
+    {}))
+
 (defn shape->svg [shape]
   (case (:type shape)
     :circle [:circle (merge {:id (:id shape)
                              :cx (+ (:x shape) (:offset-x shape))
                              :cy (+ (:y shape) (:offset-y shape))
                              :r (:r shape)}
-                            (if (:selected shape)
-                              {:stroke "lime"
-                               :stroke-width  "5px"}
-                              {}))]))
+                            (apply-selected-style shape))]
+    :rect [:rect (merge {:id (:id shape)
+                         :x (+ (:x shape) (:offset-x shape))
+                         :y (+ (:y shape) (:offset-y shape))
+                         :width (:w shape)
+                         :height (:h shape)}
+                        (apply-selected-style shape))]))
 
 (defn editor []
   [:div {:style {:height "100%"}}
@@ -36,11 +44,17 @@
    [:div "Mouse position: " (str (:mouse @s))]])
 
 (defn eval-hotkey [key]
-  (let [mouse (:mouse @s)]
-    (case key
-      :a (do (state/add-shape s (shapes/circle (:page-x mouse) (:page-y mouse) 40))
-             (state/set-tool s (tools/grab mouse)))
-      :g (state/set-tool s (tools/grab mouse)))))
+  (let [tool-key-callback (:on-keypress (state/get-tool s))]
+    (if tool-key-callback
+      (do 
+        (js/console.log "Calling tool callback: " key)
+        (tool-key-callback s key))
+      (let [mouse (:mouse @s)]
+        (js/console.log "Getting tool for hotkey: " key)
+        (case key
+          :a (tools/add-shape s)
+          :g (tools/grab s mouse)
+          nil)))))
 
 (defn eval-mouse-move [mouse-state]
   (case (:type (:tool @s))
@@ -57,10 +71,21 @@
             (state/select-id s target-id))
         (state/deselect-all s)))))
 
+(defn keyboard-event->key [event]
+  (let [key (aget event "key")
+        shift (aget event "shiftKey")
+        ctrl (aget event "ctrlKey")]
+    (keyword (str (if shift "shift-" "")
+                  (if ctrl "ctrl-" "")
+                  key))))
+
 (defn bind-keys []
   (js/document.addEventListener
    "keypress"
-   (fn [event] (eval-hotkey (keyword (aget event "key"))))))
+   (fn [event] 
+     (let [key (keyboard-event->key event)]
+       (js/console.log "Keypress: " key)
+       (eval-hotkey key)))))
 
 (defn bind-mouse []
   (let [body (aget js/document "body")]

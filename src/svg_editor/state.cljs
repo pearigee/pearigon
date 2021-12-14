@@ -1,12 +1,25 @@
-(ns svg-editor.state
-  (:require [reagent.core :as r]))
+(ns svg-editor.state)
 
 (defn initial-state []
-  (r/atom {:shapes []
-           :mouse {:page-x 0
-                   :page-y 0}
-           :tool nil
-           :next-id 0}))
+  {:shapes []
+   :mouse {:page-x 0
+           :page-y 0}
+   :tool nil
+   :next-id 0})
+
+(defn get-mouse-state [state]
+  (:mouse @state))
+
+(defn get-tool [state]
+  (:tool @state))
+
+(defn get-shapes [state]
+  (:shapes @state))
+
+(defn get-selected[state]
+  (filter
+   :selected
+   (get-shapes state)))
 
 (defn map-shapes [state f]
   (swap! state update-in [:shapes]
@@ -23,6 +36,7 @@
   ([state id] (select-id state id true)))
 
 (defn set-tool [state tool]
+  (js/console.log "Tool selected: " tool)
   (swap! state assoc :tool tool))
 
 (defn add-shape [state shape]
