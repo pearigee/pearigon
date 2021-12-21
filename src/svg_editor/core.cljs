@@ -4,43 +4,16 @@
    [reagent.dom :as d]
    [clojure.string :as str]
    [svg-editor.tools :as tools]
-   [svg-editor.state :as state]))
+   [svg-editor.state :as state]
+   [svg-editor.svg :as svg]))
 
 (def s (r/atom (state/initial-state)))
-
-(comment (defn shape-onclick [shape]
-           (fn [event]
-             (let [shift (aget event "shiftKey")]
-               (js/console.log event shift)
-               (when-not shift (state/deselect-all s))
-               (state/select s shape (not (:selected shape))))))
-         )
-
-(defn apply-selected-style [shape]
-  (if (:selected shape)
-    {:stroke "lime"
-     :stroke-width  "5px"}
-    {}))
-
-(defn shape->svg [shape]
-  (case (:type shape)
-    :circle [:circle (merge {:id (:id shape)
-                             :cx (+ (:x shape) (:offset-x shape))
-                             :cy (+ (:y shape) (:offset-y shape))
-                             :r (:r shape)}
-                            (apply-selected-style shape))]
-    :rect [:rect (merge {:id (:id shape)
-                         :x (+ (:x shape) (:offset-x shape))
-                         :y (+ (:y shape) (:offset-y shape))
-                         :width (:w shape)
-                         :height (:h shape)}
-                        (apply-selected-style shape))]))
 
 (defn editor []
   [:div {:style {:height "100%"}}
    [:svg {:width "100%" :height "100%"}
     (for [shape (:shapes @s)]
-      ^{:key shape} [shape->svg shape])]
+      ^{:key shape} [svg/shape->svg shape])]
    [:div "Mouse position: " (str (:mouse @s))]])
 
 (defn eval-hotkey [key]
