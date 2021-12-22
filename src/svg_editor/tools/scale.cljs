@@ -10,7 +10,7 @@
         axis (:axis tool)
         mpos (:pos event)]
     (js/console.log mpos impos)
-    (state/map-shapes
+    (state/map-shapes!
      state
      #(if (:selected %)
         (merge % {:offset-scale (case axis
@@ -30,12 +30,12 @@
     shape))
 
 (defn- scale-click [state]
-  (state/map-shapes
+  (state/map-shapes!
    state
    #(if (:selected %)
       (apply-scale %)
       %))
-  (state/set-tool state nil))
+  (state/set-tool! state nil))
 
 (defn- scale-keypress [state key]
   (let [axis (case key
@@ -44,14 +44,14 @@
                 nil)
         tool (state/get-tool state)]
     (js/console.log "Setting scale axis:" axis)
-    (state/set-tool state (merge tool {:axis axis}))))
+    (state/set-tool! state (merge tool {:axis axis}))))
 
 (defn scale [state]
   (let [selection (state/get-selected state)
         center (avg (map :pos selection))
         {mpos :pos} (state/get-mouse-state state)]
     (when-not (zero? (count selection))
-      (state/set-tool state {:type :scale
+      (state/set-tool! state {:type :scale
                              :on-mousemove scale-mousemove
                              :on-click scale-click
                              :on-keypress scale-keypress

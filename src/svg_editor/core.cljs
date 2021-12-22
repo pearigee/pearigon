@@ -46,9 +46,9 @@
       ;; Other wise, default to selection action
       (let [target-id (:target-id event)]
         (if (str/starts-with? target-id "shape-")
-          (do (when-not (:shift event) (state/deselect-all s))
-              (state/select-id s target-id))
-          (state/deselect-all s))))))
+          (do (when-not (:shift event) (state/deselect-all! s))
+              (state/select-id! s target-id))
+          (state/deselect-all! s))))))
 
 (defn keyboard-event->key [event]
   (let [key (aget event "key")
@@ -74,7 +74,7 @@
      (fn [event]
        (let [mouse-state {:pos [(aget event "pageX")
                                 (aget event "pageY")]}]
-         (state/set-mouse-state s mouse-state)
+         (state/set-mouse-state! s mouse-state)
          (eval-mouse-move mouse-state))))
     (.addEventListener
      js/document
@@ -84,7 +84,7 @@
                                 (aget event "pageY")]
                           :shift (aget event "shiftKey")
                           :target-id (aget (aget event "target") "id")}]
-         (state/set-mouse-state s (select-keys mouse-state [:pos]))
+         (state/set-mouse-state! s (select-keys mouse-state [:pos]))
          (eval-mouse-click mouse-state))))))
 
 (defn mount-root []

@@ -12,10 +12,10 @@
                 nil)]
     (js/console.log "Shape selected:" shape)
     (if shape
-      (do (state/add-shape-and-select state shape)
+      (do (state/add-shape-and-select! state shape)
           (grab state mouse))
-      (state/set-tool state nil))))
+      (state/set-tool! state nil))))
 
 (defn add [state]
-  (state/set-tool state {:type :add-shape
+  (state/set-tool! state {:type :add-shape
                          :on-keypress add-keypress}))
