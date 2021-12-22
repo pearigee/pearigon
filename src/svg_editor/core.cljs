@@ -3,7 +3,9 @@
    [reagent.core :as r]
    [reagent.dom :as d]
    [clojure.string :as str]
-   [svg-editor.tools :as tools]
+   [svg-editor.tools.grab :refer [grab]]
+   [svg-editor.tools.add :refer [add]]
+   [svg-editor.tools.scale :refer [scale]]
    [svg-editor.state :as state]
    [svg-editor.svg :as svg]))
 
@@ -25,24 +27,28 @@
       (let [mouse (:mouse @s)]
         (js/console.log "Getting tool for hotkey: " key)
         (case key
-          :a (tools/add-shape s)
-          :g (tools/grab s mouse)
+          :a (add s)
+          :s (scale s)
+          :g (grab s mouse)
           nil)))))
 
-(defn eval-mouse-move [mouse-state]
-  (case (:type (:tool @s))
-    :grab (tools/apply-grab s mouse-state)
-    nil))
+(defn eval-mouse-move [event]
+  (let [tool (state/get-tool s)
+        on-mousemove (:on-mousemove tool)]
+    (when on-mousemove (on-mousemove s event))))
 
-(defn eval-mouse-click [mouse-state]
-  (js/console.log "click" mouse-state)
-  (case (:type (:tool @s))
-    :grab (tools/finish-grab s)
-    (let [target-id (:target-id mouse-state)] 
-      (if (str/starts-with? target-id "shape-")
-        (do (when-not (:shift mouse-state) (state/deselect-all s))
-            (state/select-id s target-id))
-        (state/deselect-all s)))))
+(defn eval-mouse-click [event]
+  (js/console.log "click" event)
+  (let [tool (state/get-tool s)
+        on-click (:on-click tool)]
+    (if on-click
+      (on-click s event)
+      ;; Other wise, default to selection action
+      (let [target-id (:target-id event)]
+        (if (str/starts-with? target-id "shape-")
+          (do (when-not (:shift event) (state/deselect-all s))
+              (state/select-id s target-id))
+          (state/deselect-all s))))))
 
 (defn keyboard-event->key [event]
   (let [key (aget event "key")
@@ -67,7 +73,9 @@
      "mousemove"
      (fn [event]
        (let [mouse-state {:page-x (aget event "pageX")
-                          :page-y (aget event "pageY")}]
+                          :page-y (aget event "pageY")
+                          :pos [(aget event "pageX")
+                                (aget event "pageY")]}]
          (state/set-mouse-state s mouse-state)
          (eval-mouse-move mouse-state))))
     (.addEventListener
@@ -76,10 +84,12 @@
      (fn [event]
        (let [mouse-state {:page-x (aget event "pageX")
                           :page-y (aget event "pageY")
+                          :pos [(aget event "pageX")
+                                (aget event "pageY")]
                           :shift (aget event "shiftKey")
                           :target-id (aget (aget event "target") "id")}]
          (state/set-mouse-state s (select-keys mouse-state
-                                              [:page-x :page-y]))
+                                              [:page-x :page-y :pos]))
          (eval-mouse-click mouse-state))))))
 
 (defn mount-root []

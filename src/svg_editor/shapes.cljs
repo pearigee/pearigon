@@ -7,21 +7,17 @@
 
 (defn shape [value]
   (merge {:id (next-id)
-          :x 0
-          :y 0
-          :offset-x 0
-          :offset-y 0}
+          :pos [0 0]
+          :offset [0 0]
+          :offset-scale [0 0]}
          value))
 
 (defn circle [x y r]
   (shape {:type :circle
-          :x x
-          :y y
+          :pos [x y]
           :r r}))
 
 (defn rect [x y w h]
-  (shape {:type :rect 
-          :x x 
-          :y y
-          :w w 
-          :h h}))
+  (shape {:type :rect
+          :pos [x y]
+          :dim [w h]}))

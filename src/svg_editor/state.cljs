@@ -39,7 +39,7 @@
   (js/console.log "Tool selected: " tool)
   (swap! state assoc :tool tool))
 
-(defn add-shape [state shape]
+(defn add-shape-and-select [state shape]
   (deselect-all state)
   (swap! state update-in [:shapes] conj
          (merge shape {:selected true})))

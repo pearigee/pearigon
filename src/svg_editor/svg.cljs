@@ -1,4 +1,5 @@
-(ns svg-editor.svg)
+(ns svg-editor.svg
+  (:require [svg-editor.vector :refer [v+]]))
 
 (defn apply-selected-style [shape]
   (if (:selected shape)
@@ -7,15 +8,22 @@
     {}))
 
 (defn shape->svg [shape]
-  (case (:type shape)
-    :circle [:circle (merge {:id (:id shape)
-                             :cx (+ (:x shape) (:offset-x shape))
-                             :cy (+ (:y shape) (:offset-y shape))
-                             :r (:r shape)}
-                            (apply-selected-style shape))]
-    :rect [:rect (merge {:id (:id shape)
-                         :x (+ (:x shape) (:offset-x shape))
-                         :y (+ (:y shape) (:offset-y shape))
-                         :width (:w shape)
-                         :height (:h shape)}
-                        (apply-selected-style shape))]))
+  (let [{pos :pos
+         offset :offset
+         type :type
+         id :id} shape
+        [x y] pos
+        [ox oy] offset]
+    (case type
+      :circle [:circle (merge {:id id
+                               :cx (+ x ox)
+                               :cy (+ y oy)
+                               :r (+ (:r shape) (apply max (:offset-scale shape)))}
+                              (apply-selected-style shape))]
+      :rect [:rect (let [[w h] (v+ (:dim shape) (:offset-scale shape))]
+                     (merge {:id id
+                             :x (- (+ x ox) (/ w 2))
+                             :y (- (+ y oy) (/ h 2))
+                             :width w
+                             :height h}
+                            (apply-selected-style shape)))])))
