@@ -3,8 +3,9 @@
 
 (defn apply-selected-style [shape]
   (if (:selected shape)
-    {:stroke "lime"
-     :stroke-width  "5px"}
+    {:stroke "#1fd2ff"
+     :stroke-width  "3px"
+     :stroke-dasharray "4"}
     {}))
 
 (defn shape->svg [shape]
