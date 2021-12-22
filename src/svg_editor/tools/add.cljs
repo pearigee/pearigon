@@ -5,8 +5,7 @@
 
 (defn- add-keypress [state key]
   (let [mouse (state/get-mouse-state state)
-        {x :page-x
-         y :page-y} mouse
+        {[x y] :pos} mouse
         shape (case key
                 :r (shapes/rect x y 40 40)
                 :c (shapes/circle x y 20)

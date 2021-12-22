@@ -1,11 +1,11 @@
 (ns svg-editor.tools.grab
   (:require [svg-editor.state :as state]
-            [svg-editor.vector :refer [v+]]))
+            [svg-editor.vector :refer [v+ v-]]))
 
-(defn- grab-mousemove [state mouse-state]
-  (let [grab (state/get-tool state)
-        offset [(- (:page-x mouse-state) (:x grab))
-                (- (:page-y mouse-state) (:y grab))]]
+(defn- grab-mousemove [state]
+  (let [{impos :impos} (state/get-tool state)
+        {mpos :pos} (state/get-mouse-state state)
+        offset (v- mpos impos)]
     (state/map-shapes
      state
      #(if (:selected %)
@@ -25,5 +25,4 @@
   (state/set-tool state {:type :grab
                          :on-mousemove grab-mousemove
                          :on-click grab-click
-                         :x (:page-x initial-mouse-state)
-                         :y (:page-y initial-mouse-state)}))
+                         :impos (:pos initial-mouse-state)}))

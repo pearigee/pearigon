@@ -72,9 +72,7 @@
      body
      "mousemove"
      (fn [event]
-       (let [mouse-state {:page-x (aget event "pageX")
-                          :page-y (aget event "pageY")
-                          :pos [(aget event "pageX")
+       (let [mouse-state {:pos [(aget event "pageX")
                                 (aget event "pageY")]}]
          (state/set-mouse-state s mouse-state)
          (eval-mouse-move mouse-state))))
@@ -82,14 +80,11 @@
      js/document
      "mousedown"
      (fn [event]
-       (let [mouse-state {:page-x (aget event "pageX")
-                          :page-y (aget event "pageY")
-                          :pos [(aget event "pageX")
+       (let [mouse-state {:pos [(aget event "pageX")
                                 (aget event "pageY")]
                           :shift (aget event "shiftKey")
                           :target-id (aget (aget event "target") "id")}]
-         (state/set-mouse-state s (select-keys mouse-state
-                                              [:page-x :page-y :pos]))
+         (state/set-mouse-state s (select-keys mouse-state [:pos]))
          (eval-mouse-click mouse-state))))))
 
 (defn mount-root []

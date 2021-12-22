@@ -2,8 +2,7 @@
 
 (defn initial-state []
   {:shapes []
-   :mouse {:page-x 0
-           :page-y 0}
+   :mouse {:pos [0 0]}
    :tool nil
    :next-id 0})
 
