@@ -6,19 +6,15 @@
   (let [{impos :impos} (state/get-tool state)
         {mpos :pos} (state/get-mouse-state state)
         offset (v- mpos impos)]
-    (state/map-shapes!
+    (state/map-selected-shapes!
      state
-     #(if (:selected %)
-        (merge % {:offset offset})
-        %))))
+     #(merge % {:offset offset}))))
 
 (defn- grab-click [state]
-  (state/map-shapes!
+  (state/map-selected-shapes!
    state
-   #(if (:selected %)
-      (merge % {:pos (v+ (:pos %) (:offset %))
-                :offset [0 0]})
-      %))
+   #(merge % {:pos (v+ (:pos %) (:offset %))
+              :offset [0 0]}))
   (state/set-tool! state nil))
 
 (defn grab [state initial-mouse-state]

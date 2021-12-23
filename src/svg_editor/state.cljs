@@ -25,6 +25,14 @@
          (fn [shapes]
            (map f shapes))))
 
+(defn map-selected-shapes! [state f]
+  (swap! state update-in [:shapes]
+         (fn [shapes]
+           (map (fn [shape] 
+                  (if (:selected shape) 
+                    (f shape)
+                    shape)) shapes))))
+
 (defn deselect-all! [state]
   (map-shapes! state #(assoc % :selected false)))
 

@@ -10,15 +10,13 @@
         axis (:axis tool)
         mpos (:pos event)]
     (js/console.log mpos impos)
-    (state/map-shapes!
+    (state/map-selected-shapes!
      state
-     #(if (:selected %)
-        (merge % {:offset-scale (case axis
+     #(merge % {:offset-scale (case axis
                                   :x [(first (v- mpos impos)) 0]
                                   :y [0 (second (v- mpos impos))]
                                   (let [scale (- (dist mpos center) initial-dist)] 
-                                    [scale scale]))})
-        %))
+                                    [scale scale]))}))
     (js/console.log (state/get-shapes state))))
 
 (defn apply-scale [shape]
