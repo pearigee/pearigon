@@ -18,4 +18,4 @@
 
 (defn add [state]
   (state/set-tool! state {:type :add-shape
-                         :on-keypress add-keypress}))
+                          :on-keypress add-keypress}))

@@ -13,10 +13,10 @@
     (state/map-selected-shapes!
      state
      #(merge % {:offset-scale (case axis
-                                  :x [(first (v- mpos impos)) 0]
-                                  :y [0 (second (v- mpos impos))]
-                                  (let [scale (- (dist mpos center) initial-dist)] 
-                                    [scale scale]))}))
+                                :x [(first (v- mpos impos)) 0]
+                                :y [0 (second (v- mpos impos))]
+                                (let [scale (- (dist mpos center) initial-dist)]
+                                  [scale scale]))}))
     (js/console.log (state/get-shapes state))))
 
 (defn apply-scale [shape]
@@ -37,9 +37,9 @@
 
 (defn- scale-keypress [state key]
   (let [axis (case key
-                :x :x
-                :y :y
-                nil)
+               :x :x
+               :y :y
+               nil)
         tool (state/get-tool state)]
     (js/console.log "Setting scale axis:" axis)
     (state/set-tool! state (merge tool {:axis axis}))))
@@ -50,10 +50,10 @@
         {mpos :pos} (state/get-mouse-state state)]
     (when-not (zero? (count selection))
       (state/set-tool! state {:type :scale
-                             :on-mousemove scale-mousemove
-                             :on-click scale-click
-                             :on-keypress scale-keypress
-                             :center center
-                             :impos mpos
-                             :dist (dist center mpos)
-                             :axis nil}))))
+                              :on-mousemove scale-mousemove
+                              :on-click scale-click
+                              :on-keypress scale-keypress
+                              :center center
+                              :impos mpos
+                              :dist (dist center mpos)
+                              :axis nil}))))
