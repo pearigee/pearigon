@@ -1,10 +1,12 @@
-(ns svg-editor.state)
+(ns svg-editor.state
+  (:require [svg-editor.keymap :as keys]))
 
 (defn initial-state []
   {:shapes []
    :mouse {:pos [0 0]}
    :tool nil
-   :next-id 0})
+   :next-id 0
+   :suggestions (keys/get-suggestions nil)})
 
 (defn get-mouse-state [state]
   (:mouse @state))
@@ -42,9 +44,13 @@
                                                 %)))
   ([state id] (select-id! state id true)))
 
+(defn set-suggestions! [state suggestions]
+  (swap! state assoc :suggestions suggestions))
+
 (defn set-tool! [state tool]
   (js/console.log "Tool selected: " tool)
-  (swap! state assoc :tool tool))
+  (swap! state assoc :tool tool)
+  (set-suggestions! state (keys/get-suggestions (get-tool state))))
 
 (defn add-shape-and-select! [state shape]
   (deselect-all! state)

@@ -6,17 +6,29 @@
    [svg-editor.tools.grab :refer [grab]]
    [svg-editor.tools.add :refer [add]]
    [svg-editor.tools.scale :refer [scale]]
+   [svg-editor.keymap :as keys]
    [svg-editor.state :as state]
    [svg-editor.svg :as svg]))
 
 (def s (r/atom (state/initial-state)))
 
+(defn suggestion-display [suggestions]
+  (let [tool-name (:tool suggestions)
+        keys (:keys suggestions)]
+    [:div.suggestions 
+     (if tool-name 
+       [:div.tag.is-primary tool-name]
+       [:div.tag.is-primary.is-light "No Tool"])
+     (for [k keys]
+       ^{:key k} [:div [:span.tag.key-suggestion (:key-display k)] 
+                  [:span.is-size-7 (:display k)]])]))
+
 (defn editor []
-  [:div {:style {:height "100%"}}
-   [:svg {:width "100%" :height "100%"}
+  [:div.viewport
+   [:svg
     (for [shape (:shapes @s)]
       ^{:key shape} [svg/shape->svg shape])]
-   [:div "Mouse position: " (str (:mouse @s))]])
+   [suggestion-display (:suggestions @s)]])
 
 (defn eval-hotkey [key]
   (let [tool-key-callback (:on-keypress (state/get-tool s))]
@@ -26,10 +38,10 @@
         (tool-key-callback s key))
       (let [mouse (:mouse @s)]
         (js/console.log "Getting tool for hotkey: " key)
-        (case key
-          :a (add s)
-          :s (scale s)
-          :g (grab s mouse)
+        (condp = key
+          (keys/get-key :add) (add s)
+          (keys/get-key :scale) (scale s)
+          (keys/get-key :grab)(grab s mouse)
           nil)))))
 
 (defn eval-mouse-move [event]

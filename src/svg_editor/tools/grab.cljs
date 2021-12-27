@@ -19,6 +19,7 @@
 
 (defn grab [state initial-mouse-state]
   (state/set-tool! state {:type :grab
+                          :display "Grab"
                           :on-mousemove grab-mousemove
                           :on-click grab-click
                           :impos (:pos initial-mouse-state)}))

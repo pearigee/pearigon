@@ -1,5 +1,6 @@
 (ns svg-editor.tools.scale
   (:require [svg-editor.state :as state]
+            [svg-editor.keymap :as keys]
             [svg-editor.vector :refer [avg dist v+ v-]]))
 
 (defn- scale-mousemove [state event]
@@ -36,9 +37,9 @@
   (state/set-tool! state nil))
 
 (defn- scale-keypress [state key]
-  (let [axis (case key
-               :x :x
-               :y :y
+  (let [axis (condp = key
+               (keys/get-key :scale.x-axis) :x
+               (keys/get-key :scale.y-axis) :y
                nil)
         tool (state/get-tool state)]
     (js/console.log "Setting scale axis:" axis)
@@ -50,6 +51,7 @@
         {mpos :pos} (state/get-mouse-state state)]
     (when-not (zero? (count selection))
       (state/set-tool! state {:type :scale
+                              :display "Scale"
                               :on-mousemove scale-mousemove
                               :on-click scale-click
                               :on-keypress scale-keypress
