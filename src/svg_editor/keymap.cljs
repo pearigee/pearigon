@@ -17,7 +17,10 @@
    :add.rect {:key :r
               :display "Rectangle"}
    :add.circle {:key :c
-                :display "Circle"}})
+                :display "Circle"}
+   
+   :material {:key :m
+              :display "Material Editor"}})
 
 (defn get-key [id]
   (get-in keymap [id :key]))

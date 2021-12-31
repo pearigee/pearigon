@@ -8,6 +8,7 @@
 (defn shape [value]
   (merge {:id (next-id)
           :pos [0 0]
+          :material :default
           :offset [0 0]
           :offset-scale [0 0]}
          value))

@@ -8,7 +8,9 @@
    [svg-editor.tools.scale :refer [scale]]
    [svg-editor.keymap :as keys]
    [svg-editor.state :as state]
-   [svg-editor.svg :as svg]))
+   [svg-editor.svg :as svg]
+   [svg-editor.tools.material :refer [material]]
+   [svg-editor.view.sidebar :refer [sidebar]]))
 
 (def s (r/atom (state/initial-state)))
 
@@ -24,11 +26,14 @@
                   [:span.is-size-7 (:display k)]])]))
 
 (defn editor []
-  [:div.viewport
-   [:svg
-    (for [shape (:shapes @s)]
-      ^{:key shape} [svg/shape->svg shape])]
-   [suggestion-display (:suggestions @s)]])
+  (let [materials (state/get-materials s)]
+    [:div.app
+     [:div.viewport
+      [:svg {:id "svg-root"}
+       (for [shape (:shapes @s)]
+         ^{:key shape} [svg/shape->svg shape materials])]
+      [suggestion-display (:suggestions @s)]]
+     [sidebar s]]))
 
 (defn eval-hotkey [key]
   (let [tool-key-callback (:on-keypress (state/get-tool s))]
@@ -41,7 +46,8 @@
         (condp = key
           (keys/get-key :add) (add s)
           (keys/get-key :scale) (scale s)
-          (keys/get-key :grab)(grab s mouse)
+          (keys/get-key :grab) (grab s mouse)
+          (keys/get-key :material) (material s)
           nil)))))
 
 (defn eval-mouse-move [event]
@@ -60,7 +66,9 @@
         (if (str/starts-with? target-id "shape-")
           (do (when-not (:shift event) (state/deselect-all! s))
               (state/select-id! s target-id))
-          (state/deselect-all! s))))))
+          (when (and (= (:target-id event) "svg-root")
+                     (not (:shift event))) 
+            (state/deselect-all! s)))))))
 
 (defn keyboard-event->key [event]
   (let [key (aget event "key")
@@ -73,10 +81,12 @@
 (defn bind-keys []
   (js/document.addEventListener
    "keypress"
-   (fn [event] 
-     (let [key (keyboard-event->key event)]
-       (js/console.log "Keypress: " key)
-       (eval-hotkey key)))))
+   (fn [event]
+     ;; Don't capture input events from text inputs
+     (when (not= (.-tagName js/document.activeElement) "INPUT")
+       (let [key (keyboard-event->key event)]
+         (js/console.log "Keypress: " key)
+         (eval-hotkey key))))))
 
 (defn bind-mouse []
   (let [body (aget js/document "body")]
