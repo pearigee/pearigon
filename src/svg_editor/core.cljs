@@ -26,10 +26,13 @@
                   [:span.is-size-7 (:display k)]])]))
 
 (defn editor []
-  (let [materials (state/get-materials s)]
+  (let [materials (state/get-materials s)
+        [zvx zvy] (state/get-view-pos-with-zoom s)
+        [zdx zdy] (state/get-view-dim-with-zoom s)]
     [:div.app
      [:div.viewport
-      [:svg {:id "svg-root"}
+      [:svg {:id "svg-root"
+             :view-box (str zvx " " zvy " " zdx " " zdy)}
        (for [shape (:shapes @s)]
          ^{:key shape} [svg/shape->svg shape materials])]
       [suggestion-display (:suggestions @s)]]
@@ -94,8 +97,10 @@
      body
      "mousemove"
      (fn [event]
-       (let [mouse-state {:pos [(aget event "pageX")
-                                (aget event "pageY")]}]
+       (let [[vx vy] (state/get-view-pos-with-zoom s)
+             z (state/get-view-zoom-scale s)
+             mouse-state {:pos [(+ (/ (aget event "pageX") z) vx)
+                                (+ (/ (aget event "pageY") z) vy)]}]
          (state/set-mouse-state! s mouse-state)
          (eval-mouse-move mouse-state))))
     (.addEventListener
@@ -106,8 +111,27 @@
                                 (aget event "pageY")]
                           :shift (aget event "shiftKey")
                           :target-id (aget (aget event "target") "id")}]
-         (state/set-mouse-state! s (select-keys mouse-state [:pos]))
          (eval-mouse-click mouse-state))))))
+
+(defn bind-scroll []
+  (let [svg (js/document.getElementById "svg-root")]
+    ;; TODO: Scale scrolling with zoom for even sensitivity.
+    (.addEventListener svg 
+                       "mousewheel"
+                       (fn [event]
+                         (.preventDefault event)
+                         (let [x (aget event "deltaX")
+                               y (aget event "deltaY")
+                               ctrl (aget event "ctrlKey")]
+                           (if ctrl
+                             ;; This is a pinch to zoom. Delta is in `y`.
+                             (state/view-zoom! s y)
+                             ;; This is a normal scroll
+                             (state/move-view-pos! s [x y])))))))
+
+(defn bind-resize []
+  (.addEventListener js/window "resize" 
+                     #(state/update-view-size! s)))
 
 (defn mount-root []
   (d/render [editor] (.getElementById js/document "app")))
@@ -115,7 +139,10 @@
 (defn init []
   (mount-root)
   (bind-keys)
-  (bind-mouse))
+  (bind-mouse)
+  (bind-scroll)
+  (bind-resize)
+  (state/update-view-size! s))
 
 (defn ^:export init! []
   (init))
