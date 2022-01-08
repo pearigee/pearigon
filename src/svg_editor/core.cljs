@@ -80,12 +80,9 @@
 
 (defn keyboard-event->key
   [event]
-  (let [key (aget event "key")
-        shift (aget event "shiftKey")
-        ctrl (aget event "ctrlKey")]
-    (keyword (str (if shift "shift-" "")
-                  (if ctrl "ctrl-" "")
-                  key))))
+  (let [key (.-key event)
+        ctrl (.-ctrlKey event)]
+    (keyword (str (if ctrl "ctrl-" "") key))))
 
 (defn bind-keys
   []
@@ -100,25 +97,25 @@
 
 (defn bind-mouse
   []
-  (let [body (aget js/document "body")]
+  (let [body (.-body js/document)]
     (.addEventListener
       body
       "mousemove"
       (fn [event]
         (let [[vx vy] (state/get-view-pos-with-zoom s)
               z (state/get-view-zoom-scale s)
-              mouse-state {:pos [(+ (/ (aget event "pageX") z) vx)
-                                 (+ (/ (aget event "pageY") z) vy)]}]
+              mouse-state {:pos [(+ (/ (.-pageX event) z) vx)
+                                 (+ (/ (.-pageY event) z) vy)]}]
           (state/set-mouse-state! s mouse-state)
           (eval-mouse-move mouse-state))))
     (.addEventListener
       js/document
       "mousedown"
       (fn [event]
-        (let [mouse-state {:pos [(aget event "pageX")
-                                 (aget event "pageY")]
-                           :shift (aget event "shiftKey")
-                           :target-id (aget (aget event "target") "id")}]
+        (let [mouse-state {:pos [(.-pageX event)
+                                 (.-pageY event)]
+                           :shift (.-shiftKey event)
+                           :target-id (-> event .-target .-id)}]
           (eval-mouse-click mouse-state))))))
 
 (defn bind-scroll
@@ -129,9 +126,9 @@
                        "mousewheel"
                        (fn [event]
                          (.preventDefault event)
-                         (let [x (aget event "deltaX")
-                               y (aget event "deltaY")
-                               ctrl (aget event "ctrlKey")]
+                         (let [x (.-deltaX event)
+                               y (.-deltaY event)
+                               ctrl (.-ctrlKey event)]
                            (if ctrl
                              ;; This is a pinch to zoom. Delta is in `y`.
                              (state/view-zoom! s y)
