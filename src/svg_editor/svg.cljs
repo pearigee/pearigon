@@ -1,14 +1,17 @@
 (ns svg-editor.svg
-  (:require [svg-editor.vector :refer [v+]]))
+  (:require
+    [svg-editor.vector :refer [v+]]))
 
-(defn apply-selected-style [shape]
+(defn apply-selected-style
+  [shape]
   (if (:selected shape)
     {:stroke "#1fd2ff"
      :stroke-width  "3px"
      :stroke-dasharray "4"}
     {}))
 
-(defn shape->svg [shape materials]
+(defn shape->svg
+  [shape materials]
   (let [{pos :pos
          offset :offset
          material-id :material

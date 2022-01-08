@@ -1,9 +1,10 @@
 (ns user
   (:require
-   [shadow.cljs.devtools.api :as shadow]
-   [ring.middleware.resource :refer [wrap-resource]]))
+    [ring.middleware.resource :refer [wrap-resource]]
+    [shadow.cljs.devtools.api :as shadow]))
 
 (def app (wrap-resource identity "public"))
 
-(defn cljs []
+(defn cljs
+  []
   (shadow/repl :app))

@@ -1,26 +1,33 @@
 (ns svg-editor.vector)
 
-(defn v+ [a b]
+(defn v+
+  [a b]
   (mapv + a b))
 
-(defn v- [a b]
+(defn v-
+  [a b]
   (mapv - a b))
 
-(defn v* [a b]
+(defn v*
+  [a b]
   (mapv * a b))
 
-(defn sum [vecs]
+(defn sum
+  [vecs]
   (reduce v+ vecs))
 
-(defn avg [vecs]
+(defn avg
+  [vecs]
   (let [[a b] (sum vecs)
         len (count vecs)]
     [(/ a len) (/ b len)]))
 
-(defn norm [vec]
+(defn norm
+  [vec]
   (js/Math.sqrt (reduce + (v* vec vec))))
 
-(defn dist [a b]
+(defn dist
+  [a b]
   (norm (v- a b)))
 
 (comment

@@ -1,11 +1,13 @@
 (ns svg-editor.view.material
-  (:require ["react-colorful" :rename {HexColorPicker hex-color-picker}]
-            [svg-editor.state :as state]
-            [reagent.core :as r]
-            ["@tabler/icons" :rename {IconPlus add-icon
-                                      IconPaint apply-icon}]))
+  (:require
+    ["@tabler/icons" :rename {IconPlus add-icon
+                              IconPaint apply-icon}]
+    ["react-colorful" :rename {HexColorPicker hex-color-picker}]
+    [reagent.core :as r]
+    [svg-editor.state :as state]))
 
-(defn material-editor [state]
+(defn material-editor
+  [state]
   (let [m-state (r/atom {:selected :default})
         get-selected (fn [] (state/get-material state (:selected @m-state)))]
     (fn []
@@ -37,8 +39,8 @@
        [:button.button.is-small.is-success
         {:on-click (fn []
                      (state/map-selected-shapes!
-                      state
-                      #(merge % {:material (:selected @m-state)})))}
+                       state
+                       #(merge % {:material (:selected @m-state)})))}
         [:span.icon.is-small
          [:> apply-icon]]
         [:span "Apply to Selected"]]
@@ -48,10 +50,10 @@
                       :on-change (fn [event]
                                    (js/console.log event)
                                    (state/set-material!
-                                    state
-                                    (:selected @m-state)
-                                    (merge (get-selected)
-                                           {:display (-> event .-target .-value)})))}]
+                                     state
+                                     (:selected @m-state)
+                                     (merge (get-selected)
+                                            {:display (-> event .-target .-value)})))}]
        [:label "Material Type"]
        [:div.select {:style {:width "100%"
                              :margin-bottom "10px"}}
@@ -63,8 +65,8 @@
         {:color (:color (get-selected))
          :on-change (fn [color]
                       (state/set-material!
-                       state
-                       (:selected @m-state)
-                       (merge (get-selected)
-                              {:color color})))}]
+                        state
+                        (:selected @m-state)
+                        (merge (get-selected)
+                               {:color color})))}]
        [:hr]])))

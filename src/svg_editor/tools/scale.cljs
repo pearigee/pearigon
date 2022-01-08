@@ -1,9 +1,11 @@
 (ns svg-editor.tools.scale
-  (:require [svg-editor.state :as state]
-            [svg-editor.keymap :as keys]
-            [svg-editor.vector :refer [avg dist v+ v-]]))
+  (:require
+    [svg-editor.keymap :as keys]
+    [svg-editor.state :as state]
+    [svg-editor.vector :refer [avg dist v+ v-]]))
 
-(defn- scale-mousemove [state event]
+(defn- scale-mousemove
+  [state event]
   (let [tool (state/get-tool state)
         initial-dist (:dist tool)
         center (:center tool)
@@ -12,15 +14,16 @@
         mpos (:pos event)]
     (js/console.log mpos impos)
     (state/map-selected-shapes!
-     state
-     #(merge % {:offset-scale (case axis
-                                :x [(first (v- mpos impos)) 0]
-                                :y [0 (second (v- mpos impos))]
-                                (let [scale (- (dist mpos center) initial-dist)]
-                                  [scale scale]))}))
+      state
+      #(merge % {:offset-scale (case axis
+                                 :x [(first (v- mpos impos)) 0]
+                                 :y [0 (second (v- mpos impos))]
+                                 (let [scale (- (dist mpos center) initial-dist)]
+                                   [scale scale]))}))
     (js/console.log (state/get-shapes state))))
 
-(defn apply-scale [shape]
+(defn apply-scale
+  [shape]
   (case (:type shape)
     :rect (merge shape {:dim (v+ (:dim shape) (:offset-scale shape))
                         :offset-scale [0 0]})
@@ -28,15 +31,17 @@
                           :offset-scale [0 0]})
     shape))
 
-(defn- scale-click [state]
+(defn- scale-click
+  [state]
   (state/map-shapes!
-   state
-   #(if (:selected %)
-      (apply-scale %)
-      %))
+    state
+    #(if (:selected %)
+       (apply-scale %)
+       %))
   (state/set-tool! state nil))
 
-(defn- scale-keypress [state key]
+(defn- scale-keypress
+  [state key]
   (let [axis (condp = key
                (keys/get-key :scale.x-axis) :x
                (keys/get-key :scale.y-axis) :y
@@ -45,7 +50,8 @@
     (js/console.log "Setting scale axis:" axis)
     (state/set-tool! state (merge tool {:axis axis}))))
 
-(defn scale [state]
+(defn scale
+  [state]
   (let [selection (state/get-selected state)
         center (avg (map :pos selection))
         {mpos :pos} (state/get-mouse-state state)]

@@ -1,10 +1,12 @@
 (ns svg-editor.tools.add
-  (:require [svg-editor.state :as state]
-            [svg-editor.shapes :as shapes]
-            [svg-editor.tools.grab :refer [grab]]
-            [svg-editor.keymap :as keys]))
+  (:require
+    [svg-editor.keymap :as keys]
+    [svg-editor.shapes :as shapes]
+    [svg-editor.state :as state]
+    [svg-editor.tools.grab :refer [grab]]))
 
-(defn- add-keypress [state key]
+(defn- add-keypress
+  [state key]
   (let [mouse (state/get-mouse-state state)
         {[x y] :pos} mouse
         shape (condp = key
@@ -17,7 +19,8 @@
           (grab state mouse))
       (state/set-tool! state nil))))
 
-(defn add [state]
+(defn add
+  [state]
   (state/set-tool! state {:type :add
                           :display "Add Shape"
                           :on-keypress add-keypress}))
