@@ -2,7 +2,7 @@
 ** Tools
 *** Grab [0/1]
     - [ ] Enable axis constraint with ~x~ and ~y~.
-*** Duplicate [/]
+*** Duplicate [0/1]
     - [ ] Create initial duplication tool for current selection.
 *** Path Tool [0/1]
     - Design
@@ -13,5 +13,9 @@
     - [ ] Initial prototype.
 
 * Bugs
+** Tools
+*** Grab [0/1]
+    - [ ] Pressing invalid hotkey fails to apply grab, rather than
+      canceling as expected.
 ** Navigation [0/1]
    - [ ] Need to scale scrolling with zoom level.
