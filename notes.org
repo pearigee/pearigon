@@ -1,21 +1,19 @@
-* Features
-** Tools
-*** Grab [0/1]
-    - [ ] Enable axis constraint with ~x~ and ~y~.
-*** Duplicate [0/1]
-    - [ ] Create initial duplication tool for current selection.
-*** Path Tool [0/1]
-    - Design
-      - My hope is to add points at your current mouse position via
-        the hotkeys ~s~ for sharp and ~r~ for round.
-      - The round points will become quadratic SVG points.
-      - I will need the ability to draw a tool overlay.
-    - [ ] Initial prototype.
+#+TODO: FEATURE BUG DESIGN | DONE OBSOLETE
 
-* Bugs
+* Features
+** Navigation
+*** Multitouch
+**** BUG Need to scale with zoom level
 ** Tools
-*** Grab [0/1]
-    - [ ] Pressing invalid hotkey fails to apply grab, rather than
-      canceling as expected.
-** Navigation [0/1]
-   - [ ] Need to scale scrolling with zoom level.
+*** Grab
+**** FEATURE Enable axis constrains with ~x~ and ~y~.
+**** BUG Pressing invalid hotkey fails to cancel as expected
+*** Duplicate
+**** FEATURE Initial duplicate implemenation
+*** Path Tool
+**** DESIGN Basic Design
+       - My hope is to add points at your current mouse position via
+         the hotkeys ~s~ for sharp and ~r~ for round.
+       - The round points will become quadratic SVG points.
+       - I will need the ability to draw a tool overlay with the
+         ability to click to select points.
