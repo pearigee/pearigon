@@ -7,9 +7,36 @@
   A few things to consider:
   - *Multimethods* rather than increasingly complex ~condp~ statements.
   - Have a map of shapes. Do ordering, grouping, and intancing by
-    reference.
+    reference. For example:
+    #+begin_src clojure
+      {;; A registry of shapes
+       :shapes
+       {:shape-id {:path [{:pos [1 1] :type :sharp}
+                    {:pos [1 2] :type :smooth}]
+             :material :mat-id}}
+
+       ;; A registry of materials
+       :materials
+       {:mat-id {:fill "#FF00FF"
+             :stroke-color "#FFFF00"
+             :stroke-width "1px"}}
+
+       ;; The explict draw order
+       :layers [{:shape :shape-id
+                 :tranform [[1 0 0]
+                            [0 1 0]
+                            [0 0 1]]}]}
+    #+end_src
+  - Maintaning matrix transformations would decouple us from the SVG's
+    transformation representation. This frees us from the ~:offset-pos~
+    style state that exist on the shapes currently.
 
 * Features
+** Math
+*** FEATURE Matrix transformation library
+    I need a basic library to handle translation, scale, and rotation
+    of simple transformation matricies. Let's make one! This will
+    enable us to work with raw points instead of awful CSS transforms.
 ** Navigation
 *** Multitouch
 **** BUG Need to scale with zoom level
