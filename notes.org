@@ -1,5 +1,14 @@
 #+TODO: FEATURE BUG DESIGN | DONE OBSOLETE
 
+* Model
+  I think I need to rethink the model. Isn't as easy as I would like
+  for grouping, instancing, and draw order representation.
+
+  A few things to consider:
+  - *Multimethods* rather than increasingly complex ~condp~ statements.
+  - Have a map of shapes. Do ordering, grouping, and intancing by
+    reference.
+
 * Features
 ** Navigation
 *** Multitouch
@@ -7,11 +16,13 @@
 ** Tools
 *** Grab
 **** FEATURE Enable axis constrains with ~x~ and ~y~.
-**** BUG Pressing invalid hotkey fails to cancel as expected
+**** BUG Pressing invalid hotkey fails to cancel as expected.
+*** Layer up/down
+**** FEATURE Implement basic ability to modify draw order.
 *** Duplicate
-**** FEATURE Initial duplicate implemenation
+**** FEATURE Initial duplicate implemenation.
 *** Path Tool
-**** DESIGN Basic Design
+**** DESIGN Basic Design,
        - My hope is to add points at your current mouse position via
          the hotkeys ~s~ for sharp and ~r~ for round.
        - The round points will become quadratic SVG points.

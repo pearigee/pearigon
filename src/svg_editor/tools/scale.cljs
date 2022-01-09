@@ -1,6 +1,6 @@
 (ns svg-editor.tools.scale
   (:require
-    [svg-editor.keymap :as keys]
+    [svg-editor.actions :as action]
     [svg-editor.state :as state]
     [svg-editor.vector :refer [avg dist v+ v-]]))
 
@@ -43,8 +43,8 @@
 (defn- scale-keypress
   [state key]
   (let [axis (condp = key
-               (keys/get-key :scale.x-axis) :x
-               (keys/get-key :scale.y-axis) :y
+               (action/get-key :scale.x-axis) :x
+               (action/get-key :scale.y-axis) :y
                nil)
         tool (state/get-tool state)]
     (js/console.log "Setting scale axis:" axis)

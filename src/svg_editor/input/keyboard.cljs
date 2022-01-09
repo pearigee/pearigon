@@ -1,6 +1,6 @@
 (ns svg-editor.input.keyboard
   (:require
-    [svg-editor.keymap :as keys]
+    [svg-editor.actions :as actions]
     [svg-editor.state :as state]
     [svg-editor.tools.add :refer [add]]
     [svg-editor.tools.grab :refer [grab]]
@@ -17,10 +17,10 @@
       (let [mouse (:mouse @s)]
         (js/console.log "Getting tool for hotkey: " key)
         (condp = key
-          (keys/get-key :add) (add s)
-          (keys/get-key :scale) (scale s)
-          (keys/get-key :grab) (grab s mouse)
-          (keys/get-key :material) (material s)
+          (actions/get-key :add) (add s)
+          (actions/get-key :scale) (scale s)
+          (actions/get-key :grab) (grab s mouse)
+          (actions/get-key :material) (material s)
           nil)))))
 
 (defn- keyboard-event->key

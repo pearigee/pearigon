@@ -1,6 +1,6 @@
 (ns svg-editor.tools.add
   (:require
-    [svg-editor.keymap :as keys]
+    [svg-editor.actions :as actions]
     [svg-editor.shapes :as shapes]
     [svg-editor.state :as state]
     [svg-editor.tools.grab :refer [grab]]))
@@ -10,8 +10,8 @@
   (let [mouse (state/get-mouse-state state)
         {[x y] :pos} mouse
         shape (condp = key
-                (keys/get-key :add.rect) (shapes/rect x y 40 40)
-                (keys/get-key :add.circle) (shapes/circle x y 20)
+                (actions/get-key :add.rect) (shapes/rect x y 40 40)
+                (actions/get-key :add.circle) (shapes/circle x y 20)
                 nil)]
     (js/console.log "Shape selected:" shape)
     (if shape
