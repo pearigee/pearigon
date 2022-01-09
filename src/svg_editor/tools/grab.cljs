@@ -1,7 +1,7 @@
 (ns svg-editor.tools.grab
   (:require
     [svg-editor.state :as state]
-    [svg-editor.vector :refer [v+ v-]]))
+    [svg-editor.math :refer [v+ v-]]))
 
 (defn- grab-mousemove
   [state]

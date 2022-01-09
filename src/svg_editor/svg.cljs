@@ -1,6 +1,6 @@
 (ns svg-editor.svg
   (:require
-    [svg-editor.vector :refer [v+]]))
+    [svg-editor.math :refer [v+]]))
 
 (defn apply-selected-style
   [shape]

@@ -1,4 +1,4 @@
-(ns svg-editor.vector)
+(ns svg-editor.math)
 
 (defn v+
   [a b]

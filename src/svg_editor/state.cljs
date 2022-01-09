@@ -1,7 +1,7 @@
 (ns svg-editor.state
   (:require
     [svg-editor.actions :as actions]
-    [svg-editor.vector :refer [v+]]))
+    [svg-editor.math :refer [v+]]))
 
 (defn initial-state
   []

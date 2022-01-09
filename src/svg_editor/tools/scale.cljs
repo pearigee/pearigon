@@ -2,7 +2,7 @@
   (:require
     [svg-editor.actions :as action]
     [svg-editor.state :as state]
-    [svg-editor.vector :refer [avg dist v+ v-]]))
+    [svg-editor.math :refer [avg dist v+ v-]]))
 
 (defn- scale-mousemove
   [state event]
