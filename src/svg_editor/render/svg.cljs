@@ -1,4 +1,4 @@
-(ns svg-editor.svg
+(ns svg-editor.render.svg
   (:require
     [svg-editor.math :refer [v+]]))
 

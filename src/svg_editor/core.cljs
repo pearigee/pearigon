@@ -6,7 +6,7 @@
     [svg-editor.input.mouse :as mouse]
     [svg-editor.input.resize :as resize]
     [svg-editor.state :as state]
-    [svg-editor.svg :as svg]
+    [svg-editor.render.svg :as svg]
     [svg-editor.view.sidebar :refer [sidebar]]))
 
 (def s (r/atom (state/initial-state)))
