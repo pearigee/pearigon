@@ -16,7 +16,7 @@
    :panel nil
    :tool nil
    :next-id 0
-   :suggestions (actions/get-suggestions nil)})
+   :suggestions (actions/get-key-suggestions nil)})
 
 (defn get-mouse-state
   [state]
@@ -151,7 +151,7 @@
   [state tool]
   (js/console.log "Tool selected: " tool)
   (swap! state assoc :tool tool)
-  (set-suggestions! state (actions/get-suggestions (get-tool state))))
+  (set-suggestions! state (actions/get-key-suggestions (get-tool state))))
 
 (defn add-shape-and-select!
   [state shape]

@@ -54,12 +54,13 @@
       root-keys
       (get-child-keys tool-type))))
 
-(defn get-suggestions
+(defn get-key-suggestions
+  "Get active hotkeys (for the current tool) sorted by key."
   [tool]
   (let [type (:type tool)
         active-keys (get-active-keys type)
         suggestions (map
-                      #(merge % {:key-display (subs (str (:key %)) 1)})
-                      (vals (select-keys actions active-keys)))]
+                     #(merge % {:key-display (subs (str (:key %)) 1)})
+                     (vals (select-keys actions active-keys)))]
     {:tool (:display tool)
-     :keys suggestions}))
+     :keys (sort-by :key-display suggestions)}))
