@@ -1,13 +1,24 @@
-{:source-paths ["src"]
+{:source-paths ["src" "test"]
+
  :dependencies [[binaryage/devtools "1.0.3"]
                 [com.rpl/specter "1.1.3"]
                 [nrepl "0.8.3"]
+                [cider/cider-nrepl "0.28.0"]
                 [reagent "1.1.0"]]
+
  :builds       {:app {:target     :browser
                       :output-dir "public/js"
                       :asset-path "/js"
                       :modules    {:app {:entries [svg-editor.core]}}
-                      :devtools   {:after-load svg-editor.core/mount-root}}}
+                      :devtools   {:after-load svg-editor.core/mount-root}}
+
+                :node-test {:target :node-test
+                            :output-to "out/node/node_tests.js"}
+
+                :browser-test {:target :browser-test
+                               :test-dir "out/browser"
+                               :devtools {:http-port 8021
+                                          :http-root "out/browser"}}}
 
  :dev-http     {3000 {:root    "public"
                       :handler user/app}}}

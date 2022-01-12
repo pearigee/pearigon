@@ -1,3 +1,25 @@
 {:tasks
- {format {:doc "Format the project with cljstyle"
-                 :task (shell "cljstyle" "fix")}}}
+ {:requires ([babashka.fs :as fs])
+
+  format
+  {:doc "Format the project with cljstyle"
+   :task (shell "cljstyle" "fix")}
+
+  dev
+  {:doc "Launch a dev and test server for live development"
+   :task (shell "npx" "shadow-cljs" "watch" "app" "browser-test")}
+
+  test
+  {:doc "Runs all unit tests."
+   :depends [-build-node-tests]
+   :task (shell "node" "out/node/node_tests.js")}
+
+  clean
+  {:doc "Clean up generated directories."
+   :task (do
+           (println "Removing generated test files.")
+           (fs/delete-tree "out"))}
+
+  -build-node-tests
+  {:doc "Compile the tests to a node script."
+   :task (shell "npx" "shadow-cljs" "compile" "node-test")}}}

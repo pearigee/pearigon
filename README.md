@@ -1,15 +1,9 @@
-
-### Development mode
-```
-npm install
-npx shadow-cljs watch app
-```
-start a ClojureScript REPL
-```
-npx shadow-cljs browser-repl
-```
-### Building for production
+### Local Development
 
 ```
-npx shadow-cljs release app
+bb dev
 ```
+
+This will run a live dev (on port 3000) and test (on port 8021) server.
+
+Once running, use `cider-connect-cljs` to jack in.
