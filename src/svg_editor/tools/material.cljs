@@ -4,5 +4,4 @@
 
 (defn material
   [state]
-  (state/set-panel! state :material)
-  (js/console.log @state))
+  (state/set-panel! state :material))

@@ -22,6 +22,10 @@
   [state]
   (:mouse @state))
 
+(defn get-mouse-pos
+  [state]
+  (:pos (:mouse @state)))
+
 (defn get-tool
   [state]
   (:tool @state))

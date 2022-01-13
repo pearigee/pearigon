@@ -47,18 +47,18 @@
     children))
 
 (defn get-active-keys
-  [tool-type]
+  [action]
   (let [actions (keys actions)
         root-keys (filter #(not (str/includes? (str %) ".")) actions)]
-    (if (nil? tool-type)
+    (if (nil? action)
       root-keys
-      (get-child-keys tool-type))))
+      (get-child-keys action))))
 
 (defn get-key-suggestions
   "Get active hotkeys (for the current tool) sorted by key."
   [tool]
-  (let [type (:type tool)
-        active-keys (get-active-keys type)
+  (let [action (:action tool)
+        active-keys (get-active-keys action)
         suggestions (map
                      #(merge % {:key-display (subs (str (:key %)) 1)})
                      (vals (select-keys actions active-keys)))]

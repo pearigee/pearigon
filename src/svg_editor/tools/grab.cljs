@@ -1,29 +1,27 @@
 (ns svg-editor.tools.grab
   (:require
-    [svg-editor.state :as state]
-    [svg-editor.math :refer [v+ v-]]))
+   [svg-editor.state :as state]
+   [svg-editor.tools.protocol :refer [OnMouseMove OnClick]]
+   [svg-editor.math :refer [v+ v-]]))
 
-(defn- grab-mousemove
-  [state]
-  (let [{impos :impos} (state/get-tool state)
-        {mpos :pos} (state/get-mouse-state state)
-        offset (v- mpos impos)]
+(defrecord GrabTool [display action init-mouse-pos]
+  OnMouseMove
+  (on-mouse-move [t s {pos :pos}]
+    (let [offset (v- pos (:init-mouse-pos t))]
+      (state/map-selected-shapes!
+       s
+       #(merge % {:offset offset}))))
+
+  OnClick
+  (on-click [_ s _]
     (state/map-selected-shapes!
-      state
-      #(merge % {:offset offset}))))
-
-(defn- grab-click
-  [state]
-  (state/map-selected-shapes!
-    state
-    #(merge % {:pos (v+ (:pos %) (:offset %))
-               :offset [0 0]}))
-  (state/set-tool! state nil))
+     s
+     #(merge % {:pos (v+ (:pos %) (:offset %))
+                :offset [0 0]}))
+    (state/set-tool! s nil)))
 
 (defn grab
-  [state initial-mouse-state]
-  (state/set-tool! state {:type :grab
-                          :display "Grab"
-                          :on-mousemove grab-mousemove
-                          :on-click grab-click
-                          :impos (:pos initial-mouse-state)}))
+  [s]
+  (state/set-tool! s (GrabTool. "Grab"
+                                :grab
+                                (state/get-mouse-pos s))))

@@ -1,21 +1,22 @@
 (ns svg-editor.input.mouse
   (:require
-    [clojure.string :as str]
-    [svg-editor.state :as state]))
+   [clojure.string :as str]
+   [svg-editor.tools.protocol :refer [OnMouseMove on-mouse-move
+                                      OnClick on-click]]
+   [svg-editor.state :as state]))
 
 (defn- eval-mouse-move
   [s event]
-  (let [tool (state/get-tool s)
-        on-mousemove (:on-mousemove tool)]
-    (when on-mousemove (on-mousemove s event))))
+  (let [t (state/get-tool s)]
+    (when (satisfies? OnMouseMove t)
+      (on-mouse-move t s event))))
 
 (defn- eval-mouse-click
   [s event]
   (js/console.log "click" event)
-  (let [tool (state/get-tool s)
-        on-click (:on-click tool)]
-    (if on-click
-      (on-click s event)
+  (let [t (state/get-tool s)]
+    (if (satisfies? OnClick t)
+      (on-click t s event)
       ;; Other wise, default to selection action
       (let [target-id (:target-id event)]
         (if (str/starts-with? target-id "shape-")

@@ -2,6 +2,7 @@
   (:require
     [svg-editor.actions :as actions]
     [svg-editor.state :as state]
+    [svg-editor.tools.protocol :refer [OnKeypress on-keypress]]
     [svg-editor.tools.add :refer [add]]
     [svg-editor.tools.grab :refer [grab]]
     [svg-editor.tools.material :refer [material]]
@@ -9,19 +10,18 @@
 
 (defn- eval-hotkey
   [s key]
-  (let [tool-key-callback (:on-keypress (state/get-tool s))]
-    (if tool-key-callback
+  (let [tool (state/get-tool s)]
+    (if (satisfies? OnKeypress tool)
       (do
         (js/console.log "Calling tool callback: " key)
-        (tool-key-callback s key))
-      (let [mouse (:mouse @s)]
-        (js/console.log "Getting tool for hotkey: " key)
-        (condp = key
-          (actions/get-key :add) (add s)
-          (actions/get-key :scale) (scale s)
-          (actions/get-key :grab) (grab s mouse)
-          (actions/get-key :material) (material s)
-          nil)))))
+        (on-keypress tool s key))
+      (do (js/console.log "Getting tool for hotkey: " key)
+          (condp = key
+            (actions/get-key :add) (add s)
+            (actions/get-key :scale) (scale s)
+            (actions/get-key :grab) (grab s)
+            (actions/get-key :material) (material s)
+            nil)))))
 
 (defn- keyboard-event->key
   [event]
