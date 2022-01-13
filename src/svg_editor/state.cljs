@@ -18,10 +18,6 @@
    :next-id 0
    :suggestions (actions/get-key-suggestions nil)})
 
-(defn get-mouse-state
-  [state]
-  (:mouse @state))
-
 (defn get-mouse-pos
   [state]
   (:pos (:mouse @state)))
