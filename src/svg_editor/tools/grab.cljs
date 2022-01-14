@@ -2,22 +2,20 @@
   (:require
    [svg-editor.state :as state]
    [svg-editor.tools.protocol :refer [OnMouseMove OnClick]]
-   [svg-editor.math :refer [v+ v-]]))
+   [svg-editor.shapes.protocol :refer [translate]]
+   [svg-editor.math :refer [v-]]))
 
 (defrecord GrabTool [display action init-mouse-pos]
   OnMouseMove
-  (on-mouse-move [t s {pos :pos}]
-    (let [offset (v- pos (:init-mouse-pos t))]
-      (state/map-selected-shapes!
-       s
-       #(merge % {:offset offset}))))
+  (on-mouse-move [_ s {pos :pos}]
+    (let [offset (v- pos init-mouse-pos)]
+      (state/map-selected-shapes-preview! s #(translate % offset))))
 
   OnClick
-  (on-click [_ s _]
-    (state/map-selected-shapes!
-     s
-     #(merge % {:pos (v+ (:pos %) (:offset %))
-                :offset [0 0]}))
+  (on-click [_ s {pos :pos}]
+    (let [offset (v- pos init-mouse-pos)]
+      (state/map-selected-shapes! s #(translate % offset)))
+    (state/clear-shape-preview! s)
     (state/set-tool! s nil)))
 
 (defn grab

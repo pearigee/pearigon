@@ -2,18 +2,17 @@
   (:require
    [svg-editor.actions :as action]
    [svg-editor.tools.protocol :refer [OnMouseMove OnClick OnKeypress]]
+   [svg-editor.shapes.protocol :as shapes]
    [svg-editor.state :as state]
-   [svg-editor.math :refer [avg dist v+ v-]]))
+   [svg-editor.math :refer [avg dist v-]]))
 
-(defn- apply-scale
-  [shape]
-  (case (:type shape)
-    :rect (merge shape {:dim (v+ (:dim shape) (:offset-scale shape))
-                        :offset-scale [0 0]})
-    :circle (merge shape {:r (+ (:r shape)
-                                (apply max (:offset-scale shape)))
-                          :offset-scale [0 0]})
-    shape))
+(defn compute-scale
+  [{:keys [axis center init-mouse-pos init-dist]} mpos]
+  (case axis
+    :x [(first (v- mpos init-mouse-pos)) 0]
+    :y [0 (second (v- mpos init-mouse-pos))]
+    (let [scale (- (dist mpos center) init-dist)]
+      [scale scale])))
 
 (defrecord ScaleTool [display
                       action
@@ -22,26 +21,19 @@
                       init-dist
                       axis]
 
-  OnClick
-  (on-click [_ s _]
-    (state/map-selected-shapes! s #(apply-scale %))
-    (state/set-tool! s nil))
-
   OnMouseMove
-  (on-mouse-move [{init-dist :init-dist
-                   center :center
-                   init-mouse-pos :init-mouse-pos
-                   axis :axis}
-                  s
-                  {mpos :pos}]
+  (on-mouse-move [t s {mpos :pos}]
+    (state/map-selected-shapes-preview!
+     s
+     #(shapes/scale % (compute-scale t mpos))))
+
+  OnClick
+  (on-click [t s {mpos :pos}]
     (state/map-selected-shapes!
      s
-     #(merge % {:offset-scale
-                (case axis
-                  :x [(first (v- mpos init-mouse-pos)) 0]
-                  :y [0 (second (v- mpos init-mouse-pos))]
-                  (let [scale (- (dist mpos center) init-dist)]
-                    [scale scale]))})))
+     #(shapes/scale % (compute-scale t mpos)))
+    (state/clear-shape-preview! s)
+    (state/set-tool! s nil))
 
   OnKeypress
   (on-keypress [t s k]

@@ -39,8 +39,8 @@
        [:button.button.is-small.is-success
         {:on-click (fn []
                      (state/map-selected-shapes!
-                       state
-                       #(merge % {:material (:selected @m-state)})))}
+                      state
+                      #(assoc % :mat-id (:selected @m-state))))}
         [:span.icon.is-small
          [:> apply-icon]]
         [:span "Apply to Selected"]]
@@ -50,10 +50,10 @@
                       :on-change (fn [event]
                                    (js/console.log event)
                                    (state/set-material!
-                                     state
-                                     (:selected @m-state)
-                                     (merge (get-selected)
-                                            {:display (-> event .-target .-value)})))}]
+                                    state
+                                    (:selected @m-state)
+                                    (merge (get-selected)
+                                           {:display (-> event .-target .-value)})))}]
        [:label "Material Type"]
        [:div.select {:style {:width "100%"
                              :margin-bottom "10px"}}
@@ -65,8 +65,8 @@
         {:color (:color (get-selected))
          :on-change (fn [color]
                       (state/set-material!
-                        state
-                        (:selected @m-state)
-                        (merge (get-selected)
-                               {:color color})))}]
+                       state
+                       (:selected @m-state)
+                       (merge (get-selected)
+                              {:color color})))}]
        [:hr]])))

@@ -6,6 +6,9 @@
 (defn initial-state
   []
   {:shapes []
+   ;; When a shape ID is present in this map, it is rendered
+   ;; in place of the original. This is intended for tool previews.
+   :shape-preview-override {}
    :mouse {:pos [0 0]}
    :materials {:default {:display "Default"
                          :color "#000"}}
@@ -29,6 +32,17 @@
 (defn get-shapes
   [state]
   (:shapes @state))
+
+(defn get-shape-preview-override [state]
+  (:shape-preview-override @state))
+
+(defn get-shapes-with-override
+  [state]
+  (let [shapes (get-shapes state)
+        previews (get-shape-preview-override state)]
+    (mapv #(if-let [preview (get previews (:id %))]
+             preview
+             %) shapes)))
 
 (defn get-materials
   [state]
@@ -96,6 +110,17 @@
                      (f shape)
                      shape)) shapes))))
 
+(defn map-selected-shapes-preview!
+  [state f]
+  (swap! state update-in [:shape-preview-override]
+         (fn []
+           (let [shapes (map f (get-selected state))]
+             (reduce #(assoc %1 (:id %2) %2) {} shapes)))))
+
+(defn clear-shape-preview!
+  [state]
+  (swap! state assoc :shape-preview-override {}))
+
 (defn deselect-all!
   [state]
   (map-shapes! state #(assoc % :selected false)))
@@ -158,7 +183,7 @@
   (deselect-all! state)
   (swap! state update-in [:shapes] conj
          (merge shape {:selected true
-                       :material (:active-material @state)})))
+                       :mat-id (:active-material @state)})))
 
 (defn set-mouse-state!
   [state mouse-state]
