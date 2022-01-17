@@ -1,5 +1,6 @@
 (ns svg-editor.input.keyboard
   (:require
+   [clojure.string :as str]
     [svg-editor.actions :as actions]
     [svg-editor.state :as state]
     [svg-editor.tools.protocol :refer [OnKeypress on-keypress]]
@@ -25,17 +26,20 @@
 
 (defn- keyboard-event->key
   [event]
-  (let [key (.-key event)
+  (let [key-raw (str/lower-case (.-key event))
+        key (if (= key-raw " ") "space" key-raw)
         ctrl (.-ctrlKey event)]
     (keyword (str (if ctrl "ctrl-" "") key))))
 
 (defn- bind-keys
   [s]
   (js/document.addEventListener
-    "keypress"
+    "keydown"
     (fn [event]
-      ;; Don't capture input events from text inputs
+      ;; Don't capture input events from text inputs.
       (when (not= (.-tagName js/document.activeElement) "INPUT")
+        ;; Prevent Tab from leaving the page.
+        (.preventDefault event)
         (let [key (keyboard-event->key event)]
           (js/console.log "Keypress: " key)
           (eval-hotkey s key))))))
