@@ -2,8 +2,8 @@
  {:requires ([babashka.fs :as fs])
 
   format
-  {:doc "Format the project with cljstyle"
-   :task (shell "cljstyle" "fix")}
+  {:doc "Format the project."
+   :task (shell "bb scripts/format.clj")}
 
   dev
   {:doc "Launch a dev and test server for live development"
