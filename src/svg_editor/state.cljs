@@ -1,7 +1,7 @@
 (ns svg-editor.state
   (:require
-    [svg-editor.actions :as actions]
-    [svg-editor.math :refer [v+]]))
+   [svg-editor.actions :as actions]
+   [svg-editor.math :refer [v+]]))
 
 (defn initial-state
   []
@@ -92,8 +92,8 @@
 
 (defn get-selected [state]
   (filter
-    :selected
-    (get-shapes state)))
+   :selected
+   (get-shapes state)))
 
 (defn map-shapes!
   [state f]

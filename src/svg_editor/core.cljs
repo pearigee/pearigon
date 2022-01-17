@@ -1,12 +1,12 @@
 (ns svg-editor.core
   (:require
-    [reagent.core :as r]
-    [reagent.dom :as d]
-    [svg-editor.input.keyboard :as keyboard]
-    [svg-editor.input.mouse :as mouse]
-    [svg-editor.input.resize :as resize]
-    [svg-editor.state :as state]
-    [svg-editor.view.app :refer [app]]))
+   [reagent.core :as r]
+   [reagent.dom :as d]
+   [svg-editor.input.keyboard :as keyboard]
+   [svg-editor.input.mouse :as mouse]
+   [svg-editor.input.resize :as resize]
+   [svg-editor.state :as state]
+   [svg-editor.view.app :refer [app]]))
 
 (def s (r/atom (state/initial-state)))
 

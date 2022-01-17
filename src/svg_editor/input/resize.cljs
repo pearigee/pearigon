@@ -1,6 +1,6 @@
 (ns svg-editor.input.resize
   (:require
-    [svg-editor.state :as state]))
+   [svg-editor.state :as state]))
 
 (defn- bind-resize
   [s]

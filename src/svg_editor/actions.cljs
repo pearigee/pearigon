@@ -1,6 +1,6 @@
 (ns svg-editor.actions
   (:require
-    [clojure.string :as str]))
+   [clojure.string :as str]))
 
 (def actions
   {:grab

@@ -1,13 +1,13 @@
 (ns svg-editor.input.keyboard
   (:require
    [clojure.string :as str]
-    [svg-editor.actions :as actions]
-    [svg-editor.state :as state]
-    [svg-editor.tools.protocol :refer [OnKeypress on-keypress]]
-    [svg-editor.tools.add :refer [add]]
-    [svg-editor.tools.grab :refer [grab]]
-    [svg-editor.tools.material :refer [material]]
-    [svg-editor.tools.scale :refer [scale]]))
+   [svg-editor.actions :as actions]
+   [svg-editor.state :as state]
+   [svg-editor.tools.protocol :refer [OnKeypress on-keypress]]
+   [svg-editor.tools.add :refer [add]]
+   [svg-editor.tools.grab :refer [grab]]
+   [svg-editor.tools.material :refer [material]]
+   [svg-editor.tools.scale :refer [scale]]))
 
 (defn- eval-hotkey
   [s key]
@@ -34,15 +34,15 @@
 (defn- bind-keys
   [s]
   (js/document.addEventListener
-    "keydown"
-    (fn [event]
+   "keydown"
+   (fn [event]
       ;; Don't capture input events from text inputs.
-      (when (not= (.-tagName js/document.activeElement) "INPUT")
+     (when (not= (.-tagName js/document.activeElement) "INPUT")
         ;; Prevent Tab from leaving the page.
-        (.preventDefault event)
-        (let [key (keyboard-event->key event)]
-          (js/console.log "Keypress: " key)
-          (eval-hotkey s key))))))
+       (.preventDefault event)
+       (let [key (keyboard-event->key event)]
+         (js/console.log "Keypress: " key)
+         (eval-hotkey s key))))))
 
 (defn init
   "Bind keyboard input handlers."

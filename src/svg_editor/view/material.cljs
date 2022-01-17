@@ -1,10 +1,10 @@
 (ns svg-editor.view.material
   (:require
-    ["@tabler/icons" :rename {IconPlus add-icon
-                              IconPaint apply-icon}]
-    ["react-colorful" :rename {HexColorPicker hex-color-picker}]
-    [reagent.core :as r]
-    [svg-editor.state :as state]))
+   ["@tabler/icons" :rename {IconPlus add-icon
+                             IconPaint apply-icon}]
+   ["react-colorful" :rename {HexColorPicker hex-color-picker}]
+   [reagent.core :as r]
+   [svg-editor.state :as state]))
 
 (defn material-editor
   [state]

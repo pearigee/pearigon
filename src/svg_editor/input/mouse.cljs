@@ -40,18 +40,18 @@
   [s]
   (let [body (.-body js/document)]
     (.addEventListener
-      body
-      "mousemove"
-      (fn [event]
-        (let [mouse-state (event->mouse-state s event)]
-          (state/set-mouse-state! s mouse-state)
-          (eval-mouse-move s mouse-state))))
+     body
+     "mousemove"
+     (fn [event]
+       (let [mouse-state (event->mouse-state s event)]
+         (state/set-mouse-state! s mouse-state)
+         (eval-mouse-move s mouse-state))))
     (.addEventListener
-      js/document
-      "mousedown"
-      (fn [event]
-        (let [mouse-state (event->mouse-state s event)]
-          (eval-mouse-click s mouse-state))))))
+     js/document
+     "mousedown"
+     (fn [event]
+       (let [mouse-state (event->mouse-state s event)]
+         (eval-mouse-click s mouse-state))))))
 
 (defn- bind-scroll
   "Set up scrolling and zooming behavior, specifically multitouch."
