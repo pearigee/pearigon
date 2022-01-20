@@ -22,88 +22,88 @@
    :suggestions (actions/get-key-suggestions nil)})
 
 (defn get-mouse-pos
-  [state]
-  (:pos (:mouse @state)))
+  [s]
+  (:pos (:mouse @s)))
 
 (defn get-tool
-  [state]
-  (:tool @state))
+  [s]
+  (:tool @s))
 
 (defn get-shapes
-  [state]
-  (:shapes @state))
+  [s]
+  (:shapes @s))
 
-(defn get-shape-preview-override [state]
-  (:shape-preview-override @state))
+(defn get-shape-preview-override [s]
+  (:shape-preview-override @s))
 
 (defn get-shapes-with-override
-  [state]
-  (let [shapes (get-shapes state)
-        previews (get-shape-preview-override state)]
+  [s]
+  (let [shapes (get-shapes s)
+        previews (get-shape-preview-override s)]
     (mapv #(if-let [preview (get previews (:id %))]
              preview
              %) shapes)))
 
 (defn get-materials
-  [state]
-  (:materials @state))
+  [s]
+  (:materials @s))
 
 (defn get-material
-  [state id]
-  (id (:materials @state)))
+  [s id]
+  (id (:materials @s)))
 
 (defn get-panel
-  [state]
-  (:panel @state))
+  [s]
+  (:panel @s))
 
 (defn get-view-pos
-  [state]
-  (:view-pos @state))
+  [s]
+  (:view-pos @s))
 
 (defn get-view-dimensions
-  [state]
-  (:view-dimensions @state))
+  [s]
+  (:view-dimensions @s))
 
 (defn get-view-zoom
-  [state]
-  (:view-zoom @state))
+  [s]
+  (:view-zoom @s))
 
 (defn get-view-pos-with-zoom
-  [state]
-  (let [[vx vy] (get-view-pos state)
-        [dx dy] (get-view-dimensions state)
-        z (get-view-zoom state)
+  [s]
+  (let [[vx vy] (get-view-pos s)
+        [dx dy] (get-view-dimensions s)
+        z (get-view-zoom s)
         zpos [(+ vx (/ (* dx (- 1 z)) 2))
               (+ vy (/ (* dy (- 1 z)) 2))]]
     zpos))
 
 (defn get-view-dim-with-zoom
-  [state]
-  (let [[dx dy] (get-view-dimensions state)
-        z (get-view-zoom state)
+  [s]
+  (let [[dx dy] (get-view-dimensions s)
+        z (get-view-zoom s)
         zdim [(* dx z) (* dy z)]]
     zdim))
 
 (defn get-view-zoom-scale
-  [state]
-  (let [[dx _] (get-view-dimensions state)
-        [zdx _] (get-view-dim-with-zoom state)]
+  [s]
+  (let [[dx _] (get-view-dimensions s)
+        [zdx _] (get-view-dim-with-zoom s)]
     (/ dx zdx)))
 
-(defn get-selected [state]
+(defn get-selected [s]
   (filter
    :selected
-   (get-shapes state)))
+   (get-shapes s)))
 
 (defn map-shapes!
-  [state f]
-  (swap! state update-in [:shapes]
+  [s f]
+  (swap! s update-in [:shapes]
          (fn [shapes]
            (mapv f shapes))))
 
 (defn map-selected-shapes!
-  [state f]
-  (swap! state update-in [:shapes]
+  [s f]
+  (swap! s update-in [:shapes]
          (fn [shapes]
            (mapv (fn [shape]
                    (if (:selected shape)
@@ -111,80 +111,80 @@
                      shape)) shapes))))
 
 (defn map-selected-shapes-preview!
-  [state f]
-  (swap! state update-in [:shape-preview-override]
+  [s f]
+  (swap! s update-in [:shape-preview-override]
          (fn []
-           (let [shapes (map f (get-selected state))]
+           (let [shapes (map f (get-selected s))]
              (reduce #(assoc %1 (:id %2) %2) {} shapes)))))
 
 (defn clear-shape-preview!
-  [state]
-  (swap! state assoc :shape-preview-override {}))
+  [s]
+  (swap! s assoc :shape-preview-override {}))
 
 (defn deselect-all!
-  [state]
-  (map-shapes! state #(assoc % :selected false)))
+  [s]
+  (map-shapes! s #(assoc % :selected false)))
 
 (defn select-id!
-  ([state id selected?] (map-shapes! state #(if (= id (:id %))
+  ([s id selected?] (map-shapes! s #(if (= id (:id %))
                                               (merge % {:selected selected?})
                                               %)))
-  ([state id] (select-id! state id true)))
+  ([s id] (select-id! s id true)))
 
 (defn set-suggestions!
-  [state suggestions]
-  (swap! state assoc :suggestions suggestions))
+  [s suggestions]
+  (swap! s assoc :suggestions suggestions))
 
 (defn set-view-dimensions!
-  [state dim]
-  (swap! state assoc :view-dimensions dim))
+  [s dim]
+  (swap! s assoc :view-dimensions dim))
 
 (defn update-view-size!
-  [state]
+  [s]
   ;; TODO: Figure out how to remove this DOM reference.
   (let [svg (js/document.getElementById "svg-root")
         height (.-clientHeight svg)
         width (.-clientWidth svg)]
-    (set-view-dimensions! state [width height])))
+    (set-view-dimensions! s [width height])))
 
 (defn set-panel!
-  [state panel]
-  (swap! state assoc :panel panel))
+  [s panel]
+  (swap! s assoc :panel panel))
 
 (defn set-material!
-  [state id value]
-  (swap! state update-in [:materials] assoc id value))
+  [s id value]
+  (swap! s update-in [:materials] assoc id value))
 
 (defn set-active-material!
-  [state id]
-  (swap! state assoc :active-material id))
+  [s id]
+  (swap! s assoc :active-material id))
 
 (defn move-view-pos!
-  [state delta-vec]
-  (swap! state assoc :view-pos (v+ (:view-pos @state) delta-vec)))
+  [s delta-vec]
+  (swap! s assoc :view-pos (v+ (:view-pos @s) delta-vec)))
 
 ;; TODO: Constrain zoom to valid values (i.e. viewBox has positive area).
 (defn view-zoom!
-  [state delta]
-  (swap! state assoc :view-zoom (+ (:view-zoom @state) (/ delta 100))))
+  [s delta]
+  (swap! s assoc :view-zoom (+ (:view-zoom @s) (/ delta 100))))
 
 (defn add-material!
-  [state id value]
-  (swap! state update-in [:materials] assoc id value))
+  [s id value]
+  (swap! s update-in [:materials] assoc id value))
 
 (defn set-tool!
-  [state tool]
+  [s tool]
   (js/console.log "Tool selected: " tool)
-  (swap! state assoc :tool tool)
-  (set-suggestions! state (actions/get-key-suggestions (get-tool state))))
+  (swap! s assoc :tool tool)
+  (set-suggestions! s (actions/get-key-suggestions (get-tool s))))
 
 (defn add-shape-and-select!
-  [state shape]
-  (deselect-all! state)
-  (swap! state update-in [:shapes] conj
+  [s shape]
+  (deselect-all! s)
+  (swap! s update-in [:shapes] conj
          (merge shape {:selected true
-                       :mat-id (:active-material @state)})))
+                       :mat-id (:active-material @s)})))
 
 (defn set-mouse-state!
-  [state mouse-state]
-  (swap! state assoc :mouse mouse-state))
+  [s mouse-s]
+  (swap! s assoc :mouse mouse-s))
