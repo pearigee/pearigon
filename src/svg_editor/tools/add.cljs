@@ -17,7 +17,7 @@
                   nil)]
       (js/console.log "Shape selected:" shape)
       (if shape
-        (do (state/add-shape-and-select! s shape)
+        (do (state/add-shape! s shape)
             (grab s))
         (state/set-tool! s nil)))))
 

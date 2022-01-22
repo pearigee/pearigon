@@ -1,14 +1,16 @@
 (ns svg-editor.state
   (:require
+   [com.rpl.specter :as sp :include-macros true]
    [svg-editor.actions :as actions]
    [svg-editor.math :refer [v+]]))
 
 (defn initial-state
   []
-  {:shapes []
+  {:shapes {}
    ;; When a shape ID is present in this map, it is rendered
    ;; in place of the original. This is intended for tool previews.
    :shape-preview-override {}
+   :draw-order []
    :mouse {:pos [0 0]}
    :materials {:default {:display "Default"
                          :color "#000"}}
@@ -29,20 +31,21 @@
   [s]
   (:tool @s))
 
-(defn get-shapes
-  [s]
-  (:shapes @s))
+(defn get-shape [s id]
+  (-> @s :shapes (get id)))
 
-(defn get-shape-preview-override [s]
-  (:shape-preview-override @s))
+(defn get-draw-order [s]
+  (:draw-order @s))
 
-(defn get-shapes-with-override
-  [s]
-  (let [shapes (get-shapes s)
-        previews (get-shape-preview-override s)]
-    (mapv #(if-let [preview (get previews (:id %))]
-             preview
-             %) shapes)))
+(defn get-preview [s id]
+  (-> @s :shape-preview-override (get id)))
+
+(defn get-shapes-with-override [s]
+  (let [result (mapv #(if-let [preview (get-preview s %)]
+                        preview
+                        (get-shape s %))
+                     (get-draw-order s))]
+    result))
 
 (defn get-materials
   [s]
@@ -50,7 +53,7 @@
 
 (defn get-material
   [s id]
-  (id (:materials @s)))
+  (get (:materials @s) id))
 
 (defn get-panel
   [s]
@@ -91,31 +94,20 @@
     (/ dx zdx)))
 
 (defn get-selected [s]
-  (filter
-   :selected
-   (get-shapes s)))
+  (sp/select [:shapes sp/MAP-VALS #(:selected %)] @s))
 
-(defn map-shapes!
-  [s f]
-  (swap! s update-in [:shapes]
-         (fn [shapes]
-           (mapv f shapes))))
+(defn map-shapes! [s f]
+  (swap! s #(sp/transform [:shapes sp/MAP-VALS] %2 %1) f))
 
 (defn map-selected-shapes!
   [s f]
-  (swap! s update-in [:shapes]
-         (fn [shapes]
-           (mapv (fn [shape]
-                   (if (:selected shape)
-                     (f shape)
-                     shape)) shapes))))
+  (map-shapes! s #(if (:selected %) (f %) %)))
 
 (defn map-selected-shapes-preview!
   [s f]
-  (swap! s update-in [:shape-preview-override]
-         (fn []
-           (let [shapes (map f (get-selected s))]
-             (reduce #(assoc %1 (:id %2) %2) {} shapes)))))
+  (swap! s assoc :shape-preview-override
+         (let [shapes (map f (get-selected s))]
+           (reduce #(assoc %1 (:id %2) %2) {} shapes))))
 
 (defn clear-shape-preview!
   [s]
@@ -178,12 +170,16 @@
   (swap! s assoc :tool tool)
   (set-suggestions! s (actions/get-key-suggestions (get-tool s))))
 
-(defn add-shape-and-select!
-  [s shape]
+(defn conj-draw-order [s id]
+  (swap! s assoc :draw-order (conj (get-draw-order s) id)))
+
+(defn add-shape!
+  [s {:keys [id] :as shape} & {:keys [selected] :or {selected true}}]
   (deselect-all! s)
-  (swap! s update-in [:shapes] conj
-         (merge shape {:selected true
-                       :mat-id (:active-material @s)})))
+  (swap! s update-in [:shapes] assoc id
+         (merge shape {:selected selected
+                       :mat-id (:active-material @s)}))
+  (conj-draw-order s id))
 
 (defn set-mouse-state!
   [s mouse-s]

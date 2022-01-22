@@ -15,7 +15,8 @@ pom.xml.asc
 /.repl
 *.log
 /.env
-/.clj-kondo
+/.clj-kondo/*
+!/.clj-kondo/config.edn
 /.shadow-cljs
 /node_modules
 /.lsp
