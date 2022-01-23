@@ -3,7 +3,7 @@
 (defprotocol RenderSVG
   "Build a hiccup representation of the SVG this shape
   represents."
-  (render-svg [shape materials]))
+  (render-svg [shape s]))
 
 (defprotocol Transform
   (translate [shape vect])

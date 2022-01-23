@@ -1,6 +1,7 @@
 (ns svg-editor.shapes.rectangle
   (:require [svg-editor.shapes.protocol :refer [RenderSVG Transform]]
             [svg-editor.math :refer [v+]]
+            [svg-editor.state :as state]
             [svg-editor.shapes.utils :as utils]))
 
 (defrecord Rectangle [id mat-id pos dim]
@@ -13,8 +14,9 @@
     (assoc shape :dim (v+ dim vect)))
 
   RenderSVG
-  (render-svg [shape materials]
-    (let [{color :color} (get materials mat-id)
+  (render-svg [shape s]
+    (let [materials (state/get-materials s)
+          {color :color} (get materials mat-id)
           [x y] pos
           [w h] dim]
       [:rect (merge {:id id

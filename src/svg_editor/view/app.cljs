@@ -6,8 +6,7 @@
 
 (defn app
   [s]
-  (let [materials (state/get-materials s)
-        shapes (state/get-shapes-with-override s)
+  (let [shapes (state/get-shapes-with-override s)
         [zvx zvy] (state/get-view-pos-with-zoom s)
         [zdx zdy] (state/get-view-dim-with-zoom s)]
     [:div.app
@@ -15,6 +14,6 @@
       [:svg {:id "svg-root"
              :view-box (str zvx " " zvy " " zdx " " zdy)}
        (for [{:keys [id] :as shape} shapes]
-         ^{:key id} [render-svg shape materials])]
+         ^{:key id} [render-svg shape s])]
       [key-suggestion (:suggestions @s)]]
      [sidebar s]]))

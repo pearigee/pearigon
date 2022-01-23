@@ -31,7 +31,7 @@
       (actions/get-key :path-tool.add-point)
       (do
         (when (nil? path-id)
-          (let [{:keys [id] :as shape} (path s)]
+          (let [{:keys [id] :as shape} (path)]
             (state/add-shape! s shape)
             (add-point-at-pointer s shape)
             (state/update-tool! s (assoc t :path-id id))))

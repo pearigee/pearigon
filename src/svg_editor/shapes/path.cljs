@@ -14,7 +14,7 @@
     (str "M" x " " y " "
          (apply str path-str))))
 
-(defrecord Path [id mat-id points s]
+(defrecord Path [id mat-id points]
 
   Transform
   (translate [shape _]
@@ -28,9 +28,10 @@
     (state/map-shape-ids! s (into #{} points) #(assoc % :selected true)))
 
   RenderSVG
-  (render-svg [shape materials]
+  (render-svg [shape s]
     (when-not (empty? points)
-      (let [{:keys [color]} (get materials mat-id)
+      (let [materials (state/get-materials s)
+            {:keys [color]} (get materials mat-id)
             point-shapes (state/get-shapes-ids-with-override s points)]
         [:g
          [:path (merge {:id id
@@ -39,7 +40,7 @@
                        (utils/apply-selected-style shape))]
          (for [p point-shapes]
            ^{:key (:id p)}
-           [render-svg p materials])]))))
+           [render-svg p s])]))))
 
-(defn path [s]
-  (Path. (utils/new-shape-id) :default [] s))
+(defn path []
+  (Path. (utils/new-shape-id) :default []))
