@@ -3,7 +3,8 @@
    [clojure.string :as str]
    [svg-editor.tools.protocol :refer [OnMouseMove on-mouse-move
                                       OnClick on-click]]
-   [svg-editor.state :as state]))
+   [svg-editor.state :as state]
+   [svg-editor.selection :refer [select-from-mouse-event!]]))
 
 (defn- eval-mouse-move
   [s event]
@@ -18,13 +19,7 @@
     (if (satisfies? OnClick t)
       (on-click t s event)
       ;; Other wise, default to selection action
-      (let [target-id (:target-id event)]
-        (if (str/starts-with? target-id "shape-")
-          (do (when-not (:shift event) (state/deselect-all! s))
-              (state/select-id! s target-id))
-          (when (and (= (:target-id event) "svg-root")
-                     (not (:shift event)))
-            (state/deselect-all! s)))))))
+      (select-from-mouse-event! s event))))
 
 (defn- event->mouse-state
   [s event]

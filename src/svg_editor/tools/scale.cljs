@@ -33,7 +33,7 @@
      s
      #(shapes/scale % (compute-scale t mpos)))
     (state/clear-shape-preview! s)
-    (state/set-tool! s nil))
+    (state/pop-tool! s))
 
   OnKeypress
   (on-keypress [t s k]
@@ -42,7 +42,7 @@
                  (action/get-key :scale.y-axis) :y
                  nil)]
       (js/console.log "Setting scale axis:" axis)
-      (state/set-tool! s (merge t {:axis axis})))))
+      (state/update-tool! s (merge t {:axis axis})))))
 
 (defn scale
   [state]
@@ -50,10 +50,10 @@
         center (avg (map :pos selection))
         mpos (state/get-mouse-pos state)]
     (when-not (zero? (count selection))
-      (state/set-tool! state (map->ScaleTool
-                              {:display "Scale"
-                               :action :scale
-                               :center center
-                               :init-mouse-pos mpos
-                               :init-dist (dist center mpos)
-                               :axis nil})))))
+      (state/push-tool! state (map->ScaleTool
+                               {:display "Scale"
+                                :action :scale
+                                :center center
+                                :init-mouse-pos mpos
+                                :init-dist (dist center mpos)
+                                :axis nil})))))

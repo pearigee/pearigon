@@ -1,10 +1,12 @@
 (ns svg-editor.tools.path-tool
   (:require [svg-editor.tools.protocol :refer [OnKeypress
                                                OnClick]]
+            [svg-editor.tools.grab :refer [grab]]
             [svg-editor.state :as state]
             [svg-editor.actions :as actions]
             [svg-editor.shapes.path :refer [Path path]]
-            [svg-editor.shapes.point :refer [point]]))
+            [svg-editor.shapes.point :refer [point]]
+            [svg-editor.selection :refer [select-from-mouse-event!]]))
 
 (defn add-point [s {:keys [id points] :as path} point]
   (state/set-shape! s id
@@ -20,25 +22,30 @@
 (defrecord PathTool [display action path-id]
 
   OnClick
-  (on-click [t s event]
-    (js/console.log event))
+  (on-click [_ s event]
+    (select-from-mouse-event! s event))
 
   OnKeypress
   (on-keypress [t s k]
-    (when (and (nil? path-id)
-               (= k (actions/get-key :path-tool.add-point)))
-      (let [{:keys [id] :as shape} (path s)]
-        (state/add-shape! s shape)
-        (add-point-at-pointer s shape)
-        (state/set-tool! s (assoc t :path-id id))))
+    (condp = k
+      (actions/get-key :path-tool.add-point)
+      (do
+        (when (nil? path-id)
+          (let [{:keys [id] :as shape} (path s)]
+            (state/add-shape! s shape)
+            (add-point-at-pointer s shape)
+            (state/update-tool! s (assoc t :path-id id))))
+        (when path-id
+          (let [shape (state/get-shape s path-id)]
+            (add-point-at-pointer s shape))))
 
-    (when (and path-id
-               (= k (actions/get-key :path-tool.add-point)))
-      (let [shape (state/get-shape s path-id)]
-        (add-point-at-pointer s shape)))
+      (actions/get-key :path-tool.quit)
+      (state/pop-tool! s)
 
-    (when (= k (actions/get-key :path-tool.quit))
-      (state/set-tool! s nil))))
+      (actions/get-key :path-tool.grab)
+      (grab s)
+
+      nil)))
 
 (defn path-tool
   [s]
@@ -46,4 +53,4 @@
         shape (first shapes)
         {id :id} (when (and (instance? Path shape)
                             (= (count shapes) 1)) shape)]
-    (state/set-tool! s (PathTool. "Path Tool" :path-tool id))))
+    (state/push-tool! s (PathTool. "Path Tool" :path-tool id))))

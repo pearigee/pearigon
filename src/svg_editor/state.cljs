@@ -20,7 +20,7 @@
    :view-dimensions [0 0]
    :view-zoom 1
    :panel nil
-   :tool nil
+   :tool []
    :next-id 0
    :suggestions (actions/get-key-suggestions nil)})
 
@@ -30,7 +30,7 @@
 
 (defn get-tool
   [s]
-  (:tool @s))
+  (last (:tool @s)))
 
 (defn get-shape [s id]
   (-> @s :shapes (get id)))
@@ -177,11 +177,19 @@
   [s id value]
   (swap! s update-in [:materials] assoc id value))
 
-(defn set-tool!
-  [s tool]
-  (js/console.log "Tool selected: " tool)
-  (swap! s assoc :tool tool)
+(defn push-tool! [s tool]
+  (swap! s assoc :tool (conj (:tool @s) tool))
+  (js/console.log "Tool pushed:" (:tool @s))
   (set-suggestions! s (actions/get-key-suggestions (get-tool s))))
+
+(defn pop-tool! [s]
+  (when-not (empty? (:tool @s))
+    (swap! s assoc :tool (pop (:tool @s)))
+    (js/console.log "Tool popped:" (:tool @s))
+    (set-suggestions! s (actions/get-key-suggestions (get-tool s)))))
+
+(defn update-tool! [s tool]
+  (swap! s assoc :tool (sp/setval [sp/LAST] tool (:tool @s))))
 
 (defn conj-draw-order [s id]
   (swap! s assoc :draw-order (conj (get-draw-order s) id)))

@@ -16,10 +16,10 @@
     (let [offset (v- pos init-mouse-pos)]
       (state/map-selected-shapes! s #(translate % offset)))
     (state/clear-shape-preview! s)
-    (state/set-tool! s nil)))
+    (state/pop-tool! s)))
 
 (defn grab
   [s]
-  (state/set-tool! s (GrabTool. "Grab"
+  (state/push-tool! s (GrabTool. "Grab"
                                 :grab
                                 (state/get-mouse-pos s))))

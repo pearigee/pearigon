@@ -21,7 +21,7 @@
 
    :path-tool
    {:display "Path Tool"
-    :key :p}
+    :key :tab}
 
    :path-tool.add-point
    {:display "Add Point"
@@ -29,7 +29,10 @@
 
    :path-tool.quit
    {:display "Quit"
-    :key :q}
+    :key :tab}
+
+   :path-tool.grab
+   {:proxy :grab}
 
    :add
    {:key :a
@@ -49,7 +52,17 @@
 
 (defn get-key
   [id]
-  (get-in actions [id :key]))
+  (let [{:keys [proxy]} (get actions id)]
+    (if proxy
+      (get-in actions [proxy :key])
+      (get-in actions [id :key]))))
+
+(defn get-display
+  [id]
+  (let [{:keys [proxy]} (get actions id)]
+    (if proxy
+      (get-in actions [proxy :display])
+      (get-in actions [id :display]))))
 
 (defn get-child-keys
   [tool-type]
@@ -72,7 +85,9 @@
   (let [action (:action tool)
         active-keys (get-active-keys action)
         suggestions (map
-                     #(merge % {:key-display (subs (str (:key %)) 1)})
-                     (vals (select-keys actions active-keys)))]
+                     (fn [id] {:key-display (subs (str (get-key id)) 1)
+                               :key (get-key id)
+                               :display (get-display id)})
+                     active-keys)]
     {:tool (:display tool)
      :keys (sort-by :key-display suggestions)}))

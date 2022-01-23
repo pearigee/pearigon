@@ -18,9 +18,9 @@
       (js/console.log "Shape selected:" shape)
       (if shape
         (do (state/add-shape! s shape)
-            (grab s))
-        (state/set-tool! s nil)))))
+            (state/pop-tool! s)
+            (grab s))))))
 
 (defn add
   [s]
-  (state/set-tool! s (AddTool. "Add Shape" :add)))
+  (state/push-tool! s (AddTool. "Add Shape" :add)))
