@@ -7,7 +7,8 @@
    [svg-editor.tools.add :refer [add]]
    [svg-editor.tools.grab :refer [grab]]
    [svg-editor.tools.material :refer [material]]
-   [svg-editor.tools.scale :refer [scale]]))
+   [svg-editor.tools.scale :refer [scale]]
+   [svg-editor.tools.path-tool :refer [path-tool]]))
 
 (defn- eval-hotkey
   [s key]
@@ -22,6 +23,7 @@
             (actions/get-key :scale) (scale s)
             (actions/get-key :grab) (grab s)
             (actions/get-key :material) (material s)
+            (actions/get-key :path-tool) (path-tool s)
             nil)))))
 
 (defn- keyboard-event->key

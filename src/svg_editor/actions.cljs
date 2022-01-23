@@ -19,6 +19,18 @@
    {:key :y
     :display "Lock to Y axis"}
 
+   :path-tool
+   {:display "Path Tool"
+    :key :p}
+
+   :path-tool.add-point
+   {:display "Add Point"
+    :key :a}
+
+   :path-tool.quit
+   {:display "Quit"
+    :key :q}
+
    :add
    {:key :a
     :display "Add Shape"}

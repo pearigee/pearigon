@@ -15,6 +15,6 @@
       [:svg {:id "svg-root"
              :view-box (str zvx " " zvy " " zdx " " zdy)}
        (for [{:keys [id] :as shape} shapes]
-         ^{:key (str id)} [render-svg shape materials])]
+         ^{:key id} [render-svg shape materials])]
       [key-suggestion (:suggestions @s)]]
      [sidebar s]]))

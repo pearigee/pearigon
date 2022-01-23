@@ -2,6 +2,7 @@
   (:require
    [com.rpl.specter :as sp :include-macros true]
    [svg-editor.actions :as actions]
+   [svg-editor.shapes.protocol :refer [OnSelect on-select]]
    [svg-editor.math :refer [v+]]))
 
 (defn initial-state
@@ -46,6 +47,11 @@
                         (get-shape s %))
                      (get-draw-order s))]
     result))
+
+(defn get-shapes-ids-with-override [s ids]
+  (mapv #(if-let [preview (get-preview s %)]
+           preview
+           (get-shape s %)) ids))
 
 (defn get-materials
   [s]
@@ -103,6 +109,9 @@
   [s f]
   (map-shapes! s #(if (:selected %) (f %) %)))
 
+(defn map-shape-ids! [s id-set f]
+  (map-shapes! s #(if (contains? id-set (:id %)) (f %) %)))
+
 (defn map-selected-shapes-preview!
   [s f]
   (swap! s assoc :shape-preview-override
@@ -113,14 +122,18 @@
   [s]
   (swap! s assoc :shape-preview-override {}))
 
+(defn set-shape! [s sid shape]
+  (swap! s update-in [:shapes] assoc sid shape))
+
 (defn deselect-all!
   [s]
   (map-shapes! s #(assoc % :selected false)))
 
 (defn select-id!
-  ([s id selected?] (map-shapes! s #(if (= id (:id %))
-                                              (merge % {:selected selected?})
-                                              %)))
+  ([s id selected?]
+   (when-let [shape (get-shape s id)]
+     (set-shape! s id (merge shape {:selected selected?}))
+     (when (satisfies? OnSelect shape) (on-select shape s))))
   ([s id] (select-id! s id true)))
 
 (defn set-suggestions!
@@ -174,12 +187,15 @@
   (swap! s assoc :draw-order (conj (get-draw-order s) id)))
 
 (defn add-shape!
-  [s {:keys [id] :as shape} & {:keys [selected] :or {selected true}}]
-  (deselect-all! s)
+  [s {:keys [id] :as shape} & {:keys [selected? draw-order? deselect-all?]
+                               :or {selected? true
+                                    deselect-all? true
+                                    draw-order? true}}]
+  (when deselect-all? (deselect-all! s))
   (swap! s update-in [:shapes] assoc id
-         (merge shape {:selected selected
+         (merge shape {:selected selected?
                        :mat-id (:active-material @s)}))
-  (conj-draw-order s id))
+  (when draw-order? (conj-draw-order s id)))
 
 (defn set-mouse-state!
   [s mouse-s]

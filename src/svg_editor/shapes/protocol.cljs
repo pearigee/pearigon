@@ -8,3 +8,6 @@
 (defprotocol Transform
   (translate [shape vect])
   (scale [shape vect]))
+
+(defprotocol OnSelect
+  (on-select [shape s]))
