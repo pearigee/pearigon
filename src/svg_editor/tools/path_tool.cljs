@@ -13,11 +13,15 @@
                     (assoc path :points (conj points (:id point)))))
 
 (defn add-point-at-pointer [s shape]
-  (let [np (point (state/get-mouse-pos s) 10)]
+  (let [np (point (state/get-mouse-pos s))]
     (state/add-shape! s np :draw-order? false
                       :selected? false
                       :deselect-all? false)
     (add-point s shape np)))
+
+(defn is-path? [shape]
+  ;; TODO: (satisfies? Path shape) broken, but fixed in CLJS 1.11.
+  (contains? shape :points))
 
 (defrecord PathTool [display action path-id]
 
@@ -48,8 +52,10 @@
       nil)))
 
 (defn path-tool
+  "Activate the path tool. If a single path is selected, it will become
+  the path tool's target."
   [s]
-  (let [shapes (state/get-selected s)
+  (let [shapes (filter is-path? (state/get-selected s))
         shape (first shapes)
         {id :id} (when (and (instance? Path shape)
                             (= (count shapes) 1)) shape)]

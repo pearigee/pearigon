@@ -102,6 +102,12 @@
 (defn get-selected [s]
   (sp/select [:shapes sp/MAP-VALS #(:selected %)] @s))
 
+;; TODO: Consider a way to use (satisfies? PathTool (get-tool s))
+;; without create a circular dependency.
+(defn is-active-path? [s id]
+  (let [pt (first (filter #(= (:action %) :path-tool) (:tool @s)))]
+    (= id (:path-id pt))))
+
 (defn map-shapes! [s f]
   (swap! s #(sp/transform [:shapes sp/MAP-VALS] %2 %1) f))
 

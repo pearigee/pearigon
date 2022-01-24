@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "shadow-cljs": "^2.15.13"
+    "shadow-cljs": "^2.16.12"
   },
   "dependencies": {
     "@tabler/icons": "^1.50.0",

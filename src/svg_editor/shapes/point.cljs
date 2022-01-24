@@ -16,11 +16,13 @@
   (render-svg [shape _]
     (let [[x y] pos]
       [:circle (merge {:id id
-                       :fill "blue"
+                       :fill "#00d1b2"
+                       :stroke "black"
+                       :stroke-width "2"
                        :cx x
                        :cy y
                        :r r}
                       (utils/apply-selected-style shape))])))
 
-(defn point [pos r]
-  (Point. (utils/new-shape-id) pos r))
+(defn point [pos]
+  (Point. (utils/new-shape-id) pos 5))

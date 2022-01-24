@@ -38,9 +38,10 @@
                         :fill color
                         :d (points->svg s points)}
                        (utils/apply-selected-style shape))]
-         (for [p point-shapes]
-           ^{:key (:id p)}
-           [render-svg p s])]))))
+         (when (state/is-active-path? s id)
+           (for [p point-shapes]
+             ^{:key (:id p)}
+             [render-svg p s]))]))))
 
 (defn path []
   (Path. (utils/new-shape-id) :default []))

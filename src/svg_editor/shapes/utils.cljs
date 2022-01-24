@@ -3,9 +3,7 @@
 (defn apply-selected-style
   [shape]
   (if (:selected shape)
-    {:stroke "#1fd2ff"
-     :stroke-width  "3px"
-     :stroke-dasharray "4"}
+    {:class "selected"}
     {}))
 
 (defn new-shape-id []
