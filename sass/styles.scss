@@ -5,9 +5,10 @@ html, body {
   overscroll-behavior-x: none;
 }
 
+$selection-color: lighten($primary, 30%);
 svg .selected {
-  filter: drop-shadow(0px 0px 5px hsl(155deg 100% 61% / 50%));
-  stroke: hsl(155deg 100% 61%);
+  filter: drop-shadow(0px 0px 5px $selection-color);
+  stroke: $selection-color;
   stroke-width: 3;
 }
 
