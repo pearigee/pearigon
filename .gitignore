@@ -11,6 +11,7 @@ pom.xml.asc
 /.nrepl-port
 /resources/public/js
 /public/js
+/public/css
 /out
 /.repl
 *.log

@@ -6,8 +6,33 @@
    :task (shell "bb scripts/format.clj")}
 
   dev
+  {:doc "Watch the site cljs, tests, and styles in parallel."
+   :task (run '-dev {:parallel true})}
+
+  -dev
+  {:depends [watch-cljs watch-styles]}
+
+  build
+  {:doc "Build the project for release"
+   :depends [build-cljs build-styles]}
+
+  watch-cljs
   {:doc "Launch a dev and test server for live development"
    :task (shell "npx" "shadow-cljs" "watch" "app" "browser-test")}
+
+  watch-styles
+  {:doc "Build the Sass styles."
+   :task (shell "sass" "--watch" "--no-source-map"
+                "sass/styles.scss:public/css/styles.css")}
+
+  build-cljs
+  {:doc "Compile the cljs for release."
+   :task (shell "npx" "shadow-cljs" "release" "app" )}
+
+  build-styles
+  {:doc "Build the Sass styles."
+   :task (shell "sass" "--no-source-map"
+                "sass/styles.scss:public/css/styles.css")}
 
   test
   {:doc "Runs all unit tests."
