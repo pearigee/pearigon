@@ -9,17 +9,17 @@
 (defn point->svg [points]
   (let [[{[x1 y1] :pos t1 :type}
          {[x2 y2] :pos t2 :type}] points]
-    (or (when (= t1 t2 :round)
+    (cond (= t1 t2 :round)
           (let [[xa ya] (avg [[x1 y1] [x2 y2]])]
             [1 (str "Q " x1 " " y1
-                    " " xa " " ya)]))
+                    " " xa " " ya)])
 
-        (when (and (= t1 :round)
-                   (= t2 :sharp))
+          (and (= t1 :round) (= t2 :sharp))
           [2 (str "Q " x1 " " y1
-                  " " x2 " " y2)])
+                  " " x2 " " y2)]
 
-        [1 (str "L " x1 " " y1)])))
+          :else
+          [1 (str "L " x1 " " y1)])))
 
 (defn points->svg [points]
   (if (empty? points)
