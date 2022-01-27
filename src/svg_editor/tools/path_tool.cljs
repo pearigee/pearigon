@@ -39,15 +39,23 @@
     (condp contains? k
       #{(actions/get-key :path-tool.add-point-sharp)
         (actions/get-key :path-tool.add-point-round)}
-      (let [type (key->point-type k)]
-        (when (nil? path-id)
-          (let [{:keys [id] :as shape} (path)]
-            (state/add-shape! s shape)
-            (add-point-at-pointer s shape type)
-            (state/update-tool! s (assoc t :path-id id))))
-        (when path-id
-          (let [shape (state/get-shape s path-id)]
-            (add-point-at-pointer s shape type))))
+      (let [type (key->point-type k)
+            selection (state/get-selected s)]
+        (cond (and
+               (seq selection)
+               ;; TODO Replace with #(satisfies? Point %) when CLJS 1.11 drops
+               (every? #(#{:sharp :round} (:type %)) selection))
+              (state/map-selected-shapes! s #(assoc % :type type))
+
+              (nil? path-id)
+              (let [{:keys [id] :as shape} (path)]
+                (state/add-shape! s shape)
+                (add-point-at-pointer s shape type)
+                (state/update-tool! s (assoc t :path-id id)))
+
+              path-id
+              (let [shape (state/get-shape s path-id)]
+                (add-point-at-pointer s shape type))))
 
       #{(actions/get-key :path-tool.quit)}
       (state/pop-tool! s)
