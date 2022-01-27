@@ -12,8 +12,8 @@
   (state/set-shape! s id
                     (assoc path :points (conj points (:id point)))))
 
-(defn add-point-at-pointer [s shape]
-  (let [np (point (state/get-mouse-pos s))]
+(defn add-point-at-pointer [s shape type]
+  (let [np (point (state/get-mouse-pos s) type)]
     (state/add-shape! s np :draw-order? false
                       :selected? false
                       :deselect-all? false)
@@ -23,6 +23,11 @@
   ;; TODO: (satisfies? Path shape) broken, but fixed in CLJS 1.11.
   (contains? shape :points))
 
+(defn key->point-type [k]
+  (condp = k
+    (actions/get-key :path-tool.add-point-sharp) :sharp
+    (actions/get-key :path-tool.add-point-round) :round))
+
 (defrecord PathTool [display action path-id]
 
   OnClick
@@ -31,22 +36,23 @@
 
   OnKeypress
   (on-keypress [t s k]
-    (condp = k
-      (actions/get-key :path-tool.add-point)
-      (do
+    (condp contains? k
+      #{(actions/get-key :path-tool.add-point-sharp)
+        (actions/get-key :path-tool.add-point-round)}
+      (let [type (key->point-type k)]
         (when (nil? path-id)
           (let [{:keys [id] :as shape} (path)]
             (state/add-shape! s shape)
-            (add-point-at-pointer s shape)
+            (add-point-at-pointer s shape type)
             (state/update-tool! s (assoc t :path-id id))))
         (when path-id
           (let [shape (state/get-shape s path-id)]
-            (add-point-at-pointer s shape))))
+            (add-point-at-pointer s shape type))))
 
-      (actions/get-key :path-tool.quit)
+      #{(actions/get-key :path-tool.quit)}
       (state/pop-tool! s)
 
-      (actions/get-key :path-tool.grab)
+      #{(actions/get-key :path-tool.grab)}
       (grab s)
 
       nil)))

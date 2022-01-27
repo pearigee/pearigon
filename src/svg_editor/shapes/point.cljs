@@ -3,7 +3,7 @@
             [svg-editor.math :refer [v+]]
             [svg-editor.shapes.utils :as utils]))
 
-(defrecord Point [id pos r]
+(defrecord Point [id pos type r]
 
   Transform
   (translate [shape vect]
@@ -24,5 +24,5 @@
                        :r r}
                       (utils/apply-selected-style shape))])))
 
-(defn point [pos]
-  (Point. (utils/new-shape-id) pos 5))
+(defn point [pos type]
+  (Point. (utils/new-shape-id) pos type 5))

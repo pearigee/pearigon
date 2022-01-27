@@ -23,9 +23,13 @@
    {:display "Path Tool"
     :key :tab}
 
-   :path-tool.add-point
-   {:display "Add Point"
-    :key :a}
+   :path-tool.add-point-sharp
+   {:display "Add Sharp Point"
+    :key :s}
+
+   :path-tool.add-point-round
+   {:display "Add Round Point"
+    :key :r}
 
    :path-tool.quit
    {:display "Quit"

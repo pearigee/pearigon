@@ -3,16 +3,35 @@
                                                 render-svg
                                                 OnSelect]]
             [svg-editor.state :as state]
+            [svg-editor.math :refer [avg]]
             [svg-editor.shapes.utils :as utils]))
 
-(defn points->svg [s points]
-  (let [ps (state/get-shapes-ids-with-override s points)
-        {[x y] :pos} (first ps)
-        path (rest ps)
-        path-str (map (fn [{[x y] :pos}]
-                        (str "L" x " " y " ")) path)]
-    (str "M" x " " y " "
-         (apply str path-str))))
+(defn point->svg [points]
+  (let [[{[x1 y1] :pos t1 :type}
+         {[x2 y2] :pos t2 :type}] points]
+    (or (when (= t1 t2 :round)
+          (let [[xa ya] (avg [[x1 y1] [x2 y2]])]
+            [1 (str "Q " x1 " " y1
+                    " " xa " " ya)]))
+
+        (when (and (= t1 :round)
+                   (= t2 :sharp))
+          [2 (str "Q " x1 " " y1
+                  " " x2 " " y2)])
+
+        [1 (str "L " x1 " " y1)])))
+
+(defn points->svg [points]
+  (if (empty? points)
+    ""
+    (let [{[x y] :pos} (first points)
+          d (str "M " x " " y " ")]
+      (loop [points (rest points)
+             d d]
+        (if (empty? points)
+          d
+          (let [[n result] (point->svg points)]
+            (recur (drop n points) (str d result))))))))
 
 (defrecord Path [id mat-id points]
 
@@ -36,7 +55,7 @@
         [:g
          [:path (merge {:id id
                         :fill color
-                        :d (points->svg s points)}
+                        :d (points->svg point-shapes)}
                        (utils/apply-selected-style shape))]
          (when (state/is-active-path? s id)
            (for [p point-shapes]
