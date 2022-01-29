@@ -57,6 +57,10 @@
               (let [shape (state/get-shape s path-id)]
                 (add-point-at-pointer s shape type))))
 
+      #{(actions/get-key :path-tool.toggle-closed)}
+      (let [{:keys [closed?]} (state/get-shape s path-id)]
+        (state/merge-shape! s path-id {:closed? (not closed?)}))
+
       #{(actions/get-key :path-tool.quit)}
       (state/pop-tool! s)
 

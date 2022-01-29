@@ -6,7 +6,18 @@
             [svg-editor.math :refer [avg]]
             [svg-editor.shapes.utils :as utils]))
 
-(defn point->svg [points]
+(defn svg-starting-pos [points closed?]
+  (let [{[x1 y1] :pos t1 :type} (first points)
+        {[x2 y2] :pos} (second points)]
+    (cond (and (>= (count points) 3)
+               (= t1 :round)
+               closed?)
+          (avg [[x1 y1] [x2 y2]])
+
+          :else
+          [x1 y1])))
+
+(defn point->svg [points closed?]
   (let [[{[x1 y1] :pos t1 :type}
          {[x2 y2] :pos t2 :type}] points]
     (cond (= t1 t2 :round)
@@ -18,22 +29,29 @@
           [2 (str "Q " x1 " " y1
                   " " x2 " " y2)]
 
+          (and closed?
+               (= (count points) 1))
+          [1 ""]
+
           :else
           [1 (str "L " x1 " " y1)])))
 
-(defn points->svg [points]
+(defn points->svg [points closed?]
   (if (empty? points)
     ""
-    (let [{[x y] :pos} (first points)
-          d (str "M " x " " y " ")]
-      (loop [points (rest points)
+    (let [[xi yi] (svg-starting-pos points closed?)
+          d (str "M " xi " " yi)]
+      (loop [points (if closed?
+                      (conj (into [] (rest points))
+                            (first points) (second points))
+                      (rest points))
              d d]
         (if (empty? points)
           d
-          (let [[n result] (point->svg points)]
+          (let [[n result] (point->svg points closed?)]
             (recur (drop n points) (str d result))))))))
 
-(defrecord Path [id mat-id points]
+(defrecord Path [id mat-id points closed?]
 
   Transform
   (translate [shape _]
@@ -55,7 +73,7 @@
         [:g
          [:path (merge {:id id
                         :fill color
-                        :d (points->svg point-shapes)}
+                        :d (points->svg point-shapes closed?)}
                        (utils/apply-selected-style shape))]
          (when (state/is-active-path? s id)
            (for [p point-shapes]
@@ -63,4 +81,4 @@
              [render-svg p s]))]))))
 
 (defn path []
-  (Path. (utils/new-shape-id) :default []))
+  (Path. (utils/new-shape-id) :default [] true))

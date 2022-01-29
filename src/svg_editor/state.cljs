@@ -131,6 +131,9 @@
 (defn set-shape! [s sid shape]
   (swap! s update-in [:shapes] assoc sid shape))
 
+(defn merge-shape! [s sid partial-shape]
+  (set-shape! s sid (merge (get-shape s sid) partial-shape)))
+
 (defn deselect-all!
   [s]
   (map-shapes! s #(assoc % :selected false)))

@@ -31,6 +31,10 @@
    {:display "Add Round Point"
     :key :r}
 
+   :path-tool.toggle-closed
+   {:display "Toggle curve closed"
+    :key :c}
+
    :path-tool.quit
    {:display "Quit"
     :key :tab}
