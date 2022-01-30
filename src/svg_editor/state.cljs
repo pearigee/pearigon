@@ -32,6 +32,9 @@
   [s]
   (last (:tool @s)))
 
+(defn get-tool-stack [s]
+  (:tool @s))
+
 (defn get-shape [s id]
   (-> @s :shapes (get id)))
 
@@ -48,7 +51,7 @@
                      (get-draw-order s))]
     result))
 
-(defn get-shapes-ids-with-override [s ids]
+(defn get-shapes-by-id-with-override [s ids]
   (mapv #(if-let [preview (get-preview s %)]
            preview
            (get-shape s %)) ids))
@@ -101,12 +104,6 @@
 
 (defn get-selected [s]
   (sp/select [:shapes sp/MAP-VALS #(:selected %)] @s))
-
-;; TODO: Consider a way to use (satisfies? PathTool (get-tool s))
-;; without create a circular dependency.
-(defn is-active-path? [s id]
-  (let [pt (first (filter #(= (:action %) :path-tool) (:tool @s)))]
-    (= id (:path-id pt))))
 
 (defn map-shapes! [s f]
   (swap! s #(sp/transform [:shapes sp/MAP-VALS] %2 %1) f))

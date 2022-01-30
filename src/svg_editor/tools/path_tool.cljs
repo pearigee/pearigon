@@ -1,11 +1,14 @@
 (ns svg-editor.tools.path-tool
-  (:require [svg-editor.tools.protocol :refer [OnKeypress
-                                               OnClick]]
+  (:require [reagent.core :as r]
+            [svg-editor.tools.protocol :refer [OnKeypress
+                                               OnClick
+                                               ToolRenderSVG]]
             [svg-editor.tools.grab :refer [grab]]
             [svg-editor.state :as state]
             [svg-editor.actions :as actions]
             [svg-editor.shapes.path :refer [Path path]]
             [svg-editor.shapes.point :refer [point]]
+            [svg-editor.shapes.protocol :refer [render-svg]]
             [svg-editor.selection :refer [select-from-mouse-event!]]))
 
 (defn add-point [s {:keys [id points] :as path} point]
@@ -67,7 +70,15 @@
       #{(actions/get-key :path-tool.grab)}
       (grab s)
 
-      nil)))
+      nil))
+
+  ToolRenderSVG
+  (tool-render-svg [_ s]
+    (when path-id
+      (let [{pids :points} (state/get-shape s path-id)
+            ps (state/get-shapes-by-id-with-override s pids)]
+        (for [p ps]
+          (r/as-element ^{:key (:id p)}  [render-svg p s]))))))
 
 (defn path-tool
   "Activate the path tool. If a single path is selected, it will become

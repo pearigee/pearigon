@@ -69,16 +69,12 @@
     (when-not (empty? points)
       (let [materials (state/get-materials s)
             {:keys [color]} (get materials mat-id)
-            point-shapes (state/get-shapes-ids-with-override s points)]
+            point-shapes (state/get-shapes-by-id-with-override s points)]
         [:g
          [:path (merge {:id id
                         :fill color
                         :d (points->svg point-shapes closed?)}
-                       (utils/apply-selected-style shape))]
-         (when (state/is-active-path? s id)
-           (for [p point-shapes]
-             ^{:key (:id p)}
-             [render-svg p s]))]))))
+                       (utils/apply-selected-style shape))]]))))
 
 (defn path []
   (Path. (utils/new-shape-id) :default [] true))
