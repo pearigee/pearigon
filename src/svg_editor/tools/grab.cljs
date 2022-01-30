@@ -21,5 +21,5 @@
 (defn grab
   [s]
   (state/push-tool! s (GrabTool. "Grab"
-                                :grab
-                                (state/get-mouse-pos s))))
+                                 :grab
+                                 (state/get-mouse-pos s))))
