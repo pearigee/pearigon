@@ -25,7 +25,7 @@
 
     (testing "doesn't select shape when disabled by config"
       (let [s (mock-state)]
-        (state/add-shape! s shape :selected false)
+        (state/add-shape! s shape :selected? false)
         (is (= (:selected (state/get-shape s sid))
                false))))
 
