@@ -22,7 +22,7 @@
 
   watch-styles
   {:doc "Build the Sass styles."
-   :task (shell "sass" "--watch" "--no-source-map"
+   :task (shell "npx" "sass" "--watch" "--no-source-map"
                 "sass/styles.scss:public/css/styles.css")}
 
   build-cljs
@@ -31,7 +31,7 @@
 
   build-styles
   {:doc "Build the Sass styles."
-   :task (shell "sass" "--no-source-map"
+   :task (shell "npx" "sass" "--no-source-map"
                 "sass/styles.scss:public/css/styles.css")}
 
   test

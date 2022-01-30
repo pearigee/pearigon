@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "sass": "^1.49.0",
     "shadow-cljs": "^2.16.12"
   },
   "dependencies": {
