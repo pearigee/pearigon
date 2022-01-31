@@ -19,6 +19,6 @@
 
        (for [t tools]
          (when (satisfies? ToolRenderSVG t)
-           ^{:key (:action t)} [tool-render-svg t]))]
-      [key-suggestion]]
+           ^{:key (:action t)} [tool-render-svg t]))]]
+     [key-suggestion]
      [sidebar]]))
