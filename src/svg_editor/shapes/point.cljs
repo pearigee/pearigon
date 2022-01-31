@@ -13,7 +13,7 @@
     shape)
 
   RenderSVG
-  (render-svg [shape _]
+  (render-svg [shape]
     (let [[x y] pos]
       [:circle (merge {:id id
                        :fill "#00d1b2"

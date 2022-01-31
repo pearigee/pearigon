@@ -2,12 +2,11 @@
   (:require
    [svg-editor.state :as state]))
 
-(defn- bind-resize
-  [s]
+(defn- bind-resize []
   (.addEventListener js/window "resize"
-                     #(state/update-view-size! s)))
+                     #(state/update-view-size!)))
 
 (defn init
   "Bind resize handlers."
-  [s]
-  (bind-resize s))
+  []
+  (bind-resize))

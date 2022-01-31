@@ -10,20 +10,19 @@
    [svg-editor.tools.scale :refer [scale]]
    [svg-editor.tools.path-tool :refer [path-tool]]))
 
-(defn- eval-hotkey
-  [s key]
-  (let [tool (state/get-tool s)]
+(defn- eval-hotkey [key]
+  (let [tool (state/get-tool)]
     (if (satisfies? OnKeypress tool)
       (do
         (js/console.log "Calling tool callback: " key)
-        (on-keypress tool s key))
+        (on-keypress tool key))
       (do (js/console.log "Getting tool for hotkey: " key)
           (condp = key
-            (actions/get-key :add) (add s)
-            (actions/get-key :scale) (scale s)
-            (actions/get-key :grab) (grab s)
-            (actions/get-key :material) (material s)
-            (actions/get-key :path-tool) (path-tool s)
+            (actions/get-key :add) (add)
+            (actions/get-key :scale) (scale)
+            (actions/get-key :grab) (grab)
+            (actions/get-key :material) (material)
+            (actions/get-key :path-tool) (path-tool)
             nil)))))
 
 (defn- keyboard-event->key
@@ -33,8 +32,7 @@
         ctrl (.-ctrlKey event)]
     (keyword (str (if ctrl "ctrl-" "") key))))
 
-(defn- bind-keys
-  [s]
+(defn- bind-keys []
   (js/document.addEventListener
    "keydown"
    (fn [event]
@@ -44,9 +42,9 @@
        (.preventDefault event)
        (let [key (keyboard-event->key event)]
          (js/console.log "Keypress: " key)
-         (eval-hotkey s key))))))
+         (eval-hotkey key))))))
 
 (defn init
   "Bind keyboard input handlers."
-  [s]
-  (bind-keys s))
+  []
+  (bind-keys))

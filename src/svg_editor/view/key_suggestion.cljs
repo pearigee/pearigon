@@ -1,8 +1,9 @@
-(ns svg-editor.view.key-suggestion)
+(ns svg-editor.view.key-suggestion
+  (:require [svg-editor.state :as state]))
 
-(defn key-suggestion
-  [suggestions]
-  (let [tool-name (:tool suggestions)
+(defn key-suggestion []
+  (let [suggestions (state/get-suggestions)
+        tool-name (:tool suggestions)
         keys (:keys suggestions)]
     [:div.suggestions
      (if tool-name

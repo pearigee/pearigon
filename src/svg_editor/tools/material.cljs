@@ -1,7 +1,5 @@
 (ns svg-editor.tools.material
-  (:require
-   [svg-editor.state :as state]))
+  (:require [svg-editor.state :as state]))
 
-(defn material
-  [state]
-  (state/set-panel! state :material))
+(defn material []
+  (state/set-panel! :material))

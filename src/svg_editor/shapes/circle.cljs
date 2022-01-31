@@ -14,8 +14,8 @@
     (assoc shape :r (+ r (apply max vect))))
 
   RenderSVG
-  (render-svg [shape s]
-    (let [materials (state/get-materials s)
+  (render-svg [shape]
+    (let [materials (state/get-materials)
           {color :color} (get materials mat-id)
           [x y] pos]
       [:circle (merge {:id id

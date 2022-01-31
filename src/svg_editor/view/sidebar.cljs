@@ -6,30 +6,28 @@
    [svg-editor.view.material :refer [material-editor]]))
 
 (defn sidebar-panel
-  [state title content]
+  [title content]
   [:div.sidebar.notification
    [:div.sidebar-header
     [:strong title]
     [:button.button.is-small
-     {:on-click #(state/set-panel! state nil)}
+     {:on-click #(state/set-panel! nil)}
      [:span.icon.is-small [:> icon-minimize]]]]
    content])
 
-(defn sidebar
-  [state]
+(defn sidebar []
   (r/create-class
    {:component-did-update
     (fn [_ _]
        ;; Update view dimensions so zoom can be recomputed
        ;; at the correct aspect ratio.
-      (state/update-view-size! state))
+      (state/update-view-size!))
 
     :reagent-render
-    (fn [state]
-      (let [panel (state/get-panel state)]
+    (fn []
+      (let [panel (state/get-panel)]
         (case panel
           :material [sidebar-panel
-                     state
                      "Material Editor"
-                     [material-editor state]]
+                     [material-editor]]
           nil)))}))

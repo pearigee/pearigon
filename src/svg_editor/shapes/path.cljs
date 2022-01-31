@@ -1,6 +1,5 @@
 (ns svg-editor.shapes.path
   (:require [svg-editor.shapes.protocol :refer [RenderSVG Transform
-                                                render-svg
                                                 OnSelect]]
             [svg-editor.state :as state]
             [svg-editor.math :refer [avg]]
@@ -61,15 +60,15 @@
     shape)
 
   OnSelect
-  (on-select [_ s]
-    (state/map-shape-ids! s (into #{} points) #(assoc % :selected true)))
+  (on-select [_]
+    (state/map-shape-ids! (into #{} points) #(assoc % :selected true)))
 
   RenderSVG
-  (render-svg [shape s]
+  (render-svg [shape]
     (when-not (empty? points)
-      (let [materials (state/get-materials s)
+      (let [materials (state/get-materials)
             {:keys [color]} (get materials mat-id)
-            point-shapes (state/get-shapes-by-id-with-override s points)]
+            point-shapes (state/get-shapes-by-id-with-override points)]
         [:g
          [:path (merge {:id id
                         :fill color

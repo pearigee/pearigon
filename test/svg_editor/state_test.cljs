@@ -12,27 +12,27 @@
         sid (:id shape)]
 
     (testing "adds a shape"
-      (let [s (mock-state)]
-        (state/add-shape! s shape)
-        (is (= (count (state/get-shapes-with-override s))
+      (binding [state/*db* (mock-state)]
+        (state/add-shape! shape)
+        (is (= (count (state/get-shapes-with-override))
                1))))
 
     (testing "selects shape by default"
-      (let [s (mock-state)]
-        (state/add-shape! s shape)
-        (is (= (:selected (state/get-shape s sid))
+      (binding [state/*db* (mock-state)]
+        (state/add-shape! shape)
+        (is (= (:selected (state/get-shape sid))
                true))))
 
     (testing "doesn't select shape when disabled by config"
-      (let [s (mock-state)]
-        (state/add-shape! s shape :selected? false)
-        (is (= (:selected (state/get-shape s sid))
+      (binding [state/*db* (mock-state)]
+        (state/add-shape! shape :selected? false)
+        (is (= (:selected (state/get-shape sid))
                false))))
 
     (testing "appends the shape to the draw-order"
-      (let [s (mock-state)]
-        (state/add-shape! s shape)
-        (is (= (first (state/get-draw-order s))
+      (binding [state/*db* (mock-state)]
+        (state/add-shape! shape)
+        (is (= (first (state/get-draw-order))
                sid))))))
 
 (deftest map-shape-ids!
@@ -44,14 +44,14 @@
         sid3 (:id shape-3)]
 
     (testing "applys function to IDs provided"
-      (let [s (mock-state)]
-        (state/add-shape! s shape-1)
-        (state/add-shape! s shape-2)
-        (state/add-shape! s shape-3)
+      (binding [state/*db* (mock-state)]
+        (state/add-shape! shape-1)
+        (state/add-shape! shape-2)
+        (state/add-shape! shape-3)
 
-        (state/map-shape-ids! s #{sid1 sid3}
+        (state/map-shape-ids! #{sid1 sid3}
                               #(assoc % :r 50))
 
-        (is (= (:r (state/get-shape s sid1)) 50))
-        (is (= (:r (state/get-shape s sid2)) 40))
-        (is (= (:r (state/get-shape s sid3)) 50))))))
+        (is (= (:r (state/get-shape sid1)) 50))
+        (is (= (:r (state/get-shape sid2)) 40))
+        (is (= (:r (state/get-shape sid3)) 50))))))

@@ -7,19 +7,18 @@
 
 (defrecord GrabTool [display action init-mouse-pos]
   OnMouseMove
-  (on-mouse-move [_ s {pos :pos}]
+  (on-mouse-move [_ {pos :pos}]
     (let [offset (v- pos init-mouse-pos)]
-      (state/map-selected-shapes-preview! s #(translate % offset))))
+      (state/map-selected-shapes-preview! #(translate % offset))))
 
   OnClick
-  (on-click [_ s {pos :pos}]
+  (on-click [_ {pos :pos}]
     (let [offset (v- pos init-mouse-pos)]
-      (state/map-selected-shapes! s #(translate % offset)))
-    (state/clear-shape-preview! s)
-    (state/pop-tool! s)))
+      (state/map-selected-shapes! #(translate % offset)))
+    (state/clear-shape-preview!)
+    (state/pop-tool!)))
 
-(defn grab
-  [s]
-  (state/push-tool! s (GrabTool. "Grab"
+(defn grab []
+  (state/push-tool! (GrabTool. "Grab"
                                  :grab
-                                 (state/get-mouse-pos s))))
+                                 (state/get-mouse-pos))))

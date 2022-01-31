@@ -8,19 +8,17 @@
    [svg-editor.state :as state]
    [svg-editor.view.app :refer [app]]))
 
-(def s (r/atom (state/initial-state)))
-
 (defn mount-root
   []
-  (d/render [app s] (.getElementById js/document "app")))
+  (d/render [app] (.getElementById js/document "app")))
 
 (defn init
   []
   (mount-root)
-  (keyboard/init s)
-  (mouse/init s)
-  (resize/init s)
-  (state/update-view-size! s))
+  (keyboard/init)
+  (mouse/init)
+  (resize/init)
+  (state/update-view-size!))
 
 (defn ^:export init!
   []

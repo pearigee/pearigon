@@ -6,10 +6,9 @@
    [reagent.core :as r]
    [svg-editor.state :as state]))
 
-(defn material-editor
-  [state]
+(defn material-editor []
   (let [m-state (r/atom {:selected :default})
-        get-selected (fn [] (state/get-material state (:selected @m-state)))]
+        get-selected (fn [] (state/get-material (:selected @m-state)))]
     (fn []
       [:div.sidebar-content
        [:label "Active Material"]
@@ -22,16 +21,16 @@
                     (swap! m-state assoc
                            :selected
                            (keyword (-> event .-target .-value)))
-                    (state/set-active-material! state (:selected @m-state))
+                    (state/set-active-material! (:selected @m-state))
                     (js/console.log @m-state))}
-         (for [[k v] (into [] (state/get-materials state))]
+         (for [[k v] (into [] (state/get-materials))]
            ^{:key k} [:option {:value k} (:display v)])]]
        [:button.button.is-small.is-success
         {:on-click (fn []
                      (let [id (keyword (str (random-uuid)))]
-                       (state/add-material! state id {:display "New Material"
+                       (state/add-material! id {:display "New Material"
                                                       :color "#000"})
-                       (state/set-active-material! state id)
+                       (state/set-active-material! id)
                        (swap! m-state assoc :selected id)))}
         [:span.icon.is-small
          [:> add-icon]]
@@ -39,7 +38,6 @@
        [:button.button.is-small.is-success
         {:on-click (fn []
                      (state/map-selected-shapes!
-                      state
                       #(assoc % :mat-id (:selected @m-state))))}
         [:span.icon.is-small
          [:> apply-icon]]
@@ -50,7 +48,6 @@
                       :on-change (fn [event]
                                    (js/console.log event)
                                    (state/set-material!
-                                    state
                                     (:selected @m-state)
                                     (merge (get-selected)
                                            {:display (-> event .-target .-value)})))}]
@@ -65,7 +62,6 @@
         {:color (:color (get-selected))
          :on-change (fn [color]
                       (state/set-material!
-                       state
                        (:selected @m-state)
                        (merge (get-selected)
                               {:color color})))}]

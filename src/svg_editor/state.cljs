@@ -1,6 +1,7 @@
 (ns svg-editor.state
   (:require
    [com.rpl.specter :as sp :include-macros true]
+   [reagent.core :as r]
    [svg-editor.actions :as actions]
    [svg-editor.shapes.protocol :refer [OnSelect on-select]]
    [svg-editor.math :refer [v+]]))
@@ -24,193 +25,174 @@
    :next-id 0
    :suggestions (actions/get-key-suggestions nil)})
 
-(defn get-mouse-pos
-  [s]
-  (:pos (:mouse @s)))
+(def ^:dynamic *db* (r/atom (initial-state)))
 
-(defn get-tool
-  [s]
-  (last (:tool @s)))
+(defn get-mouse-pos []
+  (:pos (:mouse @*db*)))
 
-(defn get-tool-stack [s]
-  (:tool @s))
+(defn get-tool []
+  (last (:tool @*db*)))
 
-(defn get-shape [s id]
-  (-> @s :shapes (get id)))
+(defn get-tool-stack []
+  (:tool @*db*))
 
-(defn get-draw-order [s]
-  (:draw-order @s))
+(defn get-shape [id]
+  (-> @*db* :shapes (get id)))
 
-(defn get-preview [s id]
-  (-> @s :shape-preview-override (get id)))
+(defn get-draw-order []
+  (:draw-order @*db*))
 
-(defn get-shapes-with-override [s]
-  (let [result (mapv #(if-let [preview (get-preview s %)]
+(defn get-suggestions []
+  (:suggestions @*db*))
+
+(defn get-preview [ id]
+  (-> @*db* :shape-preview-override (get id)))
+
+(defn get-shapes-with-override []
+  (let [result (mapv #(if-let [preview (get-preview %)]
                         preview
-                        (get-shape s %))
-                     (get-draw-order s))]
+                        (get-shape %))
+                     (get-draw-order))]
     result))
 
-(defn get-shapes-by-id-with-override [s ids]
-  (mapv #(if-let [preview (get-preview s %)]
+(defn get-shapes-by-id-with-override [ids]
+  (mapv #(if-let [preview (get-preview %)]
            preview
-           (get-shape s %)) ids))
+           (get-shape %)) ids))
 
-(defn get-materials
-  [s]
-  (:materials @s))
+(defn get-materials []
+  (:materials @*db*))
 
-(defn get-material
-  [s id]
-  (get (:materials @s) id))
+(defn get-material [id]
+  (get (:materials @*db*) id))
 
-(defn get-panel
-  [s]
-  (:panel @s))
+(defn get-panel []
+  (:panel @*db*))
 
-(defn get-view-pos
-  [s]
-  (:view-pos @s))
+(defn get-view-pos []
+  (:view-pos @*db*))
 
-(defn get-view-dimensions
-  [s]
-  (:view-dimensions @s))
+(defn get-view-dimensions []
+  (:view-dimensions @*db*))
 
-(defn get-view-zoom
-  [s]
-  (:view-zoom @s))
+(defn get-view-zoom []
+  (:view-zoom @*db*))
 
-(defn get-view-pos-with-zoom
-  [s]
-  (let [[vx vy] (get-view-pos s)
-        [dx dy] (get-view-dimensions s)
-        z (get-view-zoom s)
+(defn get-view-pos-with-zoom []
+  (let [[vx vy] (get-view-pos)
+        [dx dy] (get-view-dimensions)
+        z (get-view-zoom)
         zpos [(+ vx (/ (* dx (- 1 z)) 2))
               (+ vy (/ (* dy (- 1 z)) 2))]]
     zpos))
 
-(defn get-view-dim-with-zoom
-  [s]
-  (let [[dx dy] (get-view-dimensions s)
-        z (get-view-zoom s)
+(defn get-view-dim-with-zoom []
+  (let [[dx dy] (get-view-dimensions)
+        z (get-view-zoom)
         zdim [(* dx z) (* dy z)]]
     zdim))
 
-(defn get-view-zoom-scale
-  [s]
-  (let [[dx _] (get-view-dimensions s)
-        [zdx _] (get-view-dim-with-zoom s)]
+(defn get-view-zoom-scale []
+  (let [[dx _] (get-view-dimensions)
+        [zdx _] (get-view-dim-with-zoom)]
     (/ dx zdx)))
 
-(defn get-selected [s]
-  (sp/select [:shapes sp/MAP-VALS #(:selected %)] @s))
+(defn get-selected []
+  (sp/select [:shapes sp/MAP-VALS #(:selected %)] @*db*))
 
-(defn map-shapes! [s f]
-  (swap! s #(sp/transform [:shapes sp/MAP-VALS] %2 %1) f))
+(defn map-shapes! [f]
+  (swap! *db* #(sp/transform [:shapes sp/MAP-VALS] %2 %1) f))
 
-(defn map-selected-shapes!
-  [s f]
-  (map-shapes! s #(if (:selected %) (f %) %)))
+(defn map-selected-shapes! [f]
+  (map-shapes! #(if (:selected %) (f %) %)))
 
-(defn map-shape-ids! [s id-set f]
-  (map-shapes! s #(if (contains? id-set (:id %)) (f %) %)))
+(defn map-shape-ids! [id-set f]
+  (map-shapes! #(if (contains? id-set (:id %)) (f %) %)))
 
-(defn map-selected-shapes-preview!
-  [s f]
-  (swap! s assoc :shape-preview-override
-         (let [shapes (map f (get-selected s))]
+(defn map-selected-shapes-preview! [f]
+  (swap! *db* assoc :shape-preview-override
+         (let [shapes (map f (get-selected))]
            (reduce #(assoc %1 (:id %2) %2) {} shapes))))
 
-(defn clear-shape-preview!
-  [s]
-  (swap! s assoc :shape-preview-override {}))
+(defn clear-shape-preview! []
+  (swap! *db* assoc :shape-preview-override {}))
 
-(defn set-shape! [s sid shape]
-  (swap! s update-in [:shapes] assoc sid shape))
+(defn set-shape! [sid shape]
+  (swap! *db* update-in [:shapes] assoc sid shape))
 
-(defn merge-shape! [s sid partial-shape]
-  (set-shape! s sid (merge (get-shape s sid) partial-shape)))
+(defn merge-shape! [sid partial-shape]
+  (set-shape! sid (merge (get-shape sid) partial-shape)))
 
-(defn deselect-all!
-  [s]
-  (map-shapes! s #(assoc % :selected false)))
+(defn deselect-all! []
+  (map-shapes! #(assoc % :selected false)))
 
 (defn select-id!
-  ([s id selected?]
-   (when-let [shape (get-shape s id)]
-     (set-shape! s id (merge shape {:selected selected?}))
-     (when (satisfies? OnSelect shape) (on-select shape s))))
-  ([s id] (select-id! s id true)))
+  ([id selected?]
+   (when-let [shape (get-shape id)]
+     (set-shape! id (merge shape {:selected selected?}))
+     (when (satisfies? OnSelect shape) (on-select shape))))
+  ([id] (select-id! id true)))
 
-(defn set-suggestions!
-  [s suggestions]
-  (swap! s assoc :suggestions suggestions))
+(defn set-suggestions! [suggestions]
+  (swap! *db*  assoc :suggestions suggestions))
 
-(defn set-view-dimensions!
-  [s dim]
-  (swap! s assoc :view-dimensions dim))
+(defn set-view-dimensions! [dim]
+  (swap! *db* assoc :view-dimensions dim))
 
-(defn update-view-size!
-  [s]
+(defn update-view-size! []
   ;; TODO: Figure out how to remove this DOM reference.
   (let [svg (js/document.getElementById "svg-root")
         height (.-clientHeight svg)
         width (.-clientWidth svg)]
-    (set-view-dimensions! s [width height])))
+    (set-view-dimensions! [width height])))
 
-(defn set-panel!
-  [s panel]
-  (swap! s assoc :panel panel))
+(defn set-panel! [panel]
+  (swap! *db* assoc :panel panel))
 
-(defn set-material!
-  [s id value]
-  (swap! s update-in [:materials] assoc id value))
+(defn set-material! [id value]
+  (swap! *db* update-in [:materials] assoc id value))
 
-(defn set-active-material!
-  [s id]
-  (swap! s assoc :active-material id))
+(defn set-active-material! [id]
+  (swap! *db* assoc :active-material id))
 
-(defn move-view-pos!
-  [s delta-vec]
-  (swap! s assoc :view-pos (v+ (:view-pos @s) delta-vec)))
+(defn move-view-pos! [delta-vec]
+  (swap! *db* assoc :view-pos (v+ (:view-pos @*db*) delta-vec)))
 
 ;; TODO: Constrain zoom to valid values (i.e. viewBox has positive area).
-(defn view-zoom!
-  [s delta]
-  (swap! s assoc :view-zoom (+ (:view-zoom @s) (/ delta 100))))
+(defn view-zoom! [delta]
+  (swap! *db* assoc :view-zoom (+ (:view-zoom @*db*) (/ delta 100))))
 
 (defn add-material!
-  [s id value]
-  (swap! s update-in [:materials] assoc id value))
+  [id value]
+  (swap! *db* update-in [:materials] assoc id value))
 
-(defn push-tool! [s tool]
-  (swap! s assoc :tool (conj (:tool @s) tool))
-  (js/console.log "Tool pushed:" (:tool @s))
-  (set-suggestions! s (actions/get-key-suggestions (get-tool s))))
+(defn push-tool! [tool]
+  (swap! *db* assoc :tool (conj (:tool @*db*) tool))
+  (js/console.log "Tool pushed:" (:tool @*db*))
+  (set-suggestions! (actions/get-key-suggestions (get-tool))))
 
-(defn pop-tool! [s]
-  (when-not (empty? (:tool @s))
-    (swap! s assoc :tool (pop (:tool @s)))
-    (js/console.log "Tool popped:" (:tool @s))
-    (set-suggestions! s (actions/get-key-suggestions (get-tool s)))))
+(defn pop-tool! []
+  (when-not (empty? (:tool @*db*))
+    (swap! *db* assoc :tool (pop (:tool @*db*)))
+    (js/console.log "Tool popped:" (:tool @*db*))
+    (set-suggestions! (actions/get-key-suggestions (get-tool)))))
 
-(defn update-tool! [s tool]
-  (swap! s assoc :tool (sp/setval [sp/LAST] tool (:tool @s))))
+(defn update-tool! [tool]
+  (swap! *db* assoc :tool (sp/setval [sp/LAST] tool (:tool @*db*))))
 
-(defn conj-draw-order [s id]
-  (swap! s assoc :draw-order (conj (get-draw-order s) id)))
+(defn conj-draw-order [id]
+  (swap! *db* assoc :draw-order (conj (get-draw-order) id)))
 
 (defn add-shape!
-  [s {:keys [id] :as shape} & {:keys [selected? draw-order? deselect-all?]
+  [{:keys [id] :as shape} & {:keys [selected? draw-order? deselect-all?]
                                :or {selected? true
                                     deselect-all? true
                                     draw-order? true}}]
-  (when deselect-all? (deselect-all! s))
-  (swap! s update-in [:shapes] assoc id
+  (when deselect-all? (deselect-all!))
+  (swap! *db* update-in [:shapes] assoc id
          (merge shape {:selected selected?
-                       :mat-id (:active-material @s)}))
-  (when draw-order? (conj-draw-order s id)))
+                       :mat-id (:active-material @*db*)}))
+  (when draw-order? (conj-draw-order id)))
 
-(defn set-mouse-state!
-  [s mouse-s]
-  (swap! s assoc :mouse mouse-s))
+(defn set-mouse-state! [mouse-s]
+  (swap! *db* assoc :mouse mouse-s))
