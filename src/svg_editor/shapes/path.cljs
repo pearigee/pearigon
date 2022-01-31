@@ -7,14 +7,18 @@
 
 (defn svg-starting-pos [points closed?]
   (let [{[x1 y1] :pos t1 :type} (first points)
-        {[x2 y2] :pos} (second points)]
-    (cond (and (>= (count points) 3)
-               (= t1 :round)
-               closed?)
-          (avg [[x1 y1] [x2 y2]])
+        {[x2 y2] :pos t2 :type} (second points)]
+    (if (and closed? (>= (count points) 3))
+      (cond (= t1 t2 :round)
+            (avg [[x1 y1] [x2 y2]])
 
-          :else
-          [x1 y1])))
+            (and (= t1 :round)
+                 (= t2 :sharp))
+            [x2 y2]
+
+            :else
+            [x1 y1])
+      [x1 y1])))
 
 (defn point->svg [points closed?]
   (let [[{[x1 y1] :pos t1 :type}
