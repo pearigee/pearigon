@@ -29,7 +29,7 @@
         {:on-click (fn []
                      (let [id (keyword (str (random-uuid)))]
                        (state/add-material! id {:display "New Material"
-                                                      :color "#000"})
+                                                :color "#000"})
                        (state/set-active-material! id)
                        (swap! m-state assoc :selected id)))}
         [:span.icon.is-small

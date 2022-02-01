@@ -1,6 +1,6 @@
 (ns frontend.shapes.path
   (:require [frontend.shapes.protocol :refer [RenderSVG Transform
-                                                OnSelect]]
+                                              OnSelect]]
             [frontend.state :as state]
             [frontend.math :refer [avg]]
             [frontend.shapes.utils :as utils]))

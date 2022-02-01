@@ -20,5 +20,6 @@
   (state/update-view-size!))
 
 (defn ^:export init!
+  "This is called by index.html to initialize the app."
   []
   (init))

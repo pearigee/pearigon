@@ -45,7 +45,7 @@
 (defn get-suggestions []
   (:suggestions @*db*))
 
-(defn get-preview [ id]
+(defn get-preview [id]
   (-> @*db* :shape-preview-override (get id)))
 
 (defn get-shapes-with-override []
@@ -185,9 +185,9 @@
 
 (defn add-shape!
   [{:keys [id] :as shape} & {:keys [selected? draw-order? deselect-all?]
-                               :or {selected? true
-                                    deselect-all? true
-                                    draw-order? true}}]
+                             :or {selected? true
+                                  deselect-all? true
+                                  draw-order? true}}]
   (when deselect-all? (deselect-all!))
   (swap! *db* update-in [:shapes] assoc id
          (merge shape {:selected selected?

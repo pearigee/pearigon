@@ -2,8 +2,8 @@
   (:require [reagent.core :as r]
             [com.rpl.specter :as sp :include-macros true]
             [frontend.tools.protocol :refer [OnKeypress
-                                               OnClick
-                                               ToolRenderSVG]]
+                                             OnClick
+                                             ToolRenderSVG]]
             [frontend.math :refer [avg]]
             [frontend.tools.grab :refer [grab]]
             [frontend.state :as state]
@@ -14,7 +14,7 @@
             [frontend.selection :refer [select-from-mouse-event!]]))
 
 (defn add-point [{:keys [id points] :as path} point
-                 &{:keys [index] :or {index (count points)}}]
+                 & {:keys [index] :or {index (count points)}}]
   (state/set-shape!
    id
    (assoc path :points
@@ -23,10 +23,10 @@
 (defn add-point-at-pos [{:keys [points] :as shape}
                         pos
                         type
-                        &{:keys [index selected? deselect-all?]
-                          :or {index (count points)
-                               selected? false
-                               deselect-all? false}}]
+                        & {:keys [index selected? deselect-all?]
+                           :or {index (count points)
+                                selected? false
+                                deselect-all? false}}]
   (let [np (point pos type)]
     (state/add-shape! np :draw-order? false
                       :selected? selected?

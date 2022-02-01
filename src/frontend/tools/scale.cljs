@@ -48,9 +48,9 @@
         mpos (state/get-mouse-pos)]
     (when-not (zero? (count selection))
       (state/push-tool! (map->ScaleTool
-                               {:display "Scale"
-                                :action :scale
-                                :center center
-                                :init-mouse-pos mpos
-                                :init-dist (dist center mpos)
-                                :axis nil})))))
+                         {:display "Scale"
+                          :action :scale
+                          :center center
+                          :init-mouse-pos mpos
+                          :init-dist (dist center mpos)
+                          :axis nil})))))

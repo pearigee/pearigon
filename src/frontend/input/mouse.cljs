@@ -1,7 +1,7 @@
 (ns frontend.input.mouse
   (:require
    [frontend.tools.protocol :refer [OnMouseMove on-mouse-move
-                                      OnClick on-click]]
+                                    OnClick on-click]]
    [frontend.state :as state]
    [frontend.selection :refer [select-from-mouse-event!]]))
 
