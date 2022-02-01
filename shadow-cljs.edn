@@ -9,8 +9,8 @@
  :builds       {:app {:target     :browser
                       :output-dir "public/js"
                       :asset-path "/js"
-                      :modules    {:app {:entries [svg-editor.core]}}
-                      :devtools   {:after-load svg-editor.core/mount-root}}
+                      :modules    {:app {:entries [frontend.core]}}
+                      :devtools   {:after-load frontend.core/mount-root}}
 
                 :node-test {:target :node-test
                             :output-to "out/node/node_tests.js"}
