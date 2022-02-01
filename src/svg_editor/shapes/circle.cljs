@@ -18,12 +18,12 @@
     (let [materials (state/get-materials)
           {color :color} (get materials mat-id)
           [x y] pos]
-      [:circle (merge {:id id
-                       :fill color
-                       :cx x
-                       :cy y
-                       :r r}
-                      (utils/apply-selected-style shape))])))
+      [:circle {:id id
+                :fill color
+                :class (utils/apply-selected-style shape "")
+                :cx x
+                :cy y
+                :r r}])))
 
 (defn circle [pos r]
   (Circle. (utils/new-shape-id) :default pos r))

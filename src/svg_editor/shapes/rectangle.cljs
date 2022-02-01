@@ -19,13 +19,13 @@
           {color :color} (get materials mat-id)
           [x y] pos
           [w h] dim]
-      [:rect (merge {:id id
-                     :fill color
-                     :x (- x (/ w 2))
-                     :y (- y (/ h 2))
-                     :width w
-                     :height h}
-                    (utils/apply-selected-style shape))])))
+      [:rect {:id id
+              :fill color
+              :class (utils/apply-selected-style shape "")
+              :x (- x (/ w 2))
+              :y (- y (/ h 2))
+              :width w
+              :height h}])))
 
 (defn rectangle [pos dim]
   (Rectangle. (utils/new-shape-id) :default pos dim))

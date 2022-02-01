@@ -1,10 +1,10 @@
 (ns svg-editor.shapes.utils)
 
 (defn apply-selected-style
-  [shape]
+  [shape class]
   (if (:selected shape)
-    {:class "selected"}
-    {}))
+    (str class " selected")
+    class))
 
 (defn new-shape-id []
   (str "shape-" (random-uuid)))

@@ -6,11 +6,6 @@ html, body {
 }
 
 $selection-color: lighten($primary, 30%);
-svg .selected {
-  filter: drop-shadow(0px 0px 5px $selection-color);
-  stroke: $selection-color;
-  stroke-width: 3;
-}
 
 body {
   height: 100vh;
@@ -70,4 +65,22 @@ svg {
   display: block;
   width: 100%;
   height: 100%;
+
+  .selected {
+    filter: drop-shadow(0px 0px 5px $selection-color);
+    stroke: $selection-color;
+    stroke-width: 3;
+  }
+
+  .point {
+    fill: hsl(204, 86%, 53%);
+  }
+
+  .add-point-button {
+    fill: lighten(hsla(204, 86%, 53%, 50%), 30%);
+  }
+
+  .mesh-line {
+    stroke: hsl(217, 71%, 53%);
+  }
 }

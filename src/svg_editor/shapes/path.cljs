@@ -74,10 +74,10 @@
             {:keys [color]} (get materials mat-id)
             point-shapes (state/get-shapes-by-id-with-override points)]
         [:g
-         [:path (merge {:id id
-                        :fill color
-                        :d (points->svg point-shapes closed?)}
-                       (utils/apply-selected-style shape))]]))))
+         [:path {:id id
+                 :class (utils/apply-selected-style shape "")
+                 :fill color
+                 :d (points->svg point-shapes closed?)}]]))))
 
 (defn path []
   (Path. (utils/new-shape-id) :default [] true))

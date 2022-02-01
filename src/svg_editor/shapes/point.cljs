@@ -15,14 +15,11 @@
   RenderSVG
   (render-svg [shape]
     (let [[x y] pos]
-      [:circle (merge {:id id
-                       :fill "#00d1b2"
-                       :stroke "black"
-                       :stroke-width "2"
-                       :cx x
-                       :cy y
-                       :r r}
-                      (utils/apply-selected-style shape))])))
+      [:circle {:id id
+                :class (utils/apply-selected-style shape "point")
+                :cx x
+                :cy y
+                :r r}])))
 
 (defn point [pos type]
   (Point. (utils/new-shape-id) pos type 5))
