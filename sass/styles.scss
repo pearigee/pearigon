@@ -50,10 +50,11 @@ div.app {
   flex-wrap: wrap;
   row-gap: 10px;
   column-gap: 15px;
-  padding: 0px 10px;
+  padding: 10px 10px;
   line-height: 0;
-  margin: 10px 0;
   pointer-events: none;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(3px);
 }
 
 .key-suggestion {
