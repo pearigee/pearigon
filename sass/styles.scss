@@ -52,7 +52,7 @@ div.app {
   @include transparent-background;
 
   position: absolute;
-  bottom: 0;
+  top: 0;
   display: flex;
   flex-wrap: wrap;
   row-gap: 10px;
