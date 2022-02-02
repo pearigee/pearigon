@@ -7,6 +7,11 @@ html, body {
 
 $selection-color: lighten($primary, 30%);
 
+@mixin transparent-background {
+  background: rgba(255,255,255, 0.75);
+  backdrop-filter: blur(3px);
+}
+
 body {
   height: 100vh;
   padding: 0;
@@ -44,8 +49,10 @@ div.app {
 }
 
 .suggestions {
+  @include transparent-background;
+
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
   display: flex;
   flex-wrap: wrap;
   row-gap: 10px;
@@ -53,8 +60,6 @@ div.app {
   padding: 10px 10px;
   line-height: 0;
   pointer-events: none;
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(3px);
 }
 
 .key-suggestion {
