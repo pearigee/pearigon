@@ -100,6 +100,9 @@
 (defn get-selected []
   (sp/select [:shapes sp/MAP-VALS #(:selected %)] @*db*))
 
+(defn selected? [id]
+  (:selected (get-shape id)))
+
 (defn map-shapes! [f]
   (swap! *db* #(sp/transform [:shapes sp/MAP-VALS] %2 %1) f))
 
@@ -132,6 +135,9 @@
      (set-shape! id (merge shape {:selected selected?}))
      (when (satisfies? OnSelect shape) (on-select shape))))
   ([id] (select-id! id true)))
+
+(defn toggle-selected! [id]
+  (select-id! id (not (selected? id))))
 
 (defn set-suggestions! [suggestions]
   (swap! *db*  assoc :suggestions suggestions))
