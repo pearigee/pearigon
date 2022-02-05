@@ -6,6 +6,7 @@
   (render-svg [shape]))
 
 (defprotocol Transform
+  (transform [shape matrix])
   (translate [shape vect])
   (scale [shape vect]))
 

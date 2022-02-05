@@ -6,6 +6,7 @@
                                              ToolRenderSVG]]
             [frontend.math :refer [avg]]
             [frontend.tools.grab :refer [grab]]
+            [frontend.tools.scale :refer [scale]]
             [frontend.state :as state]
             [frontend.actions :as actions]
             [frontend.shapes.path :refer [Path path]]
@@ -81,6 +82,9 @@
 
       #{(actions/get-key :path-tool.grab)}
       (grab)
+
+      #{(actions/get-key :path-tool.scale)}
+      (scale)
 
       nil))
 

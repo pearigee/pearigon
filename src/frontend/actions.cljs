@@ -25,11 +25,15 @@
 
    :path-tool.add-point-sharp
    {:display "Add Sharp Point"
-    :key :s}
+    :key :w}
 
    :path-tool.add-point-round
    {:display "Add Round Point"
-    :key :r}
+    :key :q}
+
+   :path-tool.scale
+   {:display "Scale"
+    :key :s}
 
    :path-tool.toggle-closed
    {:display "Toggle curve closed"

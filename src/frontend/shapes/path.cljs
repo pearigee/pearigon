@@ -57,6 +57,9 @@
 (defrecord Path [id mat-id points closed?]
 
   Transform
+  (transform [shape _]
+    shape)
+
   (translate [shape _]
     shape)
 

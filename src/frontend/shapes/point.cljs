@@ -1,13 +1,16 @@
 (ns frontend.shapes.point
   (:require [frontend.shapes.protocol :refer [RenderSVG Transform]]
-            [frontend.math :refer [v+]]
+            [frontend.math :as m]
             [frontend.shapes.utils :as utils]))
 
 (defrecord Point [id pos type r]
 
   Transform
+  (transform [shape matrix]
+    (assoc shape :pos (m/mv* matrix pos)))
+
   (translate [shape vect]
-    (assoc shape :pos (v+ pos vect)))
+    (assoc shape :pos (m/v+ pos vect)))
 
   (scale [shape vect]
     shape)

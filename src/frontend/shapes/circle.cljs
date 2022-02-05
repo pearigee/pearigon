@@ -7,6 +7,9 @@
 (defrecord Circle [id mat-id pos r]
 
   Transform
+  (transform [shape _]
+    shape)
+
   (translate [shape vect]
     (assoc shape :pos (v+ pos vect)))
 

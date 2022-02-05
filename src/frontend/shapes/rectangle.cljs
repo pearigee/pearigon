@@ -7,6 +7,9 @@
 (defrecord Rectangle [id mat-id pos dim]
 
   Transform
+  (transform [shape _]
+    shape)
+
   (translate [shape vect]
     (assoc shape :pos (v+ pos vect)))
 

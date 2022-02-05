@@ -2,19 +2,23 @@
   (:require
    [frontend.state :as state]
    [frontend.tools.protocol :refer [OnMouseMove OnClick]]
-   [frontend.shapes.protocol :refer [translate]]
-   [frontend.math :refer [v-]]))
+   [frontend.shapes.protocol :as shape]
+   [frontend.math :as m]))
+
+(defn- compute-transform [pos init-mouse-pos]
+  (let [[x y] (m/v- pos init-mouse-pos)]
+    (m/translate x y)))
 
 (defrecord GrabTool [display action init-mouse-pos]
   OnMouseMove
   (on-mouse-move [_ {pos :pos}]
-    (let [offset (v- pos init-mouse-pos)]
-      (state/map-selected-shapes-preview! #(translate % offset))))
+    (state/map-selected-shapes-preview!
+     #(shape/transform % (compute-transform pos init-mouse-pos))))
 
   OnClick
   (on-click [_ {pos :pos}]
-    (let [offset (v- pos init-mouse-pos)]
-      (state/map-selected-shapes! #(translate % offset)))
+    (state/map-selected-shapes!
+     #(shape/transform % (compute-transform pos init-mouse-pos)))
     (state/clear-shape-preview!)
     (state/pop-tool!)))
 
