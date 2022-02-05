@@ -1,14 +1,17 @@
 (ns frontend.state-test
   (:require [cljs.test :refer-macros [deftest is testing]]
             [reagent.core :as r]
-            [frontend.shapes.circle :refer [circle]]
             [frontend.state :as state]))
 
 (defn- mock-state []
   (r/atom (state/initial-state)))
 
+(defn shape [pos]
+  {:id (str "shape-" (random-uuid))
+   :pos pos})
+
 (deftest add-shape!
-  (let [shape (circle [0 0] 40)
+  (let [shape (shape [0 0])
         sid (:id shape)]
 
     (testing "adds a shape"
@@ -36,11 +39,11 @@
                sid))))))
 
 (deftest map-shape-ids!
-  (let [shape-1 (circle [0 0] 40)
+  (let [shape-1 (shape [0 0])
         sid1 (:id shape-1)
-        shape-2 (circle [0 10] 40)
+        shape-2 (shape [0 10])
         sid2 (:id shape-2)
-        shape-3 (circle [0 20] 40)
+        shape-3 (shape [0 20])
         sid3 (:id shape-3)]
 
     (testing "applys function to IDs provided"
@@ -50,8 +53,8 @@
         (state/add-shape! shape-3)
 
         (state/map-shape-ids! #{sid1 sid3}
-                              #(assoc % :r 50))
+                              #(assoc % :pos [0 10]))
 
-        (is (= (:r (state/get-shape sid1)) 50))
-        (is (= (:r (state/get-shape sid2)) 40))
-        (is (= (:r (state/get-shape sid3)) 50))))))
+        (is (= (:pos (state/get-shape sid1)) [0 10]))
+        (is (= (:pos (state/get-shape sid2)) [0 10]))
+        (is (= (:pos (state/get-shape sid3)) [0 10]))))))

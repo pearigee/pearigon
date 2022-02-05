@@ -9,12 +9,6 @@
   (transform [shape matrix]
     (assoc shape :pos (m/mv* matrix pos)))
 
-  (translate [shape vect]
-    (assoc shape :pos (m/v+ pos vect)))
-
-  (scale [shape vect]
-    shape)
-
   RenderSVG
   (render-svg [shape]
     (let [[x y] pos]

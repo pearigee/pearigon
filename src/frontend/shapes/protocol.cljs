@@ -6,9 +6,7 @@
   (render-svg [shape]))
 
 (defprotocol Transform
-  (transform [shape matrix])
-  (translate [shape vect])
-  (scale [shape vect]))
+  (transform [shape matrix]))
 
 (defprotocol OnSelect
   (on-select [shape]))

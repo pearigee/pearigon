@@ -29,9 +29,9 @@
                                 selected? false
                                 deselect-all? false}}]
   (let [np (point pos type)]
+    (when deselect-all? (state/deselect-all!))
     (state/add-shape! np :draw-order? false
-                      :selected? selected?
-                      :deselect-all? deselect-all?)
+                      :selected? selected?)
     (add-point shape np :index index)))
 
 (defn is-path? [shape]

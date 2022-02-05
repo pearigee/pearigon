@@ -184,15 +184,16 @@
   (swap! *db* assoc :draw-order (conj (get-draw-order) id)))
 
 (defn add-shape!
-  [{:keys [id] :as shape} & {:keys [selected? draw-order? deselect-all?]
+  [{:keys [id] :as shape} & {:keys [selected? draw-order?]
                              :or {selected? true
-                                  deselect-all? true
                                   draw-order? true}}]
-  (when deselect-all? (deselect-all!))
   (swap! *db* update-in [:shapes] assoc id
          (merge shape {:selected selected?
                        :mat-id (:active-material @*db*)}))
   (when draw-order? (conj-draw-order id)))
+
+(defn add-points! [points]
+  (doseq [p points] (add-shape! p :draw-order? false)))
 
 (defn set-mouse-state! [mouse-s]
   (swap! *db* assoc :mouse mouse-s))

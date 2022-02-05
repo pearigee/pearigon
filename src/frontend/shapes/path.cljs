@@ -2,7 +2,8 @@
   (:require [frontend.shapes.protocol :refer [RenderSVG Transform
                                               OnSelect]]
             [frontend.state :as state]
-            [frontend.math :refer [avg]]
+            [frontend.math :as m]
+            [frontend.shapes.point :refer [point]]
             [frontend.shapes.utils :as utils]))
 
 (defn svg-starting-pos [points closed?]
@@ -10,7 +11,7 @@
         {[x2 y2] :pos t2 :type} (second points)]
     (if (and closed? (>= (count points) 3))
       (cond (= t1 t2 :round)
-            (avg [[x1 y1] [x2 y2]])
+            (m/avg [[x1 y1] [x2 y2]])
 
             (and (= t1 :round)
                  (= t2 :sharp))
@@ -24,7 +25,7 @@
   (let [[{[x1 y1] :pos t1 :type}
          {[x2 y2] :pos t2 :type}] points]
     (cond (= t1 t2 :round)
-          (let [[xa ya] (avg [[x1 y1] [x2 y2]])]
+          (let [[xa ya] (m/avg [[x1 y1] [x2 y2]])]
             [1 (str "Q " x1 " " y1
                     " " xa " " ya)])
 
@@ -60,12 +61,6 @@
   (transform [shape _]
     shape)
 
-  (translate [shape _]
-    shape)
-
-  (scale [shape _]
-    shape)
-
   OnSelect
   (on-select [_]
     (state/map-shape-ids! (into #{} points) #(assoc % :selected true)))
@@ -84,3 +79,33 @@
 
 (defn path []
   (Path. (utils/new-shape-id) :default [] true))
+
+(defn path-from-points [points]
+  (Path. (utils/new-shape-id)
+         :default
+         (mapv :id points)
+         true))
+
+(defn create-path! [points]
+  (let [path (path-from-points points)]
+    (state/add-points! points)
+    (state/add-shape! path)))
+
+(defn circle-points [pos size]
+  (mapv
+   #(assoc % :pos (m/v+ (:pos %) pos))
+   (let [res 8
+         step (/ (* 2 m/pi) res)]
+     (for [p (range res)]
+       (let [angle (* p step)]
+         (point [(* size (m/cos angle))
+                 (* size (m/sin angle))]
+                :round))))))
+
+(defn rectangle-points [pos size]
+  (mapv
+   #(assoc % :pos (m/v+ (:pos %) pos))
+   [(point [(- size) size] :sharp)
+    (point [size size] :sharp)
+    (point [size (- size)] :sharp)
+    (point [(- size) (- size)] :sharp)]))
