@@ -19,7 +19,7 @@
   (state/set-shape!
    id
    (assoc path :points
-          (sp/setval (sp/before-index index) (:id point) points))))
+          (sp/setval (sp/before-index index) point points))))
 
 (defn add-point-at-pos [{:keys [points] :as shape}
                         pos
@@ -29,10 +29,9 @@
                                 selected? false
                                 deselect-all? false}}]
   (let [np (point pos type)]
+    (add-point shape np :index index)
     (when deselect-all? (state/deselect-all!))
-    (state/add-shape! np :draw-order? false
-                      :selected? selected?)
-    (add-point shape np :index index)))
+    (when selected? (state/select-id! (:id np)))))
 
 (defn is-path? [shape]
   ;; TODO: (satisfies? Path shape) broken, but fixed in CLJS 1.11.
@@ -92,14 +91,15 @@
   (tool-render-svg [_]
     (r/as-element
      (when path-id
-       (let [{pids :points closed? :closed? :as path} (state/get-shape path-id)
-             ps (state/get-shapes-by-id-with-override pids)
+       (let [{points :points closed? :closed? :as path}
+             (state/get-shape path-id)
+             ps (state/get-shapes-by-id-with-override (map :id points))
              edges (into [] (partition 2 1 (if (and (> (count ps) 2)
                                                     closed?)
                                              (conj ps (first ps))
                                              ps)))]
          [:g
-          (for [[{[x1 y1] :pos id :id type :type} {[x2 y2] :pos}] edges]
+          (for [[{[x1 y1] :pos id :id type :type :as p} {[x2 y2] :pos}] edges]
             (let [[cx cy] (avg [[x1 y1] [x2 y2]])]
               ^{:key id}
               [:g
@@ -110,7 +110,7 @@
                          :on-click
                          #(add-point-at-pos
                            path [cx cy] type
-                           :index (inc (.indexOf pids id))
+                           :index (inc (.indexOf points p))
                            :selected? true
                            :deselect-all? true)}]]))
           (for [p ps]

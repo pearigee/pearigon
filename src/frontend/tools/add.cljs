@@ -10,17 +10,17 @@
   OnKeypress
   (on-keypress [_ k]
     (let [[x y] (state/get-mouse-pos)
-          points (condp = k
+          shape (condp = k
                    (actions/get-key :add.rect)
-                   (p/rectangle-points [x y] 40)
+                   (p/rectangle [x y] 40)
 
                    (actions/get-key :add.circle)
-                   (p/circle-points [x y] 40)
+                   (p/circle [x y] 40)
 
                    nil)]
-      (when points
+      (when shape
         (state/deselect-all!)
-        (p/create-path! points)
+        (state/add-shape! shape)
         (state/pop-tool!)
         (grab)))))
 

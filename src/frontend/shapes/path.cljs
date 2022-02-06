@@ -63,49 +63,42 @@
 
   OnSelect
   (on-select [_]
-    (state/map-shape-ids! (into #{} points) #(assoc % :selected true)))
+    (state/map-shape-ids! (into #{} (map :id points))
+                          #(assoc % :selected true)))
 
   RenderSVG
   (render-svg [shape]
     (when-not (empty? points)
       (let [materials (state/get-materials)
             {:keys [color]} (get materials mat-id)
-            point-shapes (state/get-shapes-by-id-with-override points)]
+            ps (state/get-shapes-by-id-with-override (map :id points))]
         [:g
          [:path {:id id
                  :class (utils/apply-selected-style shape "")
                  :fill color
-                 :d (points->svg point-shapes closed?)}]]))))
+                 :d (points->svg ps closed?)}]]))))
 
-(defn path []
-  (Path. (utils/new-shape-id) :default [] true))
+(defn path
+  ([] (Path. (utils/new-shape-id) :default [] true))
+  ([points] (Path. (utils/new-shape-id) :default points true)))
 
-(defn path-from-points [points]
-  (Path. (utils/new-shape-id)
-         :default
-         (mapv :id points)
-         true))
+(defn circle [pos size]
+  (path
+   (mapv
+    #(assoc % :pos (m/v+ (:pos %) pos))
+    (let [res 8
+          step (/ (* 2 m/pi) res)]
+      (for [p (range res)]
+        (let [angle (* p step)]
+          (point [(* size (m/cos angle))
+                  (* size (m/sin angle))]
+                 :round)))))))
 
-(defn create-path! [points]
-  (let [path (path-from-points points)]
-    (state/add-points! points)
-    (state/add-shape! path)))
-
-(defn circle-points [pos size]
-  (mapv
-   #(assoc % :pos (m/v+ (:pos %) pos))
-   (let [res 8
-         step (/ (* 2 m/pi) res)]
-     (for [p (range res)]
-       (let [angle (* p step)]
-         (point [(* size (m/cos angle))
-                 (* size (m/sin angle))]
-                :round))))))
-
-(defn rectangle-points [pos size]
-  (mapv
-   #(assoc % :pos (m/v+ (:pos %) pos))
-   [(point [(- size) size] :sharp)
-    (point [size size] :sharp)
-    (point [size (- size)] :sharp)
-    (point [(- size) (- size)] :sharp)]))
+(defn rectangle [pos size]
+  (path
+   (mapv
+    #(assoc % :pos (m/v+ (:pos %) pos))
+    [(point [(- size) size] :sharp)
+     (point [size size] :sharp)
+     (point [size (- size)] :sharp)
+     (point [(- size) (- size)] :sharp)])))

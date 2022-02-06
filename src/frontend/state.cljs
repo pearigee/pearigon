@@ -37,7 +37,13 @@
   (:tool @*db*))
 
 (defn get-shape [id]
-  (-> @*db* :shapes (get id)))
+  ;; Order matters in the multi-path below. The nested structure should
+  ;; be searched first.
+  (sp/select-first [:shapes
+                    (sp/multi-path
+                     [sp/MAP-VALS :points sp/ALL #(= id (:id %))]
+                     [id])]
+                   @*db*))
 
 (defn get-draw-order []
   (:draw-order @*db*))
@@ -98,13 +104,22 @@
     (/ dx zdx)))
 
 (defn get-selected []
-  (sp/select [:shapes sp/MAP-VALS #(:selected %)] @*db*))
+  (sp/select [:shapes
+              sp/MAP-VALS
+              (sp/multi-path [#(:selected %)]
+                             [:points sp/ALL #(:selected %)])] @*db*))
 
 (defn selected? [id]
   (:selected (get-shape id)))
 
 (defn map-shapes! [f]
-  (swap! *db* #(sp/transform [:shapes sp/MAP-VALS] %2 %1) f))
+  (swap! *db*
+         #(sp/multi-transform
+           [:shapes
+            sp/MAP-VALS
+            (sp/multi-path [(sp/terminal f)]
+                           [:points sp/ALL (sp/terminal f)])]
+           %1)))
 
 (defn map-selected-shapes! [f]
   (map-shapes! #(if (:selected %) (f %) %)))
@@ -121,10 +136,21 @@
   (swap! *db* assoc :shape-preview-override {}))
 
 (defn set-shape! [sid shape]
-  (swap! *db* update-in [:shapes] assoc sid shape))
+  (swap!
+   *db*
+   (fn [db] (sp/multi-transform
+             [:shapes
+              sp/MAP-VALS
+              (sp/multi-path [#(= sid (:id %))
+                              (sp/terminal-val shape)]
+                             [:points
+                              sp/ALL
+                              #(= sid (:id %))
+                              (sp/terminal-val shape)])]
+             db)))
 
-(defn merge-shape! [sid partial-shape]
-  (set-shape! sid (merge (get-shape sid) partial-shape)))
+  (defn merge-shape! [sid partial-shape]
+    (set-shape! sid (merge (get-shape sid) partial-shape))))
 
 (defn deselect-all! []
   (map-shapes! #(assoc % :selected false)))
@@ -194,8 +220,8 @@
                              :or {selected? true
                                   draw-order? true}}]
   (swap! *db* update-in [:shapes] assoc id
-         (merge shape {:selected selected?
-                       :mat-id (:active-material @*db*)}))
+         (merge shape {:mat-id (:active-material @*db*)}))
+  (when selected? (select-id! id))
   (when draw-order? (conj-draw-order id)))
 
 (defn add-points! [points]
