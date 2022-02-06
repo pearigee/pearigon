@@ -86,7 +86,10 @@
       (scale)
 
       #{(actions/get-key :path-tool.delete)}
-      (delete)
+      (do (delete)
+          ;; If the root has been deleted, exit the tool.
+          (when (nil? (state/get-shape path-id))
+            (state/pop-tool!)))
 
       nil))
 
