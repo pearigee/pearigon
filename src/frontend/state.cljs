@@ -147,10 +147,10 @@
                               sp/ALL
                               #(= sid (:id %))
                               (sp/terminal-val shape)])]
-             db)))
+             db))))
 
-  (defn merge-shape! [sid partial-shape]
-    (set-shape! sid (merge (get-shape sid) partial-shape))))
+(defn merge-shape! [sid partial-shape]
+  (set-shape! sid (merge (get-shape sid) partial-shape)))
 
 (defn deselect-all! []
   (map-shapes! #(assoc % :selected false)))
