@@ -8,6 +8,7 @@
    [frontend.tools.grab :refer [grab]]
    [frontend.tools.material :refer [material]]
    [frontend.tools.scale :refer [scale]]
+   [frontend.tools.delete :refer [delete]]
    [frontend.tools.path-tool :refer [path-tool]]))
 
 (defn- eval-hotkey [key]
@@ -23,6 +24,7 @@
             (actions/get-key :grab) (grab)
             (actions/get-key :material) (material)
             (actions/get-key :path-tool) (path-tool)
+            (actions/get-key :delete) (delete)
             nil)))))
 
 (defn- keyboard-event->key

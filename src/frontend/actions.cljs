@@ -11,6 +11,10 @@
    {:key :s
     :display "Scale"}
 
+   :delete
+   {:key :x
+    :display "Delete"}
+
    :scale.x-axis
    {:key :x
     :display "Lock to X axis"}
@@ -34,6 +38,10 @@
    :path-tool.scale
    {:display "Scale"
     :key :s}
+
+   :path-tool.delete
+   {:display "Delete"
+    :key :x}
 
    :path-tool.toggle-closed
    {:display "Toggle curve closed"

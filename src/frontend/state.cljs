@@ -135,19 +135,33 @@
 (defn clear-shape-preview! []
   (swap! *db* assoc :shape-preview-override {}))
 
+(defn set-draw-order! [order]
+  (swap! *db* assoc :draw-order order))
+
+(defn conj-draw-order [id]
+  (set-draw-order! (conj (get-draw-order) id)))
+
 (defn set-shape! [sid shape]
+  ;; Order matters in this multi-path. We must search the nested structure
+  ;; before deleting the parent.
   (swap!
    *db*
    (fn [db] (sp/multi-transform
              [:shapes
               sp/MAP-VALS
-              (sp/multi-path [#(= sid (:id %))
-                              (sp/terminal-val shape)]
-                             [:points
+              (sp/multi-path [:points
                               sp/ALL
                               #(= sid (:id %))
+                              (sp/terminal-val shape)]
+                             [#(= sid (:id %))
                               (sp/terminal-val shape)])]
              db))))
+
+(defn delete! [& ids]
+  (let [id-set (into #{} ids)]
+    (set-draw-order! (filter #(not (id-set %)) (get-draw-order))))
+  (doseq [id ids]
+    (set-shape! id sp/NONE)))
 
 (defn merge-shape! [sid partial-shape]
   (set-shape! sid (merge (get-shape sid) partial-shape)))
@@ -212,9 +226,6 @@
 (defn update-tool! [tool]
   (swap! *db* assoc :tool (sp/setval [sp/LAST] tool (:tool @*db*))))
 
-(defn conj-draw-order [id]
-  (swap! *db* assoc :draw-order (conj (get-draw-order) id)))
-
 (defn add-shape!
   [{:keys [id] :as shape} & {:keys [selected? draw-order?]
                              :or {selected? true
@@ -223,9 +234,6 @@
          (merge shape {:mat-id (:active-material @*db*)}))
   (when selected? (select-id! id))
   (when draw-order? (conj-draw-order id)))
-
-(defn add-points! [points]
-  (doseq [p points] (add-shape! p :draw-order? false)))
 
 (defn set-mouse-state! [mouse-s]
   (swap! *db* assoc :mouse mouse-s))

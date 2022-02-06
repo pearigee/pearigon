@@ -6,6 +6,7 @@
                                              ToolRenderSVG]]
             [frontend.math :refer [avg]]
             [frontend.tools.grab :refer [grab]]
+            [frontend.tools.delete :refer [delete]]
             [frontend.tools.scale :refer [scale]]
             [frontend.state :as state]
             [frontend.actions :as actions]
@@ -84,6 +85,9 @@
 
       #{(actions/get-key :path-tool.scale)}
       (scale)
+
+      #{(actions/get-key :path-tool.delete)}
+      (delete)
 
       nil))
 
