@@ -15,12 +15,11 @@
             [frontend.shapes.protocol :refer [render-svg]]
             [frontend.selection :refer [select-from-mouse-event!]]))
 
-(defn add-point [{:keys [id points] :as path} point
+(defn add-point [{:keys [id points]} point
                  & {:keys [index] :or {index (count points)}}]
-  (state/set-shape!
+  (state/merge-shape!
    id
-   (assoc path :points
-          (sp/setval (sp/before-index index) point points))))
+   {:points (sp/setval (sp/before-index index) point points)}))
 
 (defn add-point-at-pos [{:keys [points] :as shape}
                         pos
