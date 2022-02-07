@@ -1,7 +1,7 @@
 (ns frontend.tools.add
   (:require
    [frontend.actions :as actions]
-   [frontend.shapes.path :as p]
+   [frontend.shapes.path.path :as p]
    [frontend.state :as state]
    [frontend.tools.grab :refer [grab]]
    [frontend.tools.protocol :refer [OnKeypress]]))

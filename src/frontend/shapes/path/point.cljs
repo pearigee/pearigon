@@ -1,4 +1,4 @@
-(ns frontend.shapes.point
+(ns frontend.shapes.path.point
   (:require [frontend.shapes.protocol :refer [RenderSVG Transform]]
             [frontend.math :as m]
             [frontend.shapes.utils :as utils]))

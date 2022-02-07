@@ -10,8 +10,8 @@
             [frontend.tools.scale :refer [scale]]
             [frontend.state :as state]
             [frontend.actions :as actions]
-            [frontend.shapes.path :refer [Path path]]
-            [frontend.shapes.point :refer [point]]
+            [frontend.shapes.path.path :refer [Path path]]
+            [frontend.shapes.path.point :refer [point]]
             [frontend.shapes.protocol :refer [render-svg]]
             [frontend.selection :refer [select-from-mouse-event!]]))
 

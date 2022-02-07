@@ -1,7 +1,7 @@
 (ns frontend.state-test
   (:require [cljs.test :refer-macros [deftest is testing]]
             [reagent.core :as r]
-            [frontend.shapes.path :as p]
+            [frontend.shapes.path.path :as p]
             [frontend.state :as state]))
 
 (defn- mock-state []
