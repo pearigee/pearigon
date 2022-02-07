@@ -64,7 +64,7 @@
 
               (nil? path-id)
               (let [{:keys [id] :as shape} (path)]
-                (state/add-shape! shape)
+                (state/add-shape! shape :selected? false)
                 (add-point-at-pos shape mpos type)
                 (state/update-tool! (assoc t :path-id id)))
 
