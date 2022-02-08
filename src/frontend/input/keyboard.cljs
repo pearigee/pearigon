@@ -11,21 +11,21 @@
    [frontend.tools.delete :refer [delete]]
    [frontend.tools.path-tool :refer [path-tool]]))
 
-(defn- eval-hotkey [key]
+(defn- eval-hotkey [k]
   (let [tool (state/get-tool)]
     (if (satisfies? OnKeypress tool)
       (do
-        (js/console.log "Calling tool callback: " key)
-        (on-keypress tool key))
-      (do (js/console.log "Getting tool for hotkey: " key)
-          (condp = key
-            (actions/get-key :add) (add)
-            (actions/get-key :scale) (scale)
-            (actions/get-key :grab) (grab)
-            (actions/get-key :material) (material)
-            (actions/get-key :path-tool) (path-tool)
-            (actions/get-key :delete) (delete)
-            nil)))))
+        (js/console.log "Calling tool callback: " k)
+        (on-keypress tool k))
+      (do (js/console.log "Getting tool for hotkey: " k)
+          (cond
+            (actions/active? :add k) (add)
+            (actions/active? :scale k) (scale)
+            (actions/active? :grab k) (grab)
+            (actions/active? :material k) (material)
+            (actions/active? :path-tool k) (path-tool)
+            (actions/active? :delete k) (delete)
+            :else nil)))))
 
 (defn- keyboard-event->key
   [event]

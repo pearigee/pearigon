@@ -10,14 +10,14 @@
   OnKeypress
   (on-keypress [_ k]
     (let [[x y] (state/get-mouse-pos)
-          shape (condp = k
-                   (actions/get-key :add.rect)
+          shape (cond
+                   (actions/active? :add.rect k)
                    (p/rectangle [x y] 40)
 
-                   (actions/get-key :add.circle)
+                   (actions/active? :add.circle k)
                    (p/circle [x y] 40)
 
-                   nil)]
+                   :else nil)]
       (when shape
         (state/deselect-all!)
         (state/add-shape! shape)

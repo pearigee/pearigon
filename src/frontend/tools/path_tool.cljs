@@ -38,9 +38,9 @@
   (contains? shape :points))
 
 (defn key->point-type [k]
-  (condp = k
-    (actions/get-key :path-tool.add-point-sharp) :sharp
-    (actions/get-key :path-tool.add-point-round) :round))
+  (cond
+    (actions/active? :path-tool.add-point-sharp k) :sharp
+    (actions/active? :path-tool.add-point-round k) :round))
 
 (defrecord PathTool [display action path-id]
 
@@ -50,9 +50,9 @@
 
   OnKeypress
   (on-keypress [t k]
-    (condp contains? k
-      #{(actions/get-key :path-tool.add-point-sharp)
-        (actions/get-key :path-tool.add-point-round)}
+    (cond
+      (or (actions/active? :path-tool.add-point-sharp k)
+          (actions/active? :path-tool.add-point-round k))
       (let [type (key->point-type k)
             selection (state/get-selected)
             mpos (state/get-mouse-pos)]
@@ -72,26 +72,26 @@
               (let [shape (state/get-shape path-id)]
                 (add-point-at-pos shape mpos type))))
 
-      #{(actions/get-key :path-tool.toggle-closed)}
+      (actions/active? :path-tool.toggle-closed k)
       (let [{:keys [closed?]} (state/get-shape path-id)]
         (state/merge-shape! path-id {:closed? (not closed?)}))
 
-      #{(actions/get-key :path-tool.quit)}
+      (actions/active? :path-tool.quit k)
       (state/pop-tool!)
 
-      #{(actions/get-key :path-tool.grab)}
+      (actions/active? :path-tool.grab k)
       (grab)
 
-      #{(actions/get-key :path-tool.scale)}
+      (actions/active? :path-tool.scale k)
       (scale)
 
-      #{(actions/get-key :path-tool.delete)}
+      (actions/active? :path-tool.delete k)
       (do (delete)
           ;; If the root has been deleted, exit the tool.
           (when (nil? (state/get-shape path-id))
             (state/pop-tool!)))
 
-      nil))
+      :else nil))
 
   ToolRenderSVG
   (tool-render-svg [_]

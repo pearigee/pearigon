@@ -1,6 +1,5 @@
 (ns frontend.actions
-  (:require
-   [clojure.string :as str]))
+  (:require [clojure.string :as str]))
 
 (def actions
   {:grab
@@ -70,19 +69,22 @@
    {:key :m
     :display "Material Editor"}})
 
-(defn get-key
+(defn- get-key
   [id]
   (let [{:keys [proxy]} (get actions id)]
     (if proxy
       (get-in actions [proxy :key])
       (get-in actions [id :key]))))
 
-(defn get-display
+(defn- get-display
   [id]
   (let [{:keys [proxy]} (get actions id)]
     (if proxy
       (get-in actions [proxy :display])
       (get-in actions [id :display]))))
+
+(defn active? [action key]
+  (= key (get-key action)))
 
 (defn get-child-keys
   [tool-type]
