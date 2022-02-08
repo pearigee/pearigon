@@ -34,6 +34,12 @@
         ctrl (.-ctrlKey event)]
     (keyword (str (if ctrl "ctrl-" "") key))))
 
+(defn record-suggestions!
+  "Record any actions that are polled for to populate suggestions."
+  []
+  (actions/clear-suggestions!)
+  (eval-hotkey :record-suggestions))
+
 (defn- bind-keys []
   (js/document.addEventListener
    "keydown"
@@ -44,9 +50,11 @@
        (.preventDefault event)
        (let [key (keyboard-event->key event)]
          (js/console.log "Keypress: " key)
-         (eval-hotkey key))))))
+         (eval-hotkey key)
+         (record-suggestions!))))))
 
 (defn init
   "Bind keyboard input handlers."
   []
-  (bind-keys))
+  (bind-keys)
+  (record-suggestions!))

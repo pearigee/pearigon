@@ -1,5 +1,6 @@
 (ns frontend.actions
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [reagent.core :as r]))
 
 (def actions
   {:grab
@@ -69,6 +70,8 @@
    {:key :m
     :display "Material Editor"}})
 
+(def suggestions (r/atom #{}))
+
 (defn- get-key
   [id]
   (let [{:keys [proxy]} (get actions id)]
@@ -83,33 +86,20 @@
       (get-in actions [proxy :display])
       (get-in actions [id :display]))))
 
+(defn clear-suggestions! []
+  (reset! suggestions #{}))
+
 (defn active? [action key]
-  (= key (get-key action)))
+  (if (= key :record-suggestions)
+    (do (swap! suggestions conj action)
+        false)
+    (= key (get-key action))))
 
-(defn get-child-keys
-  [tool-type]
-  (let [actions (keys actions)
-        children (filter #(str/includes? (str %) (str tool-type "."))
-                         actions)]
-    children))
-
-(defn get-active-keys
-  [action]
-  (let [actions (keys actions)
-        root-keys (filter #(not (str/includes? (str %) ".")) actions)]
-    (if (nil? action)
-      root-keys
-      (get-child-keys action))))
-
-(defn get-key-suggestions
-  "Get active hotkeys (for the current tool) sorted by key."
-  [tool]
-  (let [action (:action tool)
-        active-keys (get-active-keys action)
-        suggestions (map
-                     (fn [id] {:key-display (subs (str (get-key id)) 1)
-                               :key (get-key id)
-                               :display (get-display id)})
-                     active-keys)]
-    {:tool (:display tool)
-     :keys (sort-by :key-display suggestions)}))
+(defn get-hotkey-suggestions
+  "Get active actions sorted by hotkey."
+  []
+  (->> @suggestions
+       (map (fn [id] {:key-display (subs (str (get-key id)) 1)
+                      :key (get-key id)
+                      :display (get-display id)}))
+       (sort-by :key-display)))

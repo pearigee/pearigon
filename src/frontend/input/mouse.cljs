@@ -3,7 +3,8 @@
    [frontend.tools.protocol :refer [OnMouseMove on-mouse-move
                                     OnClick on-click]]
    [frontend.state :as state]
-   [frontend.selection :refer [select-from-mouse-event!]]))
+   [frontend.selection :refer [select-from-mouse-event!]]
+   [frontend.input.keyboard :as keyboard]))
 
 (defn- eval-mouse-move [event]
   (let [t (state/get-tool)]
@@ -14,7 +15,10 @@
   (js/console.log "click" event)
   (let [t (state/get-tool)]
     (if (satisfies? OnClick t)
-      (on-click t event)
+      (do (on-click t event)
+          ;; This click event could change what hotkeys are possible.
+          ;; Make sure the suggestions are up to date.
+          (keyboard/record-suggestions!))
       ;; Other wise, default to selection action
       (select-from-mouse-event! event))))
 

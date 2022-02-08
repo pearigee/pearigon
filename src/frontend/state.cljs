@@ -2,7 +2,6 @@
   (:require
    [com.rpl.specter :as sp :include-macros true]
    [reagent.core :as r]
-   [frontend.actions :as actions]
    [frontend.shapes.protocol :refer [OnSelect on-select]]
    [frontend.math :refer [v+]]))
 
@@ -21,9 +20,7 @@
    :view-dimensions [0 0]
    :view-zoom 1
    :panel nil
-   :tool []
-   :next-id 0
-   :suggestions (actions/get-key-suggestions nil)})
+   :tool []})
 
 (def ^:dynamic *db* (r/atom (initial-state)))
 
@@ -47,9 +44,6 @@
 
 (defn get-draw-order []
   (:draw-order @*db*))
-
-(defn get-suggestions []
-  (:suggestions @*db*))
 
 (defn get-preview [id]
   (-> @*db* :shape-preview-override (get id)))
@@ -214,14 +208,12 @@
 
 (defn push-tool! [tool]
   (swap! *db* assoc :tool (conj (:tool @*db*) tool))
-  (js/console.log "Tool pushed:" (:tool @*db*))
-  (set-suggestions! (actions/get-key-suggestions (get-tool))))
+  (js/console.log "Tool pushed:" (:tool @*db*)))
 
 (defn pop-tool! []
   (when-not (empty? (:tool @*db*))
     (swap! *db* assoc :tool (pop (:tool @*db*)))
-    (js/console.log "Tool popped:" (:tool @*db*))
-    (set-suggestions! (actions/get-key-suggestions (get-tool)))))
+    (js/console.log "Tool popped:" (:tool @*db*))))
 
 (defn update-tool! [tool]
   (swap! *db* assoc :tool (sp/setval [sp/LAST] tool (:tool @*db*))))

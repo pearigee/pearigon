@@ -56,8 +56,9 @@
                  (action/active? :scale.x-axis k) :x
                  (action/active? :scale.y-axis k) :y
                  :else nil)]
-      (js/console.log "Setting scale axis:" axis)
-      (state/update-tool! (merge t {:axis axis})))))
+      (js/console.log "Setting scale axis:" axis k)
+      (when axis
+        (state/update-tool! (merge t {:axis axis}))))))
 
 (defn scale []
   (let [selection (state/get-selected)
