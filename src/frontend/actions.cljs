@@ -15,6 +15,10 @@
    {:key :x
     :display "Delete"}
 
+   :rotate
+   {:key :r
+    :display "Rotate"}
+
    :scale.x-axis
    {:key :x
     :display "Lock to X axis"}
@@ -42,6 +46,9 @@
    :path-tool.delete
    {:display "Delete"
     :key :x}
+
+   :path-tool.rotate
+   {:proxy :rotate}
 
    :path-tool.toggle-closed
    {:display "Toggle curve closed"

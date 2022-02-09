@@ -8,6 +8,9 @@
 (defn cos [x]
   (js/Math.cos x))
 
+(defn atan2 [a b]
+  (js/Math.atan2 a b))
+
 (defn v+
   ([a b]
    (mapv + a b))

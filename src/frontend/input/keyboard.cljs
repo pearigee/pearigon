@@ -6,6 +6,7 @@
    [frontend.tools.protocol :refer [OnKeypress on-keypress]]
    [frontend.tools.add :refer [add]]
    [frontend.tools.grab :refer [grab]]
+   [frontend.tools.rotate :refer [rotate]]
    [frontend.tools.material :refer [material]]
    [frontend.tools.scale :refer [scale]]
    [frontend.tools.delete :refer [delete]]
@@ -19,6 +20,7 @@
         (actions/active? :add k) (add)
         (actions/active? :scale k) (scale)
         (actions/active? :grab k) (grab)
+        (actions/active? :rotate k) (rotate)
         (actions/active? :material k) (material)
         (actions/active? :path-tool k) (path-tool)
         (actions/active? :delete k) (delete)))))

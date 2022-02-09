@@ -8,6 +8,7 @@
             [frontend.tools.grab :refer [grab]]
             [frontend.tools.delete :refer [delete]]
             [frontend.tools.scale :refer [scale]]
+            [frontend.tools.rotate :refer [rotate]]
             [frontend.state :as state]
             [frontend.actions :as actions]
             [frontend.shapes.path.path :refer [Path path]]
@@ -84,6 +85,9 @@
 
       (actions/active? :path-tool.scale k)
       (scale)
+
+      (actions/active? :path-tool.rotate k)
+      (rotate)
 
       (actions/active? :path-tool.delete k)
       (do (delete)
