@@ -2,7 +2,7 @@
   (:require
    ["@tabler/icons" :rename {IconX icon-minimize}]
    [reagent.core :as r]
-   [frontend.state :as state]
+   [frontend.state.core :as state]
    [frontend.view.material :refer [material-editor]]))
 
 (defn sidebar-panel

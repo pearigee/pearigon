@@ -4,7 +4,7 @@
                              IconPaint apply-icon}]
    ["react-colorful" :rename {HexColorPicker hex-color-picker}]
    [reagent.core :as r]
-   [frontend.state :as state]))
+   [frontend.state.core :as state]))
 
 (defn material-editor []
   (let [m-state (r/atom {:selected :default})

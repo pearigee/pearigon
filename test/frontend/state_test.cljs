@@ -2,7 +2,7 @@
   (:require [cljs.test :refer-macros [deftest is testing]]
             [reagent.core :as r]
             [frontend.shapes.path.path :as p]
-            [frontend.state :as state]))
+            [frontend.state.core :as state]))
 
 (defn- mock-state []
   (r/atom (state/initial-state)))

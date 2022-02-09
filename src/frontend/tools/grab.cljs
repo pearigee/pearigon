@@ -1,6 +1,6 @@
 (ns frontend.tools.grab
   (:require
-   [frontend.state :as state]
+   [frontend.state.core :as state]
    [frontend.tools.protocol :refer [OnMouseMove OnClick]]
    [frontend.shapes.protocol :as shape]
    [frontend.math :as m]))

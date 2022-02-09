@@ -4,7 +4,7 @@
    [frontend.input.keyboard :as keyboard]
    [frontend.input.mouse :as mouse]
    [frontend.input.resize :as resize]
-   [frontend.state :as state]
+   [frontend.state.core :as state]
    [frontend.view.app :refer [app]]))
 
 (defn mount-root

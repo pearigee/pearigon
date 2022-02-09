@@ -1,4 +1,4 @@
-(ns frontend.state
+(ns frontend.state.core
   (:require
    [com.rpl.specter :as sp :include-macros true]
    [reagent.core :as r]

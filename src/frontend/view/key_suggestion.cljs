@@ -1,5 +1,5 @@
 (ns frontend.view.key-suggestion
-  (:require [frontend.state :as state]
+  (:require [frontend.state.core :as state]
             [frontend.actions :as actions]))
 
 (defn key-suggestion []

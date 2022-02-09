@@ -1,6 +1,6 @@
 (ns frontend.input.resize
   (:require
-   [frontend.state :as state]))
+   [frontend.state.core :as state]))
 
 (defn- bind-resize []
   (.addEventListener js/window "resize"

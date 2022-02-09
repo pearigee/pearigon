@@ -2,7 +2,7 @@
   (:require
    [clojure.string :as str]
    [frontend.actions :as actions]
-   [frontend.state :as state]
+   [frontend.state.core :as state]
    [frontend.tools.protocol :refer [OnKeypress on-keypress]]
    [frontend.tools.add :refer [add]]
    [frontend.tools.grab :refer [grab]]

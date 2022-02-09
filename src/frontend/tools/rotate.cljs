@@ -2,7 +2,7 @@
   (:require
    [frontend.tools.protocol :refer [OnMouseMove OnClick]]
    [frontend.shapes.protocol :as shapes]
-   [frontend.state :as state]
+   [frontend.state.core :as state]
    [frontend.math :as m]))
 
 (defn calc-angle [[x y]]

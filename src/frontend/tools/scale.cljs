@@ -3,7 +3,7 @@
    [frontend.actions :as action]
    [frontend.tools.protocol :refer [OnMouseMove OnClick OnKeypress]]
    [frontend.shapes.protocol :as shapes]
-   [frontend.state :as state]
+   [frontend.state.core :as state]
    [frontend.math :as m]))
 
 (defn tune

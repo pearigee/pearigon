@@ -1,5 +1,5 @@
 (ns frontend.selection
-  (:require [frontend.state :as state]
+  (:require [frontend.state.core :as state]
             [clojure.string :as str]))
 
 (defn select-from-mouse-event! [event]

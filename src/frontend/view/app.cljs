@@ -1,5 +1,5 @@
 (ns frontend.view.app
-  (:require [frontend.state :as state]
+  (:require [frontend.state.core :as state]
             [frontend.view.sidebar :refer [sidebar]]
             [frontend.shapes.protocol :refer [render-svg]]
             [frontend.tools.protocol :refer [ToolRenderSVG tool-render-svg]]

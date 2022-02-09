@@ -9,7 +9,7 @@
             [frontend.tools.delete :refer [delete]]
             [frontend.tools.scale :refer [scale]]
             [frontend.tools.rotate :refer [rotate]]
-            [frontend.state :as state]
+            [frontend.state.core :as state]
             [frontend.actions :as actions]
             [frontend.shapes.path.path :refer [Path path]]
             [frontend.shapes.path.point :refer [point]]

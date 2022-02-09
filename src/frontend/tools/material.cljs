@@ -1,5 +1,5 @@
 (ns frontend.tools.material
-  (:require [frontend.state :as state]))
+  (:require [frontend.state.core :as state]))
 
 (defn material
   "Toggles the material panel."

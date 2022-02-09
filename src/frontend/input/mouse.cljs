@@ -2,7 +2,7 @@
   (:require
    [frontend.tools.protocol :refer [OnMouseMove on-mouse-move
                                     OnClick on-click]]
-   [frontend.state :as state]
+   [frontend.state.core :as state]
    [frontend.selection :refer [select-from-mouse-event!]]
    [frontend.input.keyboard :as keyboard]))
 

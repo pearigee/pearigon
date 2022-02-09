@@ -1,7 +1,7 @@
 (ns frontend.shapes.path.path
   (:require [frontend.shapes.protocol :refer [RenderSVG Transform
                                               OnSelect]]
-            [frontend.state :as state]
+            [frontend.state.core :as state]
             [frontend.math :as m]
             [frontend.shapes.path.point :refer [point]]
             [frontend.shapes.utils :as utils]
