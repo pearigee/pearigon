@@ -1,6 +1,5 @@
 (ns frontend.actions
-  (:require [clojure.string :as str]
-            [reagent.core :as r]))
+  (:require [reagent.core :as r]))
 
 (def actions
   {:grab
