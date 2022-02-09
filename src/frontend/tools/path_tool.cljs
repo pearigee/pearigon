@@ -80,16 +80,16 @@
       (actions/active? :path-tool.quit k)
       (state/pop-tool!)
 
-      (actions/active? :path-tool.grab k)
+      (actions/active? :grab k)
       (grab)
 
-      (actions/active? :path-tool.scale k)
+      (actions/active? :scale k)
       (scale)
 
-      (actions/active? :path-tool.rotate k)
+      (actions/active? :rotate k)
       (rotate)
 
-      (actions/active? :path-tool.delete k)
+      (actions/active? :delete k)
       (do (delete)
           ;; If the root has been deleted, exit the tool.
           (when (nil? (state/get-shape path-id))

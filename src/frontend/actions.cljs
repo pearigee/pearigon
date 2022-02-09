@@ -39,17 +39,6 @@
    {:display "Add Round Point"
     :key :q}
 
-   :path-tool.scale
-   {:display "Scale"
-    :key :s}
-
-   :path-tool.delete
-   {:display "Delete"
-    :key :x}
-
-   :path-tool.rotate
-   {:proxy :rotate}
-
    :path-tool.toggle-closed
    {:display "Toggle curve closed"
     :key :c}
@@ -57,9 +46,6 @@
    :path-tool.quit
    {:display "Quit"
     :key :tab}
-
-   :path-tool.grab
-   {:proxy :grab}
 
    :add
    {:key :a
@@ -80,23 +66,26 @@
 (def suggestions (r/atom #{}))
 
 (defn- get-key
+  "Get the hotkey for this action."
   [id]
-  (let [{:keys [proxy]} (get actions id)]
-    (if proxy
-      (get-in actions [proxy :key])
-      (get-in actions [id :key]))))
+  (-> actions (get id) :key))
 
 (defn- get-display
+  "Get the label for this action."
   [id]
-  (let [{:keys [proxy]} (get actions id)]
-    (if proxy
-      (get-in actions [proxy :display])
-      (get-in actions [id :display]))))
+  (-> actions (get id) :display))
 
-(defn clear-suggestions! []
+(defn clear-suggestions!
+  "Clear the suggestion set.
+   This should be done before recording new suggestions."
+  []
   (reset! suggestions #{}))
 
-(defn active? [action key]
+(defn active?
+  "Is the current action active based on the pressed key?
+  If we recieve the fake hotkey :record-suggestions, add this
+  action to the current suggestion set. "
+  [action key]
   (if (= key :record-suggestions)
     (do (swap! suggestions conj action)
         false)
