@@ -13,19 +13,15 @@
 
 (defn- eval-hotkey [k]
   (let [tool (state/get-tool)]
-    (if (satisfies? OnKeypress tool)
-      (do
-        (js/console.log "Calling tool callback: " k)
-        (on-keypress tool k))
-      (do (js/console.log "Getting tool for hotkey: " k)
-          (cond
-            (actions/active? :add k) (add)
-            (actions/active? :scale k) (scale)
-            (actions/active? :grab k) (grab)
-            (actions/active? :material k) (material)
-            (actions/active? :path-tool k) (path-tool)
-            (actions/active? :delete k) (delete)
-            :else nil)))))
+    (if tool
+      (when (satisfies? OnKeypress tool) (on-keypress tool k))
+      (cond
+        (actions/active? :add k) (add)
+        (actions/active? :scale k) (scale)
+        (actions/active? :grab k) (grab)
+        (actions/active? :material k) (material)
+        (actions/active? :path-tool k) (path-tool)
+        (actions/active? :delete k) (delete)))))
 
 (defn- keyboard-event->key
   [event]
