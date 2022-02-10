@@ -3,10 +3,9 @@
             [frontend.input.hotkeys :as actions]))
 
 (defn key-suggestion []
-  (let [[width] (state/get-view-dimensions)
-        tool-name (:display (state/get-tool))
+  (let [tool-name (:display (state/get-tool))
         suggestions (actions/get-hotkey-suggestions)]
-    [:div.suggestions {:style {:width width}}
+    [:div.suggestions
      (if tool-name
        [:div.tag.is-primary tool-name]
        [:div.tag.is-primary.is-light "No Tool"])

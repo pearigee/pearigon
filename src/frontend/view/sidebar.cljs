@@ -16,18 +16,9 @@
    content])
 
 (defn sidebar []
-  (r/create-class
-   {:component-did-update
-    (fn [_ _]
-       ;; Update view dimensions so zoom can be recomputed
-       ;; at the correct aspect ratio.
-      (state/update-view-size!))
-
-    :reagent-render
-    (fn []
-      (let [panel (state/get-panel)]
-        (case panel
-          :material [sidebar-panel
-                     "Material Editor"
-                     [material-editor]]
-          nil)))}))
+  (let [panel (state/get-panel)]
+    (case panel
+      :material [sidebar-panel
+                 "Material Editor"
+                 [material-editor]]
+      nil)))

@@ -20,5 +20,6 @@
        (for [t tools]
          (when (satisfies? ToolRenderSVG t)
            ^{:key (:action t)} [tool-render-svg t]))]]
-     [key-suggestion]
-     [sidebar]]))
+     [:div.overlay
+      [key-suggestion]
+      [sidebar]]]))
