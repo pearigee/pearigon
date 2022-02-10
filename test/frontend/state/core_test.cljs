@@ -1,4 +1,4 @@
-(ns frontend.state-test
+(ns frontend.state.core-test
   (:require [cljs.test :refer-macros [deftest is testing]]
             [reagent.core :as r]
             [frontend.shapes.path.path :as p]
