@@ -5,7 +5,7 @@
             [frontend.state.core :as state]))
 
 (defn- mock-state []
-  (r/atom (state/initial-state)))
+  (r/atom state/initial-state))
 
 (deftest test-get-shape
   (let [shape (p/rectangle [0 0] 40)

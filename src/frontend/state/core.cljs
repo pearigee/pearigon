@@ -6,8 +6,7 @@
    [frontend.shapes.protocol :refer [OnSelect on-select]]
    [frontend.math :refer [v+]]))
 
-(defn initial-state
-  []
+(def initial-state
   {:shapes {}
    ;; When a shape ID is present in this map, it is rendered
    ;; in place of the original. This is intended for tool previews.
@@ -23,7 +22,7 @@
    :panel nil
    :tool []})
 
-(def ^:dynamic *db* (r/atom (initial-state)))
+(def ^:dynamic *db* (r/atom initial-state))
 
 (defn get-mouse-pos []
   (:pos (:mouse @*db*)))
