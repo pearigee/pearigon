@@ -1,4 +1,4 @@
-(ns frontend.actions
+(ns frontend.input.hotkeys
   (:require [reagent.core :as r]))
 
 (def actions

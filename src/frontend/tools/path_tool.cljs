@@ -10,7 +10,7 @@
             [frontend.tools.scale :refer [scale]]
             [frontend.tools.rotate :refer [rotate]]
             [frontend.state.core :as state]
-            [frontend.actions :as actions]
+            [frontend.input.hotkeys :as hotkeys]
             [frontend.shapes.path.path :refer [Path path]]
             [frontend.shapes.path.point :refer [point]]
             [frontend.shapes.protocol :refer [render-svg]]
@@ -40,8 +40,8 @@
 
 (defn key->point-type [k]
   (cond
-    (actions/active? :path-tool.add-point-sharp k) :sharp
-    (actions/active? :path-tool.add-point-round k) :round))
+    (hotkeys/active? :path-tool.add-point-sharp k) :sharp
+    (hotkeys/active? :path-tool.add-point-round k) :round))
 
 (defrecord PathTool [display action path-id]
 
@@ -52,8 +52,8 @@
   OnKeypress
   (on-keypress [t k]
     (cond
-      (or (actions/active? :path-tool.add-point-sharp k)
-          (actions/active? :path-tool.add-point-round k))
+      (or (hotkeys/active? :path-tool.add-point-sharp k)
+          (hotkeys/active? :path-tool.add-point-round k))
       (let [type (key->point-type k)
             selection (state/get-selected)
             mpos (state/get-mouse-pos)]
@@ -73,23 +73,23 @@
               (let [shape (state/get-shape path-id)]
                 (add-point-at-pos shape mpos type))))
 
-      (actions/active? :path-tool.toggle-closed k)
+      (hotkeys/active? :path-tool.toggle-closed k)
       (let [{:keys [closed?]} (state/get-shape path-id)]
         (state/merge-shape! path-id {:closed? (not closed?)}))
 
-      (actions/active? :path-tool.quit k)
+      (hotkeys/active? :path-tool.quit k)
       (state/pop-tool!)
 
-      (actions/active? :grab k)
+      (hotkeys/active? :grab k)
       (grab)
 
-      (actions/active? :scale k)
+      (hotkeys/active? :scale k)
       (scale)
 
-      (actions/active? :rotate k)
+      (hotkeys/active? :rotate k)
       (rotate)
 
-      (actions/active? :delete k)
+      (hotkeys/active? :delete k)
       (do (delete)
           ;; If the root has been deleted, exit the tool.
           (when (nil? (state/get-shape path-id))

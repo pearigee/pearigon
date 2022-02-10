@@ -1,7 +1,7 @@
 (ns frontend.input.keyboard
   (:require
    [clojure.string :as str]
-   [frontend.actions :as actions]
+   [frontend.input.hotkeys :as hotkeys]
    [frontend.state.core :as state]
    [frontend.tools.protocol :refer [OnKeypress on-keypress]]
    [frontend.tools.add :refer [add]]
@@ -17,13 +17,13 @@
     (if tool
       (when (satisfies? OnKeypress tool) (on-keypress tool k))
       (cond
-        (actions/active? :add k) (add)
-        (actions/active? :scale k) (scale)
-        (actions/active? :grab k) (grab)
-        (actions/active? :rotate k) (rotate)
-        (actions/active? :material k) (material)
-        (actions/active? :path-tool k) (path-tool)
-        (actions/active? :delete k) (delete)))))
+        (hotkeys/active? :add k) (add)
+        (hotkeys/active? :scale k) (scale)
+        (hotkeys/active? :grab k) (grab)
+        (hotkeys/active? :rotate k) (rotate)
+        (hotkeys/active? :material k) (material)
+        (hotkeys/active? :path-tool k) (path-tool)
+        (hotkeys/active? :delete k) (delete)))))
 
 (defn- keyboard-event->key
   [event]
@@ -35,7 +35,7 @@
 (defn record-suggestions!
   "Record any actions that are polled for to populate suggestions."
   []
-  (actions/clear-suggestions!)
+  (hotkeys/clear-suggestions!)
   (eval-hotkey :record-suggestions))
 
 (defn- bind-keys []

@@ -1,6 +1,6 @@
 (ns frontend.view.key-suggestion
   (:require [frontend.state.core :as state]
-            [frontend.actions :as actions]))
+            [frontend.input.hotkeys :as actions]))
 
 (defn key-suggestion []
   (let [[width] (state/get-view-dimensions)

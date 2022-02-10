@@ -1,6 +1,6 @@
 (ns frontend.tools.scale
   (:require
-   [frontend.actions :as action]
+   [frontend.input.hotkeys :as hotkeys]
    [frontend.tools.protocol :refer [OnMouseMove OnClick OnKeypress]]
    [frontend.shapes.protocol :as shapes]
    [frontend.state.core :as state]
@@ -53,8 +53,8 @@
   OnKeypress
   (on-keypress [t k]
     (let [axis (cond
-                 (action/active? :scale.x-axis k) :x
-                 (action/active? :scale.y-axis k) :y
+                 (hotkeys/active? :scale.x-axis k) :x
+                 (hotkeys/active? :scale.y-axis k) :y
                  :else nil)]
       (js/console.log "Setting scale axis:" axis k)
       (when axis
