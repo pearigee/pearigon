@@ -133,4 +133,4 @@
         shape (first shapes)
         {id :id} (when (and (instance? Path shape)
                             (= (count shapes) 1)) shape)]
-    (state/push-tool! (PathTool. "Path Tool" :path-tool id))))
+    (state/push-tool! (->PathTool "Path Tool" :path-tool id))))

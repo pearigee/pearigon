@@ -25,4 +25,4 @@
         (grab)))))
 
 (defn add []
-  (state/push-tool! (AddTool. "Add Shape" :add)))
+  (state/push-tool! (->AddTool "Add Shape" :add)))

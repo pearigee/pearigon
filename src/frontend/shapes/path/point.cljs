@@ -19,4 +19,4 @@
                 :r r}])))
 
 (defn point [pos type]
-  (Point. (utils/new-shape-id) pos type 5))
+  (->Point (utils/new-shape-id) pos type 5))

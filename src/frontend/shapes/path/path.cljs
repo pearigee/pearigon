@@ -31,8 +31,8 @@
                  :d (points->svg ps closed?)}]]))))
 
 (defn path
-  ([] (Path. (utils/new-shape-id) :default [] true))
-  ([points] (Path. (utils/new-shape-id) :default points true)))
+  ([] (->Path (utils/new-shape-id) :default [] true))
+  ([points] (->Path (utils/new-shape-id) :default points true)))
 
 (defn circle [pos size]
   (path

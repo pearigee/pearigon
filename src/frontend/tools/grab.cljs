@@ -23,6 +23,6 @@
     (state/pop-tool!)))
 
 (defn grab []
-  (state/push-tool! (GrabTool. "Grab"
-                               :grab
-                               (state/get-mouse-pos))))
+  (state/push-tool! (->GrabTool "Grab"
+                                :grab
+                                (state/get-mouse-pos))))
