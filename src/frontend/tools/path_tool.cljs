@@ -13,8 +13,7 @@
             [frontend.input.hotkeys :as hotkeys]
             [frontend.shapes.path.path :refer [Path path]]
             [frontend.shapes.path.point :refer [point]]
-            [frontend.shapes.protocol :refer [render-svg]]
-            [frontend.selection :refer [select-from-mouse-event!]]))
+            [frontend.shapes.protocol :refer [render-svg]]))
 
 (defn add-point [{:keys [id points]} point
                  & {:keys [index] :or {index (count points)}}]
@@ -47,7 +46,7 @@
 
   OnClick
   (on-click [_ event]
-    (select-from-mouse-event! event))
+    (state/select-from-mouse-event! event))
 
   OnKeypress
   (on-keypress [t k]

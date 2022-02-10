@@ -1,5 +1,6 @@
 (ns frontend.state.core
   (:require
+   [clojure.string :as str]
    [com.rpl.specter :as sp :include-macros true]
    [reagent.core :as r]
    [frontend.shapes.protocol :refer [OnSelect on-select]]
@@ -173,8 +174,14 @@
 (defn toggle-selected! [id]
   (select-id! id (not (selected? id))))
 
-(defn set-suggestions! [suggestions]
-  (swap! *db*  assoc :suggestions suggestions))
+(defn select-from-mouse-event! [event]
+  (let [target-id (:target-id event)]
+    (if (str/starts-with? target-id "shape-")
+      (do (when-not (:shift event) (deselect-all!))
+          (toggle-selected! target-id))
+      (when (and (= (:target-id event) "svg-root")
+                 (not (:shift event)))
+        (deselect-all!)))))
 
 (defn set-view-dimensions! [dim]
   (swap! *db* assoc :view-dimensions dim))

@@ -3,7 +3,6 @@
    [frontend.tools.protocol :refer [OnMouseMove on-mouse-move
                                     OnClick on-click]]
    [frontend.state.core :as state]
-   [frontend.selection :refer [select-from-mouse-event!]]
    [frontend.input.keyboard :as keyboard]))
 
 (defn- eval-mouse-move [event]
@@ -20,7 +19,7 @@
           ;; Make sure the suggestions are up to date.
           (keyboard/record-suggestions!))
       ;; Other wise, default to selection action
-      (select-from-mouse-event! event))))
+      (state/select-from-mouse-event! event))))
 
 (defn- event->mouse-state
   [event]
