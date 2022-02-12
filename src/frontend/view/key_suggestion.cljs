@@ -1,6 +1,6 @@
 (ns frontend.view.key-suggestion
   (:require [frontend.state.core :as state]
-            [frontend.input.hotkeys :as actions]))
+            [frontend.actions.core :as actions]))
 
 (defn key-suggestion []
   (let [tool-name (:display (state/get-tool))

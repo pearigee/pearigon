@@ -14,12 +14,11 @@
   (js/console.log "click" event)
   (let [t (state/get-tool)]
     (if (satisfies? OnClick t)
-      (do (on-click t event)
-          ;; This click event could change what hotkeys are possible.
-          ;; Make sure the suggestions are up to date.
-          (keyboard/record-suggestions!))
-      ;; Other wise, default to selection action
-      (state/select-from-mouse-event! event))))
+      (on-click t event)
+      (state/select-from-mouse-event! event)))
+  ;; This click event could change what hotkeys are possible.
+  ;; Make sure the suggestions are up to date.
+  (keyboard/record-suggestions!))
 
 (defn- event->mouse-state
   [event]

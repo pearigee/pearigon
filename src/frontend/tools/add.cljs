@@ -1,6 +1,6 @@
 (ns frontend.tools.add
   (:require
-   [frontend.input.hotkeys :as hotkeys]
+   [frontend.actions.core :as actions]
    [frontend.shapes.path.path :as p]
    [frontend.state.core :as state]
    [frontend.tools.grab :refer [grab]]
@@ -11,10 +11,10 @@
   (on-keypress [_ k]
     (let [[x y] (state/get-mouse-pos)
           shape (cond
-                   (hotkeys/active? :add.rect k)
+                   (actions/active? :add.rect k)
                    (p/rectangle [x y] 40)
 
-                   (hotkeys/active? :add.circle k)
+                   (actions/active? :add.circle k)
                    (p/circle [x y] 40)
 
                    :else nil)]
