@@ -18,6 +18,10 @@
    {:key :r
     :display "Rotate"}
 
+   :export
+   {:key :meta-e
+    :display "Export"}
+
    :scale.x-axis
    {:key :x
     :display "Lock to X axis"}

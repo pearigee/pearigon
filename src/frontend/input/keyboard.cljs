@@ -10,6 +10,7 @@
    [frontend.tools.material :refer [material]]
    [frontend.tools.scale :refer [scale]]
    [frontend.tools.delete :refer [delete]]
+   [frontend.tools.export :refer [export]]
    [frontend.tools.path-tool :refer [path-tool]]))
 
 (defn- eval-hotkey [k]
@@ -23,14 +24,17 @@
         (hotkeys/active? :rotate k) (rotate)
         (hotkeys/active? :material k) (material)
         (hotkeys/active? :path-tool k) (path-tool)
-        (hotkeys/active? :delete k) (delete)))))
+        (hotkeys/active? :delete k) (delete)
+        (hotkeys/active? :export k) (export)))))
 
 (defn- keyboard-event->key
   [event]
   (let [key-raw (str/lower-case (.-key event))
         key (if (= key-raw " ") "space" key-raw)
-        ctrl (.-ctrlKey event)]
-    (keyword (str (if ctrl "ctrl-" "") key))))
+        ctrl (.-ctrlKey event)
+        meta (.-metaKey event)]
+    (keyword (str (if ctrl "ctrl-" "")
+                  (if meta "meta-" "") key))))
 
 (defn record-suggestions!
   "Record any actions that are polled for to populate suggestions."
