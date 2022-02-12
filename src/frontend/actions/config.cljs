@@ -1,37 +1,35 @@
 (ns frontend.actions.config)
 
 (def actions
-  {:grab
-   {:key :g
-    :display "Grab"
-    :when [:num-selected-gt? 0]}
+  {:add
+   {:key :a
+    :display "Add Shape"}
 
-   :scale
-   {:key :s
-    :display "Scale"
-    :when [:num-selected-gt? 0]}
+   :add.circle
+   {:key :c
+    :display "Circle"}
+
+   :add.rect
+   {:key :r
+    :display "Rectangle"}
 
    :delete
    {:key :x
     :display "Delete"
     :when [:num-selected-gt? 0]}
 
-   :rotate
-   {:key :r
-    :display "Rotate"
-    :when [:num-selected-gt? 0]}
-
    :export
    {:key :ctrl-e
     :display "Export"}
 
-   :scale.x-axis
-   {:key :x
-    :display "Lock to X axis"}
+   :grab
+   {:key :g
+    :display "Grab"
+    :when [:num-selected-gt? 0]}
 
-   :scale.y-axis
-   {:key :y
-    :display "Lock to Y axis"}
+   :material
+   {:key :m
+    :display "Material Editor"}
 
    :path-tool
    {:display "Path Tool"
@@ -40,34 +38,36 @@
            [:num-selected-eq? 1 {:path? true}]
            [:num-selected-eq? 0]]}
 
-   :path-tool.add-point-sharp
-   {:display "Add Sharp Point"
-    :key :w}
-
    :path-tool.add-point-round
    {:display "Add Round Point"
     :key :q}
 
-   :path-tool.toggle-closed
-   {:display "Toggle curve closed"
-    :key :c}
+   :path-tool.add-point-sharp
+   {:display "Add Sharp Point"
+    :key :w}
 
    :path-tool.quit
    {:display "Quit"
     :key :tab}
 
-   :add
-   {:key :a
-    :display "Add Shape"}
+   :path-tool.toggle-closed
+   {:display "Toggle curve closed"
+    :key :c}
 
-   :add.rect
+   :rotate
    {:key :r
-    :display "Rectangle"}
+    :display "Rotate"
+    :when [:num-selected-gt? 0]}
 
-   :add.circle
-   {:key :c
-    :display "Circle"}
+   :scale
+   {:key :s
+    :display "Scale"
+    :when [:num-selected-gt? 0]}
 
-   :material
-   {:key :m
-    :display "Material Editor"}})
+   :scale.x-axis
+   {:key :x
+    :display "Lock to X axis"}
+
+   :scale.y-axis
+   {:key :y
+    :display "Lock to Y axis"}})
