@@ -19,7 +19,7 @@
     :display "Rotate"}
 
    :export
-   {:key :meta-e
+   {:key :ctrl-e
     :display "Export"}
 
    :scale.x-axis
