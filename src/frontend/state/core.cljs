@@ -1,4 +1,9 @@
 (ns frontend.state.core
+  "The state in this namespace will be persisted when saved.
+  Changes to this state will be recorded for undo/redo.
+
+  Anything that doesn't fit with the criteria above should live
+  elsewhere (i.e. mouse position, keyboar state)"
   (:require
    [clojure.string :as str]
    [com.rpl.specter :as sp :include-macros true]
