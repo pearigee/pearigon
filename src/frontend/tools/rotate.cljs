@@ -3,6 +3,7 @@
    [frontend.tools.protocol :refer [OnMouseMove OnClick]]
    [frontend.shapes.protocol :as shapes]
    [frontend.state.core :as state]
+   [frontend.state.input :as input]
    [frontend.math :as m]))
 
 (defn calc-angle [[x y]]
@@ -37,7 +38,7 @@
   (let [selection (state/get-selected)
         ;; Filter out shapes with no position (paths)
         origin (m/avg (filter identity (map :pos selection)))
-        mpos (state/get-mouse-pos)]
+        mpos (input/mouse-pos)]
     (when-not (zero? (count selection))
       (state/push-tool! (map->RotateTool
                          {:display "Rotate"

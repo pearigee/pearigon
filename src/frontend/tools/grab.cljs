@@ -1,6 +1,7 @@
 (ns frontend.tools.grab
   (:require
    [frontend.state.core :as state]
+   [frontend.state.input :as input]
    [frontend.tools.protocol :refer [OnMouseMove OnClick]]
    [frontend.shapes.protocol :as shape]
    [frontend.math :as m]))
@@ -25,4 +26,4 @@
 (defn grab []
   (state/push-tool! (->GrabTool "Grab"
                                 :grab
-                                (state/get-mouse-pos))))
+                                (input/mouse-pos))))

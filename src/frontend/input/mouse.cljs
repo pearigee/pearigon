@@ -3,6 +3,7 @@
    [frontend.tools.protocol :refer [OnMouseMove on-mouse-move
                                     OnClick on-click]]
    [frontend.state.core :as state]
+   [frontend.state.input :as input]
    [frontend.input.keyboard :as keyboard]))
 
 (defn- eval-mouse-move [event]
@@ -38,7 +39,7 @@
      "mousemove"
      (fn [event]
        (let [mouse-state (event->mouse-state event)]
-         (state/set-mouse-state! mouse-state)
+         (input/mouse-pos! (:pos mouse-state))
          (eval-mouse-move mouse-state))))
     (.addEventListener
      js/document

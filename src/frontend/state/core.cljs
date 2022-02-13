@@ -12,7 +12,6 @@
    ;; in place of the original. This is intended for tool previews.
    :shape-preview-override {}
    :draw-order []
-   :mouse {:pos [0 0]}
    :materials {:default {:display "Default"
                          :color "#000"}}
    :active-material :default
@@ -23,9 +22,6 @@
    :tool []})
 
 (def ^:dynamic *db* (r/atom initial-state))
-
-(defn get-mouse-pos []
-  (:pos (:mouse @*db*)))
 
 (defn get-tool []
   (last (:tool @*db*)))
@@ -232,6 +228,3 @@
          (merge shape {:mat-id (:active-material @*db*)}))
   (when selected? (select-id! id))
   (when draw-order? (conj-draw-order id)))
-
-(defn set-mouse-state! [mouse-s]
-  (swap! *db* assoc :mouse mouse-s))
