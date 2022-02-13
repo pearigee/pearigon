@@ -2,72 +2,72 @@
 
 (def actions
   {:add
-   {:key :a
+   {:key {:code "KeyA" :display "a"}
     :display "Add Shape"}
 
    :add.circle
-   {:key :c
+   {:key {:code "KeyC" :display "c"}
     :display "Circle"}
 
    :add.rect
-   {:key :r
+   {:key {:code "KeyR" :display "r"}
     :display "Rectangle"}
 
    :delete
-   {:key :x
+   {:key {:code "KeyX" :display "x"}
     :display "Delete"
     :when [:num-selected-gt? 0]}
 
    :export
-   {:key :ctrl-e
+   {:key {:code "KeyE" :ctrl true :display "ctrl-e"}
     :display "Export"}
 
    :grab
-   {:key :g
+   {:key {:code "KeyG" :display "g"}
     :display "Grab"
     :when [:num-selected-gt? 0]}
 
    :material
-   {:key :m
+   {:key {:code "KeyM" :display "m"}
     :display "Material Editor"}
 
    :path-tool
    {:display "Path Tool"
-    :key :tab
+    :key {:code "Tab" :display "tab"}
     :when [:or
            [:num-selected-eq? 1 {:path? true}]
            [:num-selected-eq? 0]]}
 
    :path-tool.add-point-round
    {:display "Add Round Point"
-    :key :q}
+    :key {:code "KeyQ" :display "q"}}
 
    :path-tool.add-point-sharp
    {:display "Add Sharp Point"
-    :key :w}
+    :key {:code "KeyW" :display "w"}}
 
    :path-tool.quit
    {:display "Quit"
-    :key :tab}
+    :key {:code "Tab" :display "tab"}}
 
    :path-tool.toggle-closed
    {:display "Toggle curve closed"
-    :key :c}
+    :key {:code "KeyC" :display "c"}}
 
    :rotate
-   {:key :r
+   {:key {:code "KeyR" :display "r"}
     :display "Rotate"
     :when [:num-selected-gt? 0]}
 
    :scale
-   {:key :s
+   {:key {:code "KeyS" :display "s"}
     :display "Scale"
     :when [:num-selected-gt? 0]}
 
    :scale.x-axis
-   {:key :x
+   {:key {:code "KeyX" :display "x"}
     :display "Lock to X axis"}
 
    :scale.y-axis
-   {:key :y
+   {:key {:code "KeyY" :display "y"}
     :display "Lock to Y axis"}})

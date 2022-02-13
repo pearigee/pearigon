@@ -1,6 +1,5 @@
 (ns frontend.input.keyboard
   (:require
-   [clojure.string :as str]
    [frontend.actions.core :as actions]
    [frontend.state.core :as state]
    [frontend.tools.protocol :refer [OnKeypress on-keypress]]
@@ -29,12 +28,10 @@
 
 (defn- keyboard-event->key
   [event]
-  (let [key-raw (str/lower-case (.-key event))
-        key (if (= key-raw " ") "space" key-raw)
-        ctrl (.-ctrlKey event)
-        meta (.-metaKey event)]
-    (keyword (str (if ctrl "ctrl-" "")
-                  (if meta "meta-" "") key))))
+  {:code (.-code event)
+   :ctrl (.-ctrlKey event)
+   :alt (.-altKey event)
+   :shift (.-shiftKey event)})
 
 (defn record-suggestions!
   "Record any actions that are polled for to populate suggestions."
