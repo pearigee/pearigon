@@ -3,7 +3,6 @@
    [frontend.tools.protocol :refer [OnMouseMove on-mouse-move
                                     OnClick on-click]]
    [frontend.state.core :as state]
-   [frontend.state.input :as input]
    [frontend.state.mouse :as mouse]
    [frontend.input.keyboard :as keyboard]))
 

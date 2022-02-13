@@ -1,13 +1,13 @@
 (ns frontend.view.key-suggestion
   (:require [frontend.state.core :as state]
             [frontend.actions.core :as actions]
-            [frontend.state.input :as input]))
+            [frontend.state.keyboard :as keyboard]))
 
 (defn key-suggestion []
   (let [tool (state/get-tool)
         key-set-name (cond
-                       (input/just-ctrl?) "Ctrl-"
-                       (input/just-alt?) "Alt-"
+                       (keyboard/just-ctrl?) "Ctrl-"
+                       (keyboard/just-alt?) "Alt-"
                        tool (:display tool)
                        :else nil)
         suggestions (actions/get-hotkey-suggestions)]
