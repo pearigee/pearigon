@@ -4,7 +4,7 @@
    [frontend.tools.protocol :refer [OnMouseMove OnClick OnKeypress]]
    [frontend.shapes.protocol :as shapes]
    [frontend.state.core :as state]
-   [frontend.state.input :as input]
+   [frontend.state.mouse :as mouse]
    [frontend.math :as m]))
 
 (defn tune
@@ -65,7 +65,7 @@
   (let [selection (state/get-selected)
         ;; Filter out shapes with no position (paths)
         center (m/avg (filter identity (map :pos selection)))
-        mpos (input/mouse-pos)]
+        mpos (mouse/pos)]
     (when-not (zero? (count selection))
       (state/push-tool! (map->ScaleTool
                          {:display "Scale"

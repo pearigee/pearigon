@@ -10,7 +10,7 @@
             [frontend.tools.scale :refer [scale]]
             [frontend.tools.rotate :refer [rotate]]
             [frontend.state.core :as state]
-            [frontend.state.input :as input]
+            [frontend.state.mouse :as mouse]
             [frontend.actions.core :as actions]
             [frontend.shapes.path.path :refer [Path path]]
             [frontend.shapes.path.point :refer [point]]
@@ -56,7 +56,7 @@
           (actions/active? :path-tool.add-point-round k))
       (let [type (key->point-type k)
             selection (state/get-selected)
-            mpos (input/mouse-pos)]
+            mpos (mouse/pos)]
         (cond (and
                (seq selection)
                ;; TODO Replace with #(satisfies? Point %) when CLJS 1.11 drops

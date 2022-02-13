@@ -2,7 +2,7 @@
   (:require
    [frontend.actions.core :as actions]
    [frontend.state.core :as state]
-   [frontend.state.input :as input]
+   [frontend.state.keyboard :as keyboard]
    [frontend.tools.protocol :refer [OnKeypress on-keypress]]
    [frontend.tools.add :refer [add]]
    [frontend.tools.grab :refer [grab]]
@@ -72,8 +72,8 @@
         ;; Prevent Tab from leaving the page.
        (.preventDefault event)
        (let [{:keys [code] :as key} (keyboard-event->key event)]
-         (when (ctrl-codes code) (input/ctrl-down?! true))
-         (when (alt-codes code) (input/alt-down?! true))
+         (when (ctrl-codes code) (keyboard/ctrl-down?! true))
+         (when (alt-codes code) (keyboard/alt-down?! true))
          (js/console.log "Keypress: " key)
          (eval-hotkey key)
          (record-suggestions!)))))
@@ -81,8 +81,8 @@
    "keyup"
    (fn [event]
      (let [{:keys [code]} (keyboard-event->key event)]
-       (when (ctrl-codes code) (input/ctrl-down?! false))
-       (when (alt-codes code) (input/alt-down?! false)))
+       (when (ctrl-codes code) (keyboard/ctrl-down?! false))
+       (when (alt-codes code) (keyboard/alt-down?! false)))
      (record-suggestions!))))
 
 (defn init
