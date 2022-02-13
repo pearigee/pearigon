@@ -29,6 +29,16 @@
        (similar? (:ctrl a) (:ctrl b))
        (similar? (:shift a) (:shift b))))
 
+(defn uses-ctrl? [id]
+  (:ctrl (get-key id)))
+
+(defn uses-alt? [id]
+  (:alt (get-key id)))
+
+(defn uses-no-modifiers? [id]
+  (let [{:keys [alt ctrl]} (get-key id)]
+    (and (not alt) (not ctrl))))
+
 (defn clear-suggestions!
   "Clear the suggestion set.
    This should be done before recording new suggestions."

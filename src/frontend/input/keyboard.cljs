@@ -2,6 +2,7 @@
   (:require
    [frontend.actions.core :as actions]
    [frontend.state.core :as state]
+   [frontend.state.input :as input]
    [frontend.tools.protocol :refer [OnKeypress on-keypress]]
    [frontend.tools.add :refer [add]]
    [frontend.tools.grab :refer [grab]]
@@ -12,19 +13,42 @@
    [frontend.tools.export :refer [export]]
    [frontend.tools.path-tool :refer [path-tool]]))
 
+(def ctrl-codes #{"ControlLeft" "ControlRight"})
+(def alt-codes #{"AltLeft" "AltRight"})
+
+(def action-bindings
+  {:add add
+   :scale scale
+   :grab grab
+   :rotate rotate
+   :path-tool path-tool
+   :delete delete
+   :export export
+   :material material})
+
+(defn- eval-keys-by [pred k]
+  (let [actions
+        (filter pred (keys action-bindings))
+        active (first (filter #(actions/active? % k) actions))]
+    (when active ((get action-bindings active)))))
+
+(defn- eval-root-keys [k]
+  (eval-keys-by actions/uses-no-modifiers? k))
+
+(defn- eval-ctrl-keys [k]
+  (eval-keys-by actions/uses-ctrl? k))
+
+(defn- eval-alt-keys [k]
+  (eval-keys-by actions/uses-alt? k))
+
 (defn- eval-hotkey [k]
   (let [tool (state/get-tool)]
     (if tool
       (when (satisfies? OnKeypress tool) (on-keypress tool k))
       (cond
-        (actions/active? :add k) (add)
-        (actions/active? :scale k) (scale)
-        (actions/active? :grab k) (grab)
-        (actions/active? :rotate k) (rotate)
-        (actions/active? :material k) (material)
-        (actions/active? :path-tool k) (path-tool)
-        (actions/active? :delete k) (delete)
-        (actions/active? :export k) (export)))))
+        (input/just-ctrl?) (eval-ctrl-keys k)
+        (input/just-alt?) (eval-alt-keys k)
+        :else (eval-root-keys k)))))
 
 (defn- keyboard-event->key
   [event]
@@ -47,10 +71,19 @@
      (when (not= (.-tagName js/document.activeElement) "INPUT")
         ;; Prevent Tab from leaving the page.
        (.preventDefault event)
-       (let [key (keyboard-event->key event)]
+       (let [{:keys [code] :as key} (keyboard-event->key event)]
+         (when (ctrl-codes code) (input/ctrl-down?! true))
+         (when (alt-codes code) (input/alt-down?! true))
          (js/console.log "Keypress: " key)
          (eval-hotkey key)
-         (record-suggestions!))))))
+         (record-suggestions!)))))
+  (js/document.addEventListener
+   "keyup"
+   (fn [event]
+     (let [{:keys [code]} (keyboard-event->key event)]
+       (when (ctrl-codes code) (input/ctrl-down?! false))
+       (when (alt-codes code) (input/alt-down?! false)))
+     (record-suggestions!))))
 
 (defn init
   "Bind keyboard input handlers."

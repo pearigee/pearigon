@@ -19,7 +19,7 @@
     :when [:num-selected-gt? 0]}
 
    :export
-   {:key {:code "KeyE" :ctrl true :display "ctrl-e"}
+   {:key {:code "KeyE" :ctrl true :display "e"}
     :display "Export"}
 
    :grab
@@ -28,7 +28,7 @@
     :when [:num-selected-gt? 0]}
 
    :material
-   {:key {:code "KeyM" :display "m"}
+   {:key {:code "KeyM" :alt true :display "m"}
     :display "Material Editor"}
 
    :path-tool
