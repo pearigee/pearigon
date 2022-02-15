@@ -23,8 +23,7 @@
    :view-pos [0 0]
    :view-dimensions [0 0]
    :view-zoom 1
-   :panel nil
-   :tool []})
+   :panel nil})
 
 (def ^:dynamic *db* (r/atom initial-state))
 
