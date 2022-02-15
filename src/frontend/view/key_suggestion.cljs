@@ -1,10 +1,10 @@
 (ns frontend.view.key-suggestion
-  (:require [frontend.state.core :as state]
+  (:require [frontend.state.tools :as tools]
             [frontend.actions.core :as actions]
             [frontend.state.keyboard :as keyboard]))
 
 (defn key-suggestion []
-  (let [tool (state/get-tool)
+  (let [tool (tools/get-tool)
         key-set-name (cond
                        (keyboard/just-ctrl?) "Ctrl-"
                        (keyboard/just-alt?) "Alt-"

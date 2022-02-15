@@ -3,6 +3,7 @@
    [frontend.tools.protocol :refer [OnMouseMove OnClick]]
    [frontend.shapes.protocol :as shapes]
    [frontend.state.core :as state]
+   [frontend.state.tools :as tools]
    [frontend.state.mouse :as mouse]
    [frontend.math :as m]))
 
@@ -32,7 +33,7 @@
     (state/map-selected-shapes!
      #(shapes/transform % (compute-transform mpos origin init-angle)))
     (state/clear-shape-preview!)
-    (state/pop-tool!)))
+    (tools/pop-tool!)))
 
 (defn rotate []
   (let [selection (state/get-selected)
@@ -40,7 +41,7 @@
         origin (m/avg (filter identity (map :pos selection)))
         mpos (mouse/pos)]
     (when-not (zero? (count selection))
-      (state/push-tool! (map->RotateTool
+      (tools/push-tool! (map->RotateTool
                          {:display "Rotate"
                           :action :rotate
                           :origin origin

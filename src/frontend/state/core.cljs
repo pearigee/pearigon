@@ -28,12 +28,6 @@
 
 (def ^:dynamic *db* (r/atom initial-state))
 
-(defn get-tool []
-  (last (:tool @*db*)))
-
-(defn get-tool-stack []
-  (:tool @*db*))
-
 (defn get-shape [id]
   ;; Order matters in the multi-path below. The nested structure should
   ;; be searched first.
@@ -212,18 +206,6 @@
 (defn add-material!
   [id value]
   (swap! *db* update-in [:materials] assoc id value))
-
-(defn push-tool! [tool]
-  (swap! *db* assoc :tool (conj (:tool @*db*) tool))
-  (js/console.log "Tool pushed:" (:tool @*db*)))
-
-(defn pop-tool! []
-  (when-not (empty? (:tool @*db*))
-    (swap! *db* assoc :tool (pop (:tool @*db*)))
-    (js/console.log "Tool popped:" (:tool @*db*))))
-
-(defn update-tool! [tool]
-  (swap! *db* assoc :tool (sp/setval [sp/LAST] tool (:tool @*db*))))
 
 (defn add-shape!
   [{:keys [id] :as shape} & {:keys [selected? draw-order?]

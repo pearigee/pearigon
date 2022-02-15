@@ -3,17 +3,18 @@
    [frontend.tools.protocol :refer [OnMouseMove on-mouse-move
                                     OnClick on-click]]
    [frontend.state.core :as state]
+   [frontend.state.tools :as tools]
    [frontend.state.mouse :as mouse]
    [frontend.input.keyboard :as keyboard]))
 
 (defn- eval-mouse-move [event]
-  (let [t (state/get-tool)]
+  (let [t (tools/get-tool)]
     (when (satisfies? OnMouseMove t)
       (on-mouse-move t event))))
 
 (defn- eval-mouse-click [event]
   (js/console.log "click" event)
-  (let [t (state/get-tool)]
+  (let [t (tools/get-tool)]
     (if (satisfies? OnClick t)
       (on-click t event)
       (state/select-from-mouse-event! event)))

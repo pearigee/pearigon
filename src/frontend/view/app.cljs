@@ -1,5 +1,6 @@
 (ns frontend.view.app
   (:require [frontend.state.core :as state]
+            [frontend.state.tools :as tools]
             [frontend.view.sidebar :refer [sidebar]]
             [frontend.shapes.protocol :refer [render-svg]]
             [frontend.tools.protocol :refer [ToolRenderSVG tool-render-svg]]
@@ -7,7 +8,7 @@
 
 (defn app []
   (let [shapes (state/get-shapes-with-override)
-        tools (state/get-tool-stack)
+        tools (tools/get-tool-stack)
         [zvx zvy] (state/get-view-pos-with-zoom)
         [zdx zdy] (state/get-view-dim-with-zoom)]
     [:div.app

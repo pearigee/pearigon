@@ -3,6 +3,7 @@
    [frontend.actions.core :as actions]
    [frontend.shapes.path.path :as p]
    [frontend.state.core :as state]
+   [frontend.state.tools :as tools]
    [frontend.state.mouse :as mouse]
    [frontend.tools.grab :refer [grab]]
    [frontend.tools.protocol :refer [OnKeypress]]))
@@ -22,8 +23,8 @@
       (when shape
         (state/deselect-all!)
         (state/add-shape! shape)
-        (state/pop-tool!)
+        (tools/pop-tool!)
         (grab)))))
 
 (defn add []
-  (state/push-tool! (->AddTool "Add Shape" :add)))
+  (tools/push-tool! (->AddTool "Add Shape" :add)))

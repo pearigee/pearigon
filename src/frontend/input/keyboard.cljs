@@ -1,7 +1,7 @@
 (ns frontend.input.keyboard
   (:require
    [frontend.actions.core :as actions]
-   [frontend.state.core :as state]
+   [frontend.state.tools :as tools]
    [frontend.state.keyboard :as keyboard]
    [frontend.tools.protocol :refer [OnKeypress on-keypress]]
    [frontend.tools.add :refer [add]]
@@ -42,7 +42,7 @@
   (eval-keys-by actions/uses-alt? k))
 
 (defn- eval-hotkey [k]
-  (let [tool (state/get-tool)]
+  (let [tool (tools/get-tool)]
     (if tool
       (when (satisfies? OnKeypress tool) (on-keypress tool k))
       (cond

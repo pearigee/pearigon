@@ -11,6 +11,7 @@
             [frontend.tools.rotate :refer [rotate]]
             [frontend.state.core :as state]
             [frontend.state.mouse :as mouse]
+            [frontend.state.tools :as tools]
             [frontend.actions.core :as actions]
             [frontend.shapes.path.path :refer [Path path]]
             [frontend.shapes.path.point :refer [point]]
@@ -67,7 +68,7 @@
               (let [{:keys [id] :as shape} (path)]
                 (state/add-shape! shape :selected? false)
                 (add-point-at-pos shape mpos type)
-                (state/update-tool! (assoc t :path-id id)))
+                (tools/update-tool! (assoc t :path-id id)))
 
               path-id
               (let [shape (state/get-shape path-id)]
@@ -78,7 +79,7 @@
         (state/merge-shape! path-id {:closed? (not closed?)}))
 
       (actions/active? :path-tool.quit k)
-      (state/pop-tool!)
+      (tools/pop-tool!)
 
       (actions/active? :grab k)
       (grab)
@@ -93,7 +94,7 @@
       (do (delete)
           ;; If the root has been deleted, exit the tool.
           (when (nil? (state/get-shape path-id))
-            (state/pop-tool!)))
+            (tools/pop-tool!)))
 
       :else nil))
 
@@ -134,4 +135,4 @@
         shape (first shapes)
         {id :id} (when (and (instance? Path shape)
                             (= (count shapes) 1)) shape)]
-    (state/push-tool! (->PathTool "Path Tool" :path-tool id))))
+    (tools/push-tool! (->PathTool "Path Tool" :path-tool id))))

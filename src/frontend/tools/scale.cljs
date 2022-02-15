@@ -4,6 +4,7 @@
    [frontend.tools.protocol :refer [OnMouseMove OnClick OnKeypress]]
    [frontend.shapes.protocol :as shapes]
    [frontend.state.core :as state]
+   [frontend.state.tools :as tools]
    [frontend.state.mouse :as mouse]
    [frontend.math :as m]))
 
@@ -49,7 +50,7 @@
     (state/map-selected-shapes!
      #(shapes/transform % (compute-transform t mpos center)))
     (state/clear-shape-preview!)
-    (state/pop-tool!))
+    (tools/pop-tool!))
 
   OnKeypress
   (on-keypress [t k]
@@ -59,7 +60,7 @@
                  :else nil)]
       (js/console.log "Setting scale axis:" axis k)
       (when axis
-        (state/update-tool! (merge t {:axis axis}))))))
+        (tools/update-tool! (merge t {:axis axis}))))))
 
 (defn scale []
   (let [selection (state/get-selected)
@@ -67,7 +68,7 @@
         center (m/avg (filter identity (map :pos selection)))
         mpos (mouse/pos)]
     (when-not (zero? (count selection))
-      (state/push-tool! (map->ScaleTool
+      (tools/push-tool! (map->ScaleTool
                          {:display "Scale"
                           :action :scale
                           :center center
