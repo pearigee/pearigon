@@ -43,12 +43,11 @@
 
 (defn- eval-hotkey [k]
   (let [tool (tools/get-tool)]
-    (if tool
-      (when (satisfies? OnKeypress tool) (on-keypress tool k))
-      (cond
-        (keyboard/just-ctrl?) (eval-ctrl-keys k)
-        (keyboard/just-alt?) (eval-alt-keys k)
-        :else (eval-root-keys k)))))
+    (cond
+      (keyboard/just-ctrl?) (eval-ctrl-keys k)
+      (keyboard/just-alt?) (eval-alt-keys k)
+      (satisfies? OnKeypress tool) (on-keypress tool k)
+      :else (eval-root-keys k))))
 
 (defn- keyboard-event->key
   [event]
