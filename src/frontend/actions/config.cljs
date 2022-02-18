@@ -27,9 +27,9 @@
     :display "Grab"
     :when [:num-selected-gt? 0]}
 
-   :material
-   {:key {:code "KeyM" :alt true :display "m"}
-    :display "Material Editor"}
+   :styles-panel
+   {:key {:code "KeyS" :alt true :display "s"}
+    :display "Styles (color)"}
 
    :path-tool
    {:display "Path Tool"

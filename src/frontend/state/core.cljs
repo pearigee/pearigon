@@ -9,6 +9,7 @@
    [com.rpl.specter :as sp :include-macros true]
    [reagent.core :as r]
    [frontend.shapes.protocol :refer [OnSelect on-select]]
+   [frontend.utils.styles :as styles]
    [frontend.math :refer [v+]]))
 
 (def initial-state
@@ -19,7 +20,7 @@
    :draw-order []
    :materials {:default {:display "Default"
                          :color "#000"}}
-   :active-material :default
+   :default-styles styles/default-styles
    :view-pos [0 0]
    :view-dimensions [0 0]
    :view-zoom 1
@@ -53,12 +54,6 @@
   (mapv #(if-let [preview (get-preview %)]
            preview
            (get-shape %)) ids))
-
-(defn get-materials []
-  (:materials @*db*))
-
-(defn get-material [id]
-  (get (:materials @*db*) id))
 
 (defn get-panel []
   (:panel @*db*))
@@ -96,6 +91,12 @@
               sp/MAP-VALS
               (sp/multi-path [#(:selected %)]
                              [:points sp/ALL #(:selected %)])] @*db*))
+
+(defn selected-paths []
+  (filter :points (get-selected)))
+
+(defn default-styles []
+  (:default-styles @*db*))
 
 (defn selected? [id]
   (:selected (get-shape id)))
@@ -157,6 +158,9 @@
 (defn deselect-all! []
   (map-shapes! #(assoc % :selected false)))
 
+(defn default-styles! [styles]
+  (swap! *db* assoc :default-styles styles))
+
 (defn select-id!
   ([id selected?]
    (when-let [shape (get-shape id)]
@@ -189,12 +193,6 @@
 (defn set-panel! [panel]
   (swap! *db* assoc :panel panel))
 
-(defn set-material! [id value]
-  (swap! *db* update-in [:materials] assoc id value))
-
-(defn set-active-material! [id]
-  (swap! *db* assoc :active-material id))
-
 (defn move-view-pos! [delta-vec]
   (swap! *db* assoc :view-pos (v+ (:view-pos @*db*) delta-vec)))
 
@@ -202,15 +200,11 @@
 (defn view-zoom! [delta]
   (swap! *db* assoc :view-zoom (+ (:view-zoom @*db*) (/ delta 100))))
 
-(defn add-material!
-  [id value]
-  (swap! *db* update-in [:materials] assoc id value))
-
 (defn add-shape!
   [{:keys [id] :as shape} & {:keys [selected? draw-order?]
                              :or {selected? true
                                   draw-order? true}}]
   (swap! *db* update-in [:shapes] assoc id
-         (merge shape {:mat-id (:active-material @*db*)}))
+         (merge shape {:styles (default-styles)}))
   (when selected? (select-id! id))
   (when draw-order? (conj-draw-order id)))

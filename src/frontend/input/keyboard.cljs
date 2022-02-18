@@ -7,7 +7,7 @@
    [frontend.tools.add :refer [add]]
    [frontend.tools.grab :refer [grab]]
    [frontend.tools.rotate :refer [rotate]]
-   [frontend.tools.material :refer [material]]
+   [frontend.tools.styles-panel :refer [styles-panel]]
    [frontend.tools.scale :refer [scale]]
    [frontend.tools.delete :refer [delete]]
    [frontend.tools.export :refer [export]]
@@ -24,7 +24,7 @@
    :path-tool path-tool
    :delete delete
    :export export
-   :material material})
+   :styles-panel styles-panel})
 
 (defn- eval-keys-by [pred k]
   (let [actions

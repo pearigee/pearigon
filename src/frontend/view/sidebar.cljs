@@ -1,9 +1,8 @@
 (ns frontend.view.sidebar
   (:require
    ["@tabler/icons" :rename {IconX icon-minimize}]
-   [reagent.core :as r]
    [frontend.state.core :as state]
-   [frontend.view.material :refer [material-editor]]))
+   [frontend.view.panels.styles-panel :refer [styles-panel]]))
 
 (defn sidebar-panel
   [title content]
@@ -18,7 +17,7 @@
 (defn sidebar []
   (let [panel (state/get-panel)]
     (case panel
-      :material [sidebar-panel
-                 "Material Editor"
-                 [material-editor]]
+      :styles [sidebar-panel
+               "Styles"
+               [styles-panel]]
       nil)))
