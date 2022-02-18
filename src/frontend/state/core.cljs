@@ -18,8 +18,6 @@
    ;; in place of the original. This is intended for tool previews.
    :shape-preview-override {}
    :draw-order []
-   :materials {:default {:display "Default"
-                         :color "#000"}}
    :default-styles styles/default-styles
    :view-pos [0 0]
    :view-dimensions [0 0]
