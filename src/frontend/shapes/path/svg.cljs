@@ -30,7 +30,7 @@
 
           (and closed?
                (= (count points) 1))
-          [1 ""]
+          [1 "z"]
 
           :else
           [1 (str "L " x1 " " y1)])))
