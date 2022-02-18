@@ -30,7 +30,7 @@
 
           (and closed?
                (= (count points) 1))
-          [1 "z"]
+          [1 ""]
 
           :else
           [1 (str "L " x1 " " y1)])))
@@ -46,6 +46,6 @@
                       (rest points))
              d d]
         (if (empty? points)
-          d
+          (if closed? (str d "z") d)
           (let [[n result] (point->svg points closed?)]
             (recur (drop n points) (str d result))))))))
