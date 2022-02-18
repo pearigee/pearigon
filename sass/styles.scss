@@ -6,7 +6,7 @@ html, body {
   overscroll-behavior-x: none;
 }
 
-$selection-color: $info;
+$selection-color: $link;
 
 @mixin transparent-background {
   background: rgba(255,255,255, 0.75);
@@ -110,7 +110,12 @@ svg {
   }
 
   .point {
-    fill: hsl(204, 86%, 53%);
+    fill: $link;
+  }
+
+  .point.selected {
+    fill: $danger;
+    filter: drop-shadow(0 0 10px $danger)
   }
 
   .add-point-button {
@@ -118,6 +123,6 @@ svg {
   }
 
   .mesh-line {
-    stroke: hsl(217, 71%, 53%);
+    stroke: $link;
   }
 }
