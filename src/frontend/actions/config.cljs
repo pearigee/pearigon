@@ -3,7 +3,8 @@
 (def actions
   {:add
    {:key {:code "KeyA" :display "a"}
-    :display "Add Shape"}
+    :display "Add Shape"
+    :when [:num-selected-eq? 0]}
 
    :add.circle
    {:key {:code "KeyC" :display "c"}
