@@ -54,6 +54,16 @@
    {:display "Toggle curve closed"
     :key {:code "KeyC" :display "c"}}
 
+   :move-up
+   {:display "Move up"
+    :key {:code "BracketRight" :display "]"}
+    :when [:num-selected-eq? 1 {:path? true}]}
+
+   :move-down
+   {:display "Move down"
+    :key {:code "BracketLeft" :display "["}
+    :when [:num-selected-eq? 1 {:path? true}]}
+
    :rotate
    {:key {:code "KeyR" :display "r"}
     :display "Rotate"

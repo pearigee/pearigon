@@ -10,6 +10,7 @@
    [reagent.core :as r]
    [frontend.shapes.protocol :refer [OnSelect on-select]]
    [frontend.utils.styles :as styles]
+   [frontend.utils.layers :as layers]
    [frontend.math :refer [v+]]))
 
 (def initial-state
@@ -180,6 +181,12 @@
 
 (defn set-view-dimensions! [dim]
   (swap! *db* assoc :view-dimensions dim))
+
+(defn move-up-draw-order! [id]
+  (swap! *db* assoc :draw-order (layers/move-up (get-draw-order) id)))
+
+(defn move-down-draw-order! [id]
+  (swap! *db* assoc :draw-order (layers/move-down (get-draw-order) id)))
 
 (defn update-view-size! []
   ;; TODO: Figure out how to remove this DOM reference.
