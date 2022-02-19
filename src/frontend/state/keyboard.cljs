@@ -2,8 +2,7 @@
   (:require [reagent.core :as r]))
 
 (def initial-state
-  {;; Mouse position in canvas coordinates
-   :ctrl-down? false
+  {:ctrl-down? false
    :alt-down? false})
 
 (def ^:dynamic *db* (r/atom initial-state))
