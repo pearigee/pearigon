@@ -3,6 +3,7 @@
    [frontend.tools.protocol :refer [OnMouseMove on-mouse-move
                                     OnClick on-click]]
    [frontend.state.core :as state]
+   [frontend.state.viewport :as viewport]
    [frontend.state.tools :as tools]
    [frontend.state.mouse :as mouse]
    [frontend.input.keyboard :as keyboard]))
@@ -24,8 +25,8 @@
 
 (defn- event->mouse-state
   [event]
-  (let [[vx vy] (state/get-view-pos-with-zoom)
-        z (state/get-view-zoom-scale)]
+  (let [[vx vy] (viewport/pos-with-zoom)
+        z (viewport/zoom-scale)]
     {:pos [(+ (/ (.-pageX event) z) vx)
            (+ (/ (.-pageY event) z) vy)]
      :shift (.-shiftKey event)
@@ -64,9 +65,9 @@
              ctrl (.-ctrlKey event)]
          (if ctrl
            ;; This is a pinch to zoom. Delta is in `y`.
-           (state/view-zoom! y)
+           (viewport/zoom! y)
            ;; This is a normal scroll
-           (state/move-view-pos! [x y])))))))
+           (viewport/move-pos! [x y])))))))
 
 (defn init
   "Bind mouse events to input handlers."

@@ -54,37 +54,6 @@
            preview
            (get-shape %)) ids))
 
-(defn get-panel []
-  (:panel @*db*))
-
-(defn get-view-pos []
-  (:view-pos @*db*))
-
-(defn get-view-dimensions []
-  (:view-dimensions @*db*))
-
-(defn get-view-zoom []
-  (:view-zoom @*db*))
-
-(defn get-view-pos-with-zoom []
-  (let [[vx vy] (get-view-pos)
-        [dx dy] (get-view-dimensions)
-        z (get-view-zoom)
-        zpos [(+ vx (/ (* dx (- 1 z)) 2))
-              (+ vy (/ (* dy (- 1 z)) 2))]]
-    zpos))
-
-(defn get-view-dim-with-zoom []
-  (let [[dx dy] (get-view-dimensions)
-        z (get-view-zoom)
-        zdim [(* dx z) (* dy z)]]
-    zdim))
-
-(defn get-view-zoom-scale []
-  (let [[dx _] (get-view-dimensions)
-        [zdx _] (get-view-dim-with-zoom)]
-    (/ dx zdx)))
-
 (defn get-selected []
   (sp/select [:shapes
               sp/MAP-VALS
@@ -179,31 +148,14 @@
                  (not (:shift event)))
         (deselect-all!)))))
 
-(defn set-view-dimensions! [dim]
-  (swap! *db* assoc :view-dimensions dim))
-
 (defn move-up-draw-order! [id]
   (swap! *db* assoc :draw-order (layers/move-up (get-draw-order) id)))
 
 (defn move-down-draw-order! [id]
   (swap! *db* assoc :draw-order (layers/move-down (get-draw-order) id)))
 
-(defn update-view-size! []
-  ;; TODO: Figure out how to remove this DOM reference.
-  (let [svg (js/document.getElementById "svg-root")
-        height (.-clientHeight svg)
-        width (.-clientWidth svg)]
-    (set-view-dimensions! [width height])))
-
-(defn set-panel! [panel]
-  (swap! *db* assoc :panel panel))
-
 (defn move-view-pos! [delta-vec]
   (swap! *db* assoc :view-pos (v+ (:view-pos @*db*) delta-vec)))
-
-;; TODO: Constrain zoom to valid values (i.e. viewBox has positive area).
-(defn view-zoom! [delta]
-  (swap! *db* assoc :view-zoom (+ (:view-zoom @*db*) (/ delta 100))))
 
 (defn add-shape!
   [{:keys [id] :as shape} & {:keys [selected? draw-order?]

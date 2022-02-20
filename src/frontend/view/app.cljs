@@ -1,5 +1,6 @@
 (ns frontend.view.app
   (:require [frontend.state.core :as state]
+            [frontend.state.viewport :as viewport]
             [frontend.state.tools :as tools]
             [frontend.view.sidebar :refer [sidebar]]
             [frontend.shapes.protocol :refer [render-svg]]
@@ -9,8 +10,8 @@
 (defn app []
   (let [shapes (state/get-shapes-with-override)
         tools (tools/get-tool-stack)
-        [zvx zvy] (state/get-view-pos-with-zoom)
-        [zdx zdy] (state/get-view-dim-with-zoom)]
+        [zvx zvy] (viewport/pos-with-zoom)
+        [zdx zdy] (viewport/dim-with-zoom)]
     [:div.app
      [:div.viewport
       [:svg {:id "svg-root"
