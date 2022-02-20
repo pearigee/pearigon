@@ -1,6 +1,5 @@
 (ns frontend.view.panels.styles-panel
-  (:require [frontend.utils.styles :as styles]
-            [frontend.state.core :as state]
+  (:require [frontend.state.core :as state]
             [frontend.view.components.input :refer [input]]
             [frontend.utils.styles :refer [apply-styles]]
             [reagent.core :as r]))
