@@ -1,16 +1,29 @@
 (ns frontend.view.panels.styles-panel
   (:require [frontend.state.core :as state]
+            [frontend.state.tools :as tools]
             [frontend.view.components.input :refer [input]]
             [frontend.utils.styles :refer [apply-styles]]
             [reagent.core :as r]))
 
+(defn get-selection
+  "Get the shape(s) that should be styled.
+  When using the path tool, default to the shape being edited."
+  []
+  (let [paths (state/selected-paths)
+        path-tool-selection (:path-id (tools/get-tool))]
+    (cond (> (count paths) 0) paths
+          path-tool-selection [(state/get-shape path-tool-selection)]
+          :else [])))
+
 (defn update-styles [styles]
-  (if-not (zero? (count (state/selected-paths)))
-    (state/map-selected-shapes! #(apply-styles % styles))
-    (state/default-styles! styles)))
+  (let [selection (get-selection)]
+    (if-not (zero? (count selection))
+      (state/map-shape-ids! (into #{} (map :id selection))
+                            #(apply-styles % styles))
+      (state/default-styles! styles))))
 
 (defn current-styles []
-  (let [selected (state/selected-paths)]
+  (let [selected (get-selection)]
     (if-not (zero? (count selected))
       (:styles (first selected))
       (state/default-styles))))
@@ -20,7 +33,7 @@
                merge-model! (fn [styles]
                               (swap! model merge styles)
                               (update-styles @model))]
-    (let [num-selected (count (state/selected-paths))
+    (let [num-selected (count (get-selection))
           current-styles (current-styles)]
       (when (<= num-selected 1)
         (merge-model! current-styles))
