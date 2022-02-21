@@ -10,8 +10,7 @@
    [reagent.core :as r]
    [frontend.shapes.protocol :refer [OnSelect on-select]]
    [frontend.utils.styles :as styles]
-   [frontend.utils.layers :as layers]
-   [frontend.math :refer [v+]]))
+   [frontend.utils.layers :as layers]))
 
 (def initial-state
   {:shapes {}
@@ -19,11 +18,7 @@
    ;; in place of the original. This is intended for tool previews.
    :shape-preview-override {}
    :draw-order []
-   :default-styles styles/default-styles
-   :view-pos [0 0]
-   :view-dimensions [0 0]
-   :view-zoom 1
-   :panel nil})
+   :default-styles styles/default-styles})
 
 (def ^:dynamic *db* (r/atom initial-state))
 
@@ -153,9 +148,6 @@
 
 (defn move-down-draw-order! [id]
   (swap! *db* assoc :draw-order (layers/move-down (get-draw-order) id)))
-
-(defn move-view-pos! [delta-vec]
-  (swap! *db* assoc :view-pos (v+ (:view-pos @*db*) delta-vec)))
 
 (defn add-shape!
   [{:keys [id] :as shape} & {:keys [selected? draw-order?]
