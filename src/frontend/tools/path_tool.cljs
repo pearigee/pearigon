@@ -12,7 +12,7 @@
             [frontend.state.core :as state]
             [frontend.state.mouse :as mouse]
             [frontend.state.tools :as tools]
-            [frontend.actions.core :as actions]
+            [frontend.state.actions :as actions]
             [frontend.shapes.path.path :refer [Path path]]
             [frontend.shapes.path.point :refer [point]]
             [frontend.shapes.protocol :refer [render-svg]]))

@@ -1,6 +1,6 @@
 (ns frontend.tools.add
   (:require
-   [frontend.actions.core :as actions]
+   [frontend.state.actions :as actions]
    [frontend.shapes.path.path :as p]
    [frontend.state.core :as state]
    [frontend.state.tools :as tools]

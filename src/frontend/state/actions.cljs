@@ -1,4 +1,4 @@
-(ns frontend.actions.core
+(ns frontend.state.actions
   (:require [reagent.core :as r]
             [frontend.actions.config :refer [actions]]
             [frontend.actions.conditions :as c]))

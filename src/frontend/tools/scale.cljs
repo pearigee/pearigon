@@ -1,6 +1,6 @@
 (ns frontend.tools.scale
   (:require
-   [frontend.actions.core :as actions]
+   [frontend.state.actions :as actions]
    [frontend.tools.protocol :refer [OnMouseMove OnClick OnKeypress]]
    [frontend.shapes.protocol :as shapes]
    [frontend.state.core :as state]

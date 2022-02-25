@@ -1,6 +1,6 @@
 (ns frontend.input.keyboard
   (:require
-   [frontend.actions.core :as actions]
+   [frontend.state.actions :as actions]
    [frontend.state.tools :as tools]
    [frontend.state.core :as state]
    [frontend.state.keyboard :as keyboard]
