@@ -30,13 +30,18 @@
 
 (defn styles-panel []
   (r/with-let [model (r/atom (current-styles))
-               merge-model! (fn [styles]
+               merge-model! (fn [styles & {:keys [update-styles?]
+                                           :or {update-styles? true}}]
                               (swap! model merge styles)
-                              (update-styles @model))]
+                              (when update-styles? (update-styles @model)))]
     (let [num-selected (count (get-selection))
           current-styles (current-styles)]
-      (when (<= num-selected 1)
-        (merge-model! current-styles))
+      (when (and (<= num-selected 1)
+                 (not= @model current-styles))
+        ;; TODO: This seems like an anti-pattern. Improve this.
+        ;; This is called on render, and should not update the styles
+        ;; in shape.core.
+        (merge-model! current-styles :update-styles? false))
       [:div
        [:div
         [:label.tag.is-info

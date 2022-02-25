@@ -28,6 +28,14 @@
     :display "Grab"
     :when [:num-selected-gt? 0]}
 
+   :undo
+   {:key {:code "KeyZ" :ctrl true :display "z"}
+    :display "Undo"}
+
+   :redo
+   {:key {:code "KeyR" :ctrl true :display "r"}
+    :display "Redo"}
+
    :styles-panel
    {:key {:code "KeyS" :alt true :display "s"}
     :display "Styles (color)"}

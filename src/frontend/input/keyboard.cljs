@@ -2,6 +2,7 @@
   (:require
    [frontend.actions.core :as actions]
    [frontend.state.tools :as tools]
+   [frontend.state.core :as state]
    [frontend.state.keyboard :as keyboard]
    [frontend.tools.protocol :refer [OnKeypress on-keypress]]
    [frontend.tools.add :refer [add]]
@@ -27,7 +28,9 @@
    :export export
    :move-up move-up
    :move-down move-down
-   :styles-panel styles-panel})
+   :styles-panel styles-panel
+   :undo state/undo!
+   :redo state/redo!})
 
 (defn- eval-keys-by [pred k]
   (let [actions
