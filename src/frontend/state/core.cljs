@@ -70,10 +70,15 @@
 (defn selected? [id]
   (:selected (get-shape id)))
 
-(defn- redoable-state
-  "Remove fields that should not be recorded for undo/redo."
+(defn save-state
+  "Returns the data that should be persisted in project files and undo/redo."
   []
   (dissoc @*db* :shape-preview-override))
+
+(defn apply-save-state!
+  "Merges the state supplied with the active model."
+  [save-state]
+  (swap! *db* merge save-state))
 
 (defn- trim-undo-stack
   "Limit the size of the undo stack."
@@ -81,7 +86,7 @@
   (into [] (take-last 50 stack)))
 
 (defn- push-undo! [& {:keys [reset-redo?] :or {reset-redo? true}}]
-  (let [val (redoable-state)]
+  (let [val (save-state)]
     (swap! undo-db assoc
            :undo (trim-undo-stack (conj (:undo @undo-db) val))))
   ;; Reset the undo state by default. The state is stale after new
@@ -91,14 +96,14 @@
 (def ^:private debounced-push-undo! (debounce push-undo! 250))
 
 (defn- push-redo! []
-  (swap! undo-db assoc :redo (conj (:redo @undo-db) (redoable-state))))
+  (swap! undo-db assoc :redo (conj (:redo @undo-db) (save-state))))
 
 (defn undo! []
   (let [new-state (peek (:undo @undo-db))
         new-undo (when new-state (pop (:undo @undo-db)))]
     (when new-state
       (push-redo!)
-      (swap! *db* merge new-state)
+      (apply-save-state! new-state)
       (swap! undo-db assoc :undo new-undo))))
 
 (defn redo! []
@@ -106,7 +111,7 @@
         new-redo (when new-state (pop (:redo @undo-db)))]
     (when new-state
       (push-undo! :reset-redo? false)
-      (swap! *db* merge new-state)
+      (apply-save-state! new-state)
       (swap! undo-db assoc :redo new-redo))))
 
 (defn- undoable-swap! [& args]
@@ -137,7 +142,7 @@
   (swap! *db* assoc :shape-preview-override {}))
 
 (defn set-draw-order! [order]
-  (undoable-swap! *db* assoc :draw-order order))
+  (undoable-swap! *db* assoc :draw-order (vec order)))
 
 (defn conj-draw-order [id]
   (set-draw-order! (conj (get-draw-order) id)))
@@ -193,12 +198,10 @@
         (deselect-all!)))))
 
 (defn move-up-draw-order! [id]
-  (undoable-swap! *db* assoc :draw-order
-                  (layers/move-up (get-draw-order) id)))
+  (set-draw-order! (layers/move-up (get-draw-order) id)))
 
 (defn move-down-draw-order! [id]
-  (undoable-swap! *db* assoc :draw-order
-                 (layers/move-down (get-draw-order) id)))
+  (set-draw-order! (layers/move-down (get-draw-order) id)))
 
 (defn add-shape!
   [{:keys [id] :as shape} & {:keys [selected? draw-order?]

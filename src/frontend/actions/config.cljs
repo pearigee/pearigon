@@ -78,6 +78,14 @@
     :display "Rotate"
     :when [:num-selected-gt? 0]}
 
+   :save
+   {:key {:code "KeyS" :ctrl true :display "s"}
+    :display "Save"}
+
+   :open
+   {:key {:code "KeyO" :ctrl true :display "o"}
+    :display "Open"}
+
    :scale
    {:key {:code "KeyS" :display "s"}
     :display "Scale"

@@ -9,7 +9,9 @@
    [frontend.tools.scale :refer [scale]]
    [frontend.tools.delete :refer [delete]]
    [frontend.tools.export :refer [export]]
-   [frontend.tools.path-tool :refer [path-tool]]))
+   [frontend.tools.path-tool :refer [path-tool]]
+   [frontend.tools.save :refer [save]]
+   [frontend.tools.open :refer [open]]))
 
 (def action->handler
   {:add add
@@ -23,4 +25,6 @@
    :move-down move-down
    :styles-panel styles-panel
    :undo state/undo!
-   :redo state/redo!})
+   :redo state/redo!
+   :save save
+   :open open})
