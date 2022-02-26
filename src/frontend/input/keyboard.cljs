@@ -1,42 +1,19 @@
 (ns frontend.input.keyboard
   (:require
    [frontend.state.actions :as actions]
+   [frontend.actions.handlers :refer [action->handler]]
    [frontend.state.tools :as tools]
-   [frontend.state.core :as state]
    [frontend.state.keyboard :as keyboard]
-   [frontend.tools.protocol :refer [OnKeypress on-keypress]]
-   [frontend.tools.add :refer [add]]
-   [frontend.tools.grab :refer [grab]]
-   [frontend.tools.rotate :refer [rotate]]
-   [frontend.tools.styles-panel :refer [styles-panel]]
-   [frontend.tools.draw-order :refer [move-up move-down]]
-   [frontend.tools.scale :refer [scale]]
-   [frontend.tools.delete :refer [delete]]
-   [frontend.tools.export :refer [export]]
-   [frontend.tools.path-tool :refer [path-tool]]))
+   [frontend.tools.protocol :refer [OnKeypress on-keypress]]))
 
 (def ctrl-codes #{"ControlLeft" "ControlRight"})
 (def alt-codes #{"AltLeft" "AltRight"})
 
-(def action-bindings
-  {:add add
-   :scale scale
-   :grab grab
-   :rotate rotate
-   :path-tool path-tool
-   :delete delete
-   :export export
-   :move-up move-up
-   :move-down move-down
-   :styles-panel styles-panel
-   :undo state/undo!
-   :redo state/redo!})
-
 (defn- eval-keys-by [pred k]
   (let [actions
-        (filter pred (keys action-bindings))
+        (filter pred (keys action->handler))
         active (first (filter #(actions/active? % k) actions))]
-    (when active ((get action-bindings active)))))
+    (when active ((get action->handler active)))))
 
 (defn- eval-root-keys [k]
   (eval-keys-by actions/uses-no-modifiers? k))
