@@ -6,6 +6,7 @@
   elsewhere (i.e. mouse position, keyboard state)"
   (:require
    [clojure.string :as str]
+   [mount.core :refer-macros [defstate]]
    [com.rpl.specter :as sp :include-macros true]
    [reagent.core :as r]
    [frontend.shapes.protocol :refer [OnSelect on-select]]
@@ -25,8 +26,8 @@
   {:undo []
    :redo []})
 
-(def ^:dynamic *db* (r/atom initial-state))
-(def undo-db (r/atom initial-undo-state))
+(defstate db :start (r/atom initial-state))
+(defstate undo-db :start (r/atom initial-undo-state))
 
 (defn get-shape [id]
   ;; Order matters in the multi-path below. The nested structure should
@@ -35,13 +36,13 @@
                     (sp/multi-path
                      [sp/MAP-VALS :points sp/ALL #(= id (:id %))]
                      [id])]
-                   @*db*))
+                   @@db))
 
 (defn get-draw-order []
-  (:draw-order @*db*))
+  (:draw-order @@db))
 
 (defn get-preview [id]
-  (-> @*db* :shape-preview-override (get id)))
+  (-> @@db :shape-preview-override (get id)))
 
 (defn get-shapes-with-override []
   (let [result (mapv #(if-let [preview (get-preview %)]
@@ -59,13 +60,13 @@
   (sp/select [:shapes
               sp/MAP-VALS
               (sp/multi-path [#(:selected %)]
-                             [:points sp/ALL #(:selected %)])] @*db*))
+                             [:points sp/ALL #(:selected %)])] @@db))
 
 (defn selected-paths []
   (filter :points (get-selected)))
 
 (defn default-styles []
-  (:default-styles @*db*))
+  (:default-styles @@db))
 
 (defn selected? [id]
   (:selected (get-shape id)))
@@ -73,12 +74,12 @@
 (defn save-state
   "Returns the data that should be persisted in project files and undo/redo."
   []
-  (dissoc @*db* :shape-preview-override))
+  (dissoc @@db :shape-preview-override))
 
 (defn apply-save-state!
   "Merges the state supplied with the active model."
   [save-state]
-  (swap! *db* merge save-state))
+  (swap! @db merge save-state))
 
 (defn- trim-undo-stack
   "Limit the size of the undo stack."
@@ -87,39 +88,39 @@
 
 (defn- push-undo! [& {:keys [reset-redo?] :or {reset-redo? true}}]
   (let [val (save-state)]
-    (swap! undo-db assoc
-           :undo (trim-undo-stack (conj (:undo @undo-db) val))))
+    (swap! @undo-db assoc
+           :undo (trim-undo-stack (conj (:undo @@undo-db) val))))
   ;; Reset the undo state by default. The state is stale after new
   ;; modifications.
-  (when reset-redo? (swap! undo-db assoc :redo [])))
+  (when reset-redo? (swap! @undo-db assoc :redo [])))
 
 (def ^:private debounced-push-undo! (debounce push-undo! 250))
 
 (defn- push-redo! []
-  (swap! undo-db assoc :redo (conj (:redo @undo-db) (save-state))))
+  (swap! @undo-db assoc :redo (conj (:redo @@undo-db) (save-state))))
 
 (defn undo! []
-  (let [new-state (peek (:undo @undo-db))
-        new-undo (when new-state (pop (:undo @undo-db)))]
+  (let [new-state (peek (:undo @@undo-db))
+        new-undo (when new-state (pop (:undo @@undo-db)))]
     (when new-state
       (push-redo!)
       (apply-save-state! new-state)
-      (swap! undo-db assoc :undo new-undo))))
+      (swap! @undo-db assoc :undo new-undo))))
 
 (defn redo! []
-  (let [new-state (peek (:redo @undo-db))
-        new-redo (when new-state (pop (:redo @undo-db)))]
+  (let [new-state (peek (:redo @@undo-db))
+        new-redo (when new-state (pop (:redo @@undo-db)))]
     (when new-state
       (push-undo! :reset-redo? false)
       (apply-save-state! new-state)
-      (swap! undo-db assoc :redo new-redo))))
+      (swap! @undo-db assoc :redo new-redo))))
 
 (defn- undoable-swap! [& args]
   (debounced-push-undo!)
   (apply swap! args))
 
 (defn- map-shapes! [f]
-  (undoable-swap! *db*
+  (undoable-swap! @db
          #(sp/multi-transform
            [:shapes
             sp/MAP-VALS
@@ -134,15 +135,15 @@
   (map-shapes! #(if (contains? id-set (:id %)) (f %) %)))
 
 (defn map-selected-shapes-preview! [f]
-  (swap! *db* assoc :shape-preview-override
+  (swap! @db assoc :shape-preview-override
          (let [shapes (map f (get-selected))]
            (reduce #(assoc %1 (:id %2) %2) {} shapes))))
 
 (defn clear-shape-preview! []
-  (swap! *db* assoc :shape-preview-override {}))
+  (swap! @db assoc :shape-preview-override {}))
 
 (defn set-draw-order! [order]
-  (undoable-swap! *db* assoc :draw-order (vec order)))
+  (undoable-swap! @db assoc :draw-order (vec order)))
 
 (defn conj-draw-order [id]
   (set-draw-order! (conj (get-draw-order) id)))
@@ -151,7 +152,7 @@
   ;; Order matters in this multi-path. We must search the nested structure
   ;; before deleting the parent.
   (undoable-swap!
-   *db*
+   @db
    (fn [db] (sp/multi-transform
              [:shapes
               sp/MAP-VALS
@@ -176,7 +177,7 @@
   (map-shapes! #(assoc % :selected false)))
 
 (defn default-styles! [styles]
-  (undoable-swap! *db* assoc :default-styles styles))
+  (undoable-swap! @db assoc :default-styles styles))
 
 (defn select-id!
   ([id selected?]
@@ -207,7 +208,7 @@
   [{:keys [id] :as shape} & {:keys [selected? draw-order?]
                              :or {selected? true
                                   draw-order? true}}]
-  (undoable-swap! *db* update-in [:shapes] assoc id
+  (undoable-swap! @db update-in [:shapes] assoc id
          (merge shape {:styles (default-styles)}))
   (when selected? (select-id! id))
   (when draw-order? (conj-draw-order id)))

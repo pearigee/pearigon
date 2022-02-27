@@ -3,6 +3,7 @@
  :dependencies [[binaryage/devtools "1.0.3"]
                 [com.rpl/specter "1.1.3"]
                 [nrepl "0.8.3"]
+                [mount "0.1.16"]
                 [cider/cider-nrepl "0.28.0"]
                 [reagent "1.1.0"]]
 
