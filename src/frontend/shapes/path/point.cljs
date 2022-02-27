@@ -1,7 +1,8 @@
 (ns frontend.shapes.path.point
-  (:require [frontend.shapes.protocol :refer [RenderSVG Transform]]
-            [frontend.math :as m]
-            [frontend.shapes.utils :as utils]))
+  (:require
+   [frontend.math :as m]
+   [frontend.shapes.protocol :refer [RenderSVG Transform]]
+   [frontend.shapes.utils :as utils]))
 
 (defrecord Point [id pos type r]
 

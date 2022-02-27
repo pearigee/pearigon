@@ -1,7 +1,8 @@
 (ns frontend.state.actions
-  (:require [reagent.core :as r]
-            [frontend.actions.config :refer [actions]]
-            [frontend.actions.conditions :as c]))
+  (:require
+   [frontend.actions.conditions :as c]
+   [frontend.actions.config :refer [actions]]
+   [reagent.core :as r]))
 
 (def suggestions (r/atom #{}))
 

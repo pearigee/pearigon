@@ -1,6 +1,7 @@
 (ns frontend.state.tools
-  (:require [reagent.core :as r]
-            [com.rpl.specter :as sp]))
+  (:require
+   [com.rpl.specter :as sp]
+   [reagent.core :as r]))
 
 (def initial-state {:tool-stack []})
 

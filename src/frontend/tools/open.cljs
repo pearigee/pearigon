@@ -1,9 +1,10 @@
 (ns frontend.tools.open
-  (:require [frontend.state.core :as state]
-            [frontend.utils.file-system :as fs]
-            [frontend.shapes.path.path :refer [map->Path]]
-            [frontend.shapes.path.point :refer [map->Point]]
-            [clojure.edn :as edn]))
+  (:require
+   [clojure.edn :as edn]
+   [frontend.shapes.path.path :refer [map->Path]]
+   [frontend.shapes.path.point :refer [map->Point]]
+   [frontend.state.core :as state]
+   [frontend.utils.file-system :as fs]))
 
 (defn open []
   (fs/open-project

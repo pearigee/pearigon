@@ -1,8 +1,9 @@
 (ns frontend.state.core-test
-  (:require [cljs.test :refer-macros [deftest is testing use-fixtures]]
-            [frontend.shapes.path.path :as p]
-            [frontend.state.core :as state]
-            [frontend.state.undo :as undo]))
+  (:require
+   [cljs.test :refer-macros [deftest is testing use-fixtures]]
+   [frontend.shapes.path.path :as p]
+   [frontend.state.core :as state]
+   [frontend.state.undo :as undo]))
 
 (use-fixtures :each
   {:before (fn []

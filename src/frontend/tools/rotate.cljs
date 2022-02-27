@@ -1,11 +1,11 @@
 (ns frontend.tools.rotate
   (:require
-   [frontend.tools.protocol :refer [OnMouseMove OnClick]]
+   [frontend.math :as m]
    [frontend.shapes.protocol :as shapes]
    [frontend.state.core :as state]
-   [frontend.state.tools :as tools]
    [frontend.state.mouse :as mouse]
-   [frontend.math :as m]))
+   [frontend.state.tools :as tools]
+   [frontend.tools.protocol :refer [OnClick OnMouseMove]]))
 
 (defn calc-angle [[x y]]
   (m/atan2 y x))

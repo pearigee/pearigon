@@ -1,5 +1,6 @@
 (ns frontend.state.keyboard
-  (:require [reagent.core :as r]))
+  (:require
+   [reagent.core :as r]))
 
 (def initial-state
   {:ctrl-down? false

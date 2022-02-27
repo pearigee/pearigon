@@ -1,11 +1,12 @@
 (ns frontend.view.app
-  (:require [frontend.state.core :as state]
-            [frontend.state.viewport :as viewport]
-            [frontend.state.tools :as tools]
-            [frontend.view.sidebar :refer [sidebar]]
-            [frontend.shapes.protocol :refer [render-svg]]
-            [frontend.tools.protocol :refer [ToolRenderSVG tool-render-svg]]
-            [frontend.view.key-suggestion :refer [key-suggestion]]))
+  (:require
+   [frontend.shapes.protocol :refer [render-svg]]
+   [frontend.state.core :as state]
+   [frontend.state.tools :as tools]
+   [frontend.state.viewport :as viewport]
+   [frontend.tools.protocol :refer [tool-render-svg ToolRenderSVG]]
+   [frontend.view.key-suggestion :refer [key-suggestion]]
+   [frontend.view.sidebar :refer [sidebar]]))
 
 (defn app []
   (let [shapes (state/get-shapes-with-override)

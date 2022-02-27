@@ -1,5 +1,6 @@
 (ns frontend.state.mouse
-  (:require [reagent.core :as r]))
+  (:require
+   [reagent.core :as r]))
 
 (def initial-state
   {;; Mouse position in canvas coordinates

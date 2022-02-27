@@ -1,5 +1,6 @@
 (ns frontend.tools.styles-panel
-  (:require [frontend.state.viewport :as viewport]))
+  (:require
+   [frontend.state.viewport :as viewport]))
 
 (defn styles-panel
   "Toggles the styles panel."

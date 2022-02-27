@@ -1,8 +1,8 @@
 (ns frontend.math-test
-  (:require [cljs.test :refer-macros [deftest is testing run-tests]]
-            [frontend.math :refer [v+ v- v* dot mv* mm* sin
-                                   cos pi translate rotate scale
-                                   transform]]))
+  (:require
+   [cljs.test :refer-macros [deftest is testing run-tests]]
+   [frontend.math :refer [cos dot mm* mv* pi rotate scale sin transform
+                          translate v* v+ v-]]))
 
 (defn difference [a b]
   (js/Math.abs (- a b)))
@@ -49,7 +49,7 @@
     (is (v-close-too? (mv* [[(cos (/ pi 2)) (sin (/ pi 2)) 0]
                             [(- (sin (/ pi 2))) (cos (/ pi 2)) 0]
                             [0 0 1]]
-                            [1 1])
+                           [1 1])
                       [1 -1]))))
 
 (deftest test-mm*

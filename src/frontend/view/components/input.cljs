@@ -1,5 +1,6 @@
 (ns frontend.view.components.input
-  (:require [reagent.core :as r]))
+  (:require
+   [reagent.core :as r]))
 
 (defn- event->str [event]
   (-> event .-target .-value))

@@ -1,6 +1,7 @@
 (ns frontend.utils.layers-test
-  (:require [cljs.test :refer-macros [deftest is testing]]
-            [frontend.utils.layers :refer [move-up move-down]]))
+  (:require
+   [cljs.test :refer-macros [deftest is testing]]
+   [frontend.utils.layers :refer [move-down move-up]]))
 
 (deftest move-up-test
   (testing "moves value forward 1 place"

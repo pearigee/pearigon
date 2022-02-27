@@ -5,14 +5,14 @@
   Anything that doesn't fit with the criteria above should live
   elsewhere (i.e. mouse position, keyboard state)"
   (:require
+   [clojure.core.async :refer [<! go-loop]]
    [clojure.string :as str]
-   [clojure.core.async :refer [go-loop <!]]
    [com.rpl.specter :as sp :include-macros true]
-   [reagent.core :as r]
-   [frontend.shapes.protocol :refer [OnSelect on-select]]
+   [frontend.shapes.protocol :refer [on-select OnSelect]]
    [frontend.state.undo :as undo]
+   [frontend.utils.layers :as layers]
    [frontend.utils.styles :as styles]
-   [frontend.utils.layers :as layers]))
+   [reagent.core :as r]))
 
 (def initial-state
   {:shapes {}
@@ -88,12 +88,12 @@
 
 (defn- map-shapes! [f]
   (undoable-swap! db
-         #(sp/multi-transform
-           [:shapes
-            sp/MAP-VALS
-            (sp/multi-path [(sp/terminal f)]
-                           [:points sp/ALL (sp/terminal f)])]
-           %1)))
+                  #(sp/multi-transform
+                    [:shapes
+                     sp/MAP-VALS
+                     (sp/multi-path [(sp/terminal f)]
+                                    [:points sp/ALL (sp/terminal f)])]
+                    %1)))
 
 (defn map-selected-shapes! [f]
   (map-shapes! #(if (:selected %) (f %) %)))
@@ -176,7 +176,7 @@
                              :or {selected? true
                                   draw-order? true}}]
   (undoable-swap! db update-in [:shapes] assoc id
-         (merge shape {:styles (default-styles)}))
+                  (merge shape {:styles (default-styles)}))
   (when selected? (select-id! id))
   (when draw-order? (conj-draw-order id)))
 

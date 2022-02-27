@@ -1,9 +1,10 @@
 (ns frontend.view.panels.styles-panel
-  (:require [frontend.state.core :as state]
-            [frontend.state.tools :as tools]
-            [frontend.view.components.input :refer [input]]
-            [frontend.utils.styles :refer [apply-styles]]
-            [reagent.core :as r]))
+  (:require
+   [frontend.state.core :as state]
+   [frontend.state.tools :as tools]
+   [frontend.utils.styles :refer [apply-styles]]
+   [frontend.view.components.input :refer [input]]
+   [reagent.core :as r]))
 
 (defn get-selection
   "Get the shape(s) that should be styled.

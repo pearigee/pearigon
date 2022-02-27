@@ -1,13 +1,13 @@
 (ns frontend.core
   (:require
-   [reagent.dom :as d]
    [frontend.input.keyboard :as keyboard]
    [frontend.input.mouse :as mouse]
    [frontend.input.resize :as resize]
    [frontend.state.core :as state]
    [frontend.state.undo :as undo]
    [frontend.state.viewport :as viewport]
-   [frontend.view.app :refer [app]]))
+   [frontend.view.app :refer [app]]
+   [reagent.dom :as d]))
 
 (defn mount-root
   []

@@ -1,12 +1,12 @@
 (ns frontend.shapes.path.path
-  (:require [frontend.shapes.protocol :refer [RenderSVG Transform
-                                              OnSelect]]
-            [frontend.state.core :as state]
-            [frontend.utils.styles :refer [styles->svg-attr]]
-            [frontend.math :as m]
-            [frontend.shapes.path.point :refer [point]]
-            [frontend.shapes.utils :as utils]
-            [frontend.shapes.path.svg :refer [points->svg]]))
+  (:require
+   [frontend.math :as m]
+   [frontend.shapes.path.point :refer [point]]
+   [frontend.shapes.path.svg :refer [points->svg]]
+   [frontend.shapes.protocol :refer [OnSelect RenderSVG Transform]]
+   [frontend.shapes.utils :as utils]
+   [frontend.state.core :as state]
+   [frontend.utils.styles :refer [styles->svg-attr]]))
 
 (defrecord Path [id mat-id points closed?]
 

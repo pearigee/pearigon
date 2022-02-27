@@ -1,8 +1,9 @@
 (ns frontend.export.svg
-  (:require [reagent.dom.server :refer [render-to-string]]
-            [frontend.state.core :as state]
-            [frontend.state.viewport :as viewport]
-            [frontend.shapes.protocol :refer [render-svg]]))
+  (:require
+   [frontend.shapes.protocol :refer [render-svg]]
+   [frontend.state.core :as state]
+   [frontend.state.viewport :as viewport]
+   [reagent.dom.server :refer [render-to-string]]))
 
 (defn- svg-hiccup []
   (let [shapes (state/get-shapes-with-override)

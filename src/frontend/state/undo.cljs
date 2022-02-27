@@ -1,7 +1,8 @@
 (ns frontend.state.undo
-  (:require [frontend.utils.async :refer [debounce]]
-            [clojure.core.async :refer [chan go >! go-loop <!]]
-            [reagent.core :as r]))
+  (:require
+   [clojure.core.async :refer [<! >! chan go go-loop]]
+   [frontend.utils.async :refer [debounce]]
+   [reagent.core :as r]))
 
 ;; Values initialized in init! below.
 (def undo-db (r/atom {}))
@@ -44,7 +45,7 @@
 
 (defn redo!
   "Trigger a redo action.
-  Takes the current value so the redo can be undo'ed."[val]
+  Takes the current value so the redo can be undo'ed." [val]
   (let [new-state (peek (:redo @undo-db))
         new-redo (when new-state (pop (:redo @undo-db)))]
     (when new-state

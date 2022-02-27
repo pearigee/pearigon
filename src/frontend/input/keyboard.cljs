@@ -1,10 +1,10 @@
 (ns frontend.input.keyboard
   (:require
-   [frontend.state.actions :as actions]
    [frontend.actions.handlers :refer [action->handler]]
-   [frontend.state.tools :as tools]
+   [frontend.state.actions :as actions]
    [frontend.state.keyboard :as keyboard]
-   [frontend.tools.protocol :refer [OnKeypress on-keypress]]))
+   [frontend.state.tools :as tools]
+   [frontend.tools.protocol :refer [on-keypress OnKeypress]]))
 
 (def ctrl-codes #{"ControlLeft" "ControlRight"})
 (def alt-codes #{"AltLeft" "AltRight"})

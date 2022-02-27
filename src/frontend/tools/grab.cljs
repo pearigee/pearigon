@@ -1,11 +1,11 @@
 (ns frontend.tools.grab
   (:require
-   [frontend.state.core :as state]
-   [frontend.state.tools :as tools]
-   [frontend.state.mouse :as mouse]
-   [frontend.tools.protocol :refer [OnMouseMove OnClick]]
+   [frontend.math :as m]
    [frontend.shapes.protocol :as shape]
-   [frontend.math :as m]))
+   [frontend.state.core :as state]
+   [frontend.state.mouse :as mouse]
+   [frontend.state.tools :as tools]
+   [frontend.tools.protocol :refer [OnClick OnMouseMove]]))
 
 (defn- compute-transform [pos init-mouse-pos]
   (let [[x y] (m/v- pos init-mouse-pos)]

@@ -1,5 +1,6 @@
 (ns frontend.tools.draw-order
-  (:require [frontend.state.core :as state]))
+  (:require
+   [frontend.state.core :as state]))
 
 (defn move-up []
   (let [selection (first (state/get-selected))

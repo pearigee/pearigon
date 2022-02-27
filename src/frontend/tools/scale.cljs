@@ -1,12 +1,12 @@
 (ns frontend.tools.scale
   (:require
-   [frontend.state.actions :as actions]
-   [frontend.tools.protocol :refer [OnMouseMove OnClick OnKeypress]]
+   [frontend.math :as m]
    [frontend.shapes.protocol :as shapes]
+   [frontend.state.actions :as actions]
    [frontend.state.core :as state]
-   [frontend.state.tools :as tools]
    [frontend.state.mouse :as mouse]
-   [frontend.math :as m]))
+   [frontend.state.tools :as tools]
+   [frontend.tools.protocol :refer [OnClick OnKeypress OnMouseMove]]))
 
 (defn tune
   "Adjust the scale multiplier for usability.

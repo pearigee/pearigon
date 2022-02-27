@@ -1,21 +1,20 @@
 (ns frontend.tools.path-tool
-  (:require [reagent.core :as r]
-            [com.rpl.specter :as sp :include-macros true]
-            [frontend.tools.protocol :refer [OnKeypress
-                                             OnClick
-                                             ToolRenderSVG]]
-            [frontend.math :refer [avg]]
-            [frontend.tools.grab :refer [grab]]
-            [frontend.tools.delete :refer [delete]]
-            [frontend.tools.scale :refer [scale]]
-            [frontend.tools.rotate :refer [rotate]]
-            [frontend.state.core :as state]
-            [frontend.state.mouse :as mouse]
-            [frontend.state.tools :as tools]
-            [frontend.state.actions :as actions]
-            [frontend.shapes.path.path :refer [Path path]]
-            [frontend.shapes.path.point :refer [point]]
-            [frontend.shapes.protocol :refer [render-svg]]))
+  (:require
+   [com.rpl.specter :as sp :include-macros true]
+   [frontend.math :refer [avg]]
+   [frontend.shapes.path.path :refer [Path path]]
+   [frontend.shapes.path.point :refer [point]]
+   [frontend.shapes.protocol :refer [render-svg]]
+   [frontend.state.actions :as actions]
+   [frontend.state.core :as state]
+   [frontend.state.mouse :as mouse]
+   [frontend.state.tools :as tools]
+   [frontend.tools.delete :refer [delete]]
+   [frontend.tools.grab :refer [grab]]
+   [frontend.tools.protocol :refer [OnClick OnKeypress ToolRenderSVG]]
+   [frontend.tools.rotate :refer [rotate]]
+   [frontend.tools.scale :refer [scale]]
+   [reagent.core :as r]))
 
 (defn add-point [{:keys [id points]} point
                  & {:keys [index] :or {index (count points)}}]

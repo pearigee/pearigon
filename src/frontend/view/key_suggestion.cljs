@@ -1,7 +1,8 @@
 (ns frontend.view.key-suggestion
-  (:require [frontend.state.tools :as tools]
-            [frontend.state.actions :as actions]
-            [frontend.state.keyboard :as keyboard]))
+  (:require
+   [frontend.state.actions :as actions]
+   [frontend.state.keyboard :as keyboard]
+   [frontend.state.tools :as tools]))
 
 (defn key-suggestion []
   (let [tool (tools/get-tool)

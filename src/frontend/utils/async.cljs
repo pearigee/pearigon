@@ -1,6 +1,6 @@
 (ns frontend.utils.async
-  (:require [clojure.core.async :refer [go-loop chan timeout <! >!
-                                        close! alts!]]))
+  (:require
+   [clojure.core.async :refer [<! >! alts! chan close! go-loop timeout]]))
 
 (defn debounce [in ms]
   (let [out (chan)]

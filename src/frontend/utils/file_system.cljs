@@ -1,5 +1,6 @@
 (ns frontend.utils.file-system
-  (:require ["browser-fs-access" :as fs]))
+  (:require
+   ["browser-fs-access" :as fs]))
 
 (defn- flush-modifier-keys
   "This is a workaround.

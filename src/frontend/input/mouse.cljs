@@ -1,12 +1,11 @@
 (ns frontend.input.mouse
   (:require
-   [frontend.tools.protocol :refer [OnMouseMove on-mouse-move
-                                    OnClick on-click]]
+   [frontend.input.keyboard :as keyboard]
    [frontend.state.core :as state]
-   [frontend.state.viewport :as viewport]
-   [frontend.state.tools :as tools]
    [frontend.state.mouse :as mouse]
-   [frontend.input.keyboard :as keyboard]))
+   [frontend.state.tools :as tools]
+   [frontend.state.viewport :as viewport]
+   [frontend.tools.protocol :refer [on-click on-mouse-move OnClick OnMouseMove]]))
 
 (defn- eval-mouse-move [event]
   (let [t (tools/get-tool)]

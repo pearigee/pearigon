@@ -1,5 +1,6 @@
 (ns frontend.actions.conditions
-  (:require [frontend.state.core :as state]))
+  (:require
+   [frontend.state.core :as state]))
 
 ;; Forward declaratoin of valid so it can be used recursively below.
 (declare valid?)
@@ -20,12 +21,12 @@
 
 (defn valid? [condition]
   (if-not (nil? condition)
-          (let [f (first condition)
-                args (rest condition)]
-            (case f
-              :and (and? args)
-              :or (or? args)
-              :num-selected-eq? (num-selected-eq? args)
-              :num-selected-gt? (num-selected-gt? args)
-              (js/console.error "Invalid action condition!" f args)))
-          true))
+    (let [f (first condition)
+          args (rest condition)]
+      (case f
+        :and (and? args)
+        :or (or? args)
+        :num-selected-eq? (num-selected-eq? args)
+        :num-selected-gt? (num-selected-gt? args)
+        (js/console.error "Invalid action condition!" f args)))
+    true))

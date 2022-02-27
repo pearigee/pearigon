@@ -1,5 +1,6 @@
 (ns frontend.shapes.path.svg
-  (:require [frontend.math :as m]))
+  (:require
+   [frontend.math :as m]))
 
 (defn- svg-starting-pos [points closed?]
   (let [{[x1 y1] :pos t1 :type} (first points)

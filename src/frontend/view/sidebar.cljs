@@ -1,6 +1,7 @@
 (ns frontend.view.sidebar
-  (:require [frontend.state.viewport :as viewport]
-            [frontend.view.panels.styles-panel :refer [styles-panel]]))
+  (:require
+   [frontend.state.viewport :as viewport]
+   [frontend.view.panels.styles-panel :refer [styles-panel]]))
 
 (defn sidebar-panel
   [title content]

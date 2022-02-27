@@ -1,6 +1,7 @@
 (ns frontend.state.viewport
-  (:require [reagent.core :as r]
-            [frontend.math :as m]))
+  (:require
+   [frontend.math :as m]
+   [reagent.core :as r]))
 
 (def initial-state {:pos [0 0]
                     :dim [0 0]

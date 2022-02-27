@@ -2,16 +2,16 @@
   (:require
    [frontend.state.core :as state]
    [frontend.tools.add :refer [add]]
-   [frontend.tools.grab :refer [grab]]
-   [frontend.tools.rotate :refer [rotate]]
-   [frontend.tools.styles-panel :refer [styles-panel]]
-   [frontend.tools.draw-order :refer [move-up move-down]]
-   [frontend.tools.scale :refer [scale]]
    [frontend.tools.delete :refer [delete]]
+   [frontend.tools.draw-order :refer [move-down move-up]]
    [frontend.tools.export :refer [export]]
+   [frontend.tools.grab :refer [grab]]
+   [frontend.tools.open :refer [open]]
    [frontend.tools.path-tool :refer [path-tool]]
+   [frontend.tools.rotate :refer [rotate]]
    [frontend.tools.save :refer [save]]
-   [frontend.tools.open :refer [open]]))
+   [frontend.tools.scale :refer [scale]]
+   [frontend.tools.styles-panel :refer [styles-panel]]))
 
 (def action->handler
   {:add add
