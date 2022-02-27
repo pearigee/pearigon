@@ -6,10 +6,11 @@
   elsewhere (i.e. mouse position, keyboard state)"
   (:require
    [clojure.string :as str]
+   [clojure.core.async :refer [go-loop <!]]
    [com.rpl.specter :as sp :include-macros true]
    [reagent.core :as r]
    [frontend.shapes.protocol :refer [OnSelect on-select]]
-   [frontend.utils.async :refer [debounce]]
+   [frontend.state.undo :as undo]
    [frontend.utils.styles :as styles]
    [frontend.utils.layers :as layers]))
 
@@ -77,45 +78,11 @@
 
 (defn apply-save-state!
   "Merges the state supplied with the active model."
-  [save-state]
-  (swap! *db* merge save-state))
-
-(defn- trim-undo-stack
-  "Limit the size of the undo stack."
-  [stack]
-  (into [] (take-last 50 stack)))
-
-(defn- push-undo! [& {:keys [reset-redo?] :or {reset-redo? true}}]
-  (let [val (save-state)]
-    (swap! undo-db assoc
-           :undo (trim-undo-stack (conj (:undo @undo-db) val))))
-  ;; Reset the undo state by default. The state is stale after new
-  ;; modifications.
-  (when reset-redo? (swap! undo-db assoc :redo [])))
-
-(def ^:private debounced-push-undo! (debounce push-undo! 250))
-
-(defn- push-redo! []
-  (swap! undo-db assoc :redo (conj (:redo @undo-db) (save-state))))
-
-(defn undo! []
-  (let [new-state (peek (:undo @undo-db))
-        new-undo (when new-state (pop (:undo @undo-db)))]
-    (when new-state
-      (push-redo!)
-      (apply-save-state! new-state)
-      (swap! undo-db assoc :undo new-undo))))
-
-(defn redo! []
-  (let [new-state (peek (:redo @undo-db))
-        new-redo (when new-state (pop (:redo @undo-db)))]
-    (when new-state
-      (push-undo! :reset-redo? false)
-      (apply-save-state! new-state)
-      (swap! undo-db assoc :redo new-redo))))
+  [state]
+  (swap! *db* merge state))
 
 (defn- undoable-swap! [& args]
-  (debounced-push-undo!)
+  (undo/push-undo! (save-state))
   (apply swap! args))
 
 (defn- map-shapes! [f]
@@ -211,3 +178,8 @@
          (merge shape {:styles (default-styles)}))
   (when selected? (select-id! id))
   (when draw-order? (conj-draw-order id)))
+
+(defn init! []
+  (go-loop [val (<! (undo/on-change-chan))]
+    (apply-save-state! val)
+    (recur (<! (undo/on-change-chan)))))
