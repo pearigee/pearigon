@@ -85,6 +85,12 @@
   (undo/push-undo! (save-state))
   (apply swap! args))
 
+(defn undo! []
+  (undo/undo! (save-state)))
+
+(defn redo! []
+  (undo/redo! (save-state)))
+
 (defn- map-shapes! [f]
   (undoable-swap! *db*
          #(sp/multi-transform

@@ -1,6 +1,5 @@
 (ns frontend.actions.handlers
   (:require
-   [frontend.state.undo :as undo]
    [frontend.state.core :as state]
    [frontend.tools.add :refer [add]]
    [frontend.tools.grab :refer [grab]]
@@ -25,7 +24,7 @@
    :move-up move-up
    :move-down move-down
    :styles-panel styles-panel
-   :undo #(undo/undo! (state/save-state))
-   :redo #(undo/redo! (state/save-state))
+   :undo state/undo!
+   :redo state/redo!
    :save save
    :open open})
