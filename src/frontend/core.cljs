@@ -1,7 +1,6 @@
 (ns frontend.core
   (:require
    [reagent.dom :as d]
-   [mount.core :as mount]
    [frontend.input.keyboard :as keyboard]
    [frontend.input.mouse :as mouse]
    [frontend.input.resize :as resize]
@@ -15,7 +14,6 @@
 (defn init
   []
   (mount-root)
-  (mount/start)
   (keyboard/init)
   (mouse/init)
   (resize/init)
