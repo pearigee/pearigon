@@ -39,7 +39,6 @@ body {
   @include transparent-background;
 
   height: 100%;
-  padding: 20px;
   border-radius: 0;
   pointer-events: all;
   min-width: 240px;
@@ -50,12 +49,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 20px;
 }
 
 .sidebar-content {
   display: flex;
   flex-direction: column;
   row-gap: 5px;
+  margin: 0 20px;
 }
 
 .viewport {
