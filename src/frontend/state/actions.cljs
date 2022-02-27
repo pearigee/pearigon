@@ -1,12 +1,9 @@
 (ns frontend.state.actions
   (:require [reagent.core :as r]
-            [mount.core :refer-macros [defstate]]
             [frontend.actions.config :refer [actions]]
             [frontend.actions.conditions :as c]))
 
-(defstate suggestions
-  :start
-  (r/atom #{}))
+(def suggestions (r/atom #{}))
 
 (defn- get-key
   "Get the hotkey for this action."
@@ -46,7 +43,7 @@
   "Clear the suggestion set.
    This should be done before recording new suggestions."
   []
-  (reset! @suggestions #{}))
+  (reset! suggestions #{}))
 
 (defn active?
   "Is the current action active based on the pressed key?
@@ -55,14 +52,14 @@
   [id key]
   (when (c/valid? (:when (get actions id)))
     (if (= key :record-suggestions)
-      (do (swap! @suggestions conj id)
+      (do (swap! suggestions conj id)
           false)
       (key-matches? key (get-key id)))))
 
 (defn get-hotkey-suggestions
   "Get active actions sorted by hotkey."
   []
-  (->> @@suggestions
+  (->> @suggestions
        (map (fn [id] {:key-display (get-key-display id)
                       :key (get-key id)
                       :display (get-display id)}))
