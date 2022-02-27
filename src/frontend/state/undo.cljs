@@ -31,7 +31,10 @@
 (defn- push-redo! [val]
   (swap! undo-db assoc :redo (conj (:redo @undo-db) val)))
 
-(defn undo! [val]
+(defn undo!
+  "Trigger an undo action.
+  Takes the current value so that the undo can be redo'ed."
+  [val]
   (let [new-state (peek (:undo @undo-db))
         new-undo (when new-state (pop (:undo @undo-db)))]
     (when new-state
@@ -39,7 +42,9 @@
       (on-change! new-state)
       (swap! undo-db assoc :undo new-undo))))
 
-(defn redo! [val]
+(defn redo!
+  "Trigger a redo action.
+  Takes the current value so the redo can be undo'ed."[val]
   (let [new-state (peek (:redo @undo-db))
         new-redo (when new-state (pop (:redo @undo-db)))]
     (when new-state
