@@ -1,6 +1,6 @@
 {
     "scripts" : {
-        "build": "shadow-cljs release app && sass --no-source-map sass/styles.scss:public/css/styles.css"
+        "build": "shadow-cljs release app && sass --no-source-map --style=compressed sass/styles.scss:public/css/styles.css"
     },
     "devDependencies": {
         "bulma": "^0.9.3",
