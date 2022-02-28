@@ -7,12 +7,6 @@
 ;; Values initialized in init! below.
 (def undo-db (r/atom {}))
 
-(defn- on-change! [val]
-  (go (>! (:on-change-chan @undo-db) val)))
-
-(defn on-change-chan []
-  (:on-change-chan @undo-db))
-
 (defn- trim-undo-stack
   "Limit the size of the undo stack."
   [stack]
@@ -40,8 +34,8 @@
         new-undo (when new-state (pop (:undo @undo-db)))]
     (when new-state
       (push-redo! val)
-      (on-change! new-state)
-      (swap! undo-db assoc :undo new-undo))))
+      (swap! undo-db assoc :undo new-undo)
+      new-state)))
 
 (defn redo!
   "Trigger a redo action.
@@ -50,8 +44,8 @@
         new-redo (when new-state (pop (:redo @undo-db)))]
     (when new-state
       (push-undo-impl! val :reset-redo? false)
-      (on-change! new-state)
-      (swap! undo-db assoc :redo new-redo))))
+      (swap! undo-db assoc :redo new-redo)
+      new-state)))
 
 (defn init! [& {:keys [debounce? debounce-ms]
                 :or {debounce? true
@@ -59,8 +53,7 @@
   (let [undo-chan (chan)
         initial-state {:undo []
                        :redo []
-                       :undo-chan undo-chan
-                       :on-change-chan (chan)}]
+                       :undo-chan undo-chan}]
     (reset! undo-db initial-state)
 
     ;; Subscribe to incoming undo values, optionally with a debounce.

@@ -74,17 +74,17 @@
 (defn apply-save-state!
   "Merges the state supplied with the active model."
   [state]
-  (swap! db merge state))
+  (when state (swap! db merge state)))
 
 (defn- undoable-swap! [& args]
   (undo/push-undo! (save-state))
   (apply swap! args))
 
 (defn undo! []
-  (undo/undo! (save-state)))
+  (apply-save-state! (undo/undo! (save-state))))
 
 (defn redo! []
-  (undo/redo! (save-state)))
+  (apply-save-state! (undo/redo! (save-state))))
 
 (defn- map-shapes! [f]
   (undoable-swap! db
@@ -181,7 +181,4 @@
   (when draw-order? (conj-draw-order id)))
 
 (defn init! []
-  (reset! db initial-state)
-  (go-loop [val (<! (undo/on-change-chan))]
-    (apply-save-state! val)
-    (recur (<! (undo/on-change-chan)))))
+  (reset! db initial-state))
