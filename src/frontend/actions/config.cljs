@@ -73,6 +73,10 @@
     :key {:code "BracketLeft" :display "["}
     :when [:num-selected-eq? 1 {:path? true}]}
 
+   :new-project
+   {:display "New project"
+    :key {:code "KeyN" :ctrl true :display "n"}}
+
    :rotate
    {:key {:code "KeyR" :display "r"}
     :display "Rotate"
@@ -97,4 +101,12 @@
 
    :scale.y-axis
    {:key {:code "KeyY" :display "y"}
-    :display "Lock to Y axis"}})
+    :display "Lock to Y axis"}
+
+   :yes
+   {:key {:code "KeyY" :display "y"}
+    :display "Yes"}
+
+   :no
+   {:key {:code "KeyN" :display "n"}
+    :display "No"}})

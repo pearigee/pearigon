@@ -5,7 +5,6 @@
   Anything that doesn't fit with the criteria above should live
   elsewhere (i.e. mouse position, keyboard state)"
   (:require
-   [clojure.core.async :refer [<! go-loop]]
    [clojure.string :as str]
    [com.rpl.specter :as sp :include-macros true]
    [frontend.shapes.protocol :refer [on-select OnSelect]]
@@ -180,5 +179,5 @@
   (when selected? (select-id! id))
   (when draw-order? (conj-draw-order id)))
 
-(defn init! []
-  (reset! db initial-state))
+(defn init! [& {:keys [with-state]}]
+  (reset! db (merge initial-state with-state)))

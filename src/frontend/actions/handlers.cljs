@@ -7,6 +7,7 @@
    [frontend.tools.export :refer [export]]
    [frontend.tools.grab :refer [grab]]
    [frontend.tools.open :refer [open]]
+   [frontend.tools.new-project :refer [new-project]]
    [frontend.tools.path-tool :refer [path-tool]]
    [frontend.tools.rotate :refer [rotate]]
    [frontend.tools.save :refer [save]]
@@ -26,5 +27,6 @@
    :styles-panel styles-panel
    :undo state/undo!
    :redo state/redo!
+   :new-project new-project
    :save save
    :open open})
