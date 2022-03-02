@@ -1,5 +1,5 @@
 {
-    "scripts" : {
+    "scripts": {
         "build": "shadow-cljs release app && sass --no-source-map --style=compressed sass/styles.scss:public/css/styles.css"
     },
     "devDependencies": {
