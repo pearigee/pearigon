@@ -14,7 +14,7 @@
 (defn- get-key-display [id]
   (-> actions (get id) :key :display))
 
-(defn- get-display
+(defn get-display
   "Get the label for this action."
   [id]
   (-> actions (get id) :display))
@@ -37,8 +37,8 @@
   (:alt (get-key id)))
 
 (defn uses-no-modifiers? [id]
-  (let [{:keys [alt ctrl]} (get-key id)]
-    (and (not alt) (not ctrl))))
+  (let [{:keys [alt ctrl] :as config} (get-key id)]
+    (and config (not alt) (not ctrl))))
 
 (defn clear-suggestions!
   "Clear the suggestion set.

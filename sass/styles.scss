@@ -1,6 +1,7 @@
 @charset "utf-8";
 @import "../node_modules/bulma/bulma.sass";
 @import "../node_modules/bulma-switch/src/sass";
+@import "../node_modules/@creativebulma/bulma-tooltip/src/sass";
 
 html, body {
   overscroll-behavior-x: none;
@@ -33,6 +34,34 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
+}
+
+.toolbar {
+  @include transparent-background;
+
+  pointer-events: all;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  .button {
+    border-radius: 0;
+    border-width: 0;
+  }
+
+  .active {
+    background-color: $link;
+    &:hover {
+      background-color: darken($link, 15%);
+    }
+  }
+
+  .group {
+    display:flex;
+    flex-direction: column;
+    width: max-content;
+    margin-bottom: 10px;
+  }
 }
 
 .sidebar {

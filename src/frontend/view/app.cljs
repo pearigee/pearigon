@@ -6,7 +6,8 @@
    [frontend.state.viewport :as viewport]
    [frontend.tools.protocol :refer [tool-render-svg ToolRenderSVG]]
    [frontend.view.key-suggestion :refer [key-suggestion]]
-   [frontend.view.sidebar :refer [sidebar]]))
+   [frontend.view.sidebar :refer [sidebar]]
+   [frontend.view.toolbar :refer [toolbar]]))
 
 (defn app []
   (let [shapes (state/get-shapes-with-override)
@@ -25,4 +26,5 @@
            ^{:key (:action t)} [tool-render-svg t]))]]
      [:div.overlay
       [key-suggestion]
-      [sidebar]]]))
+      [sidebar]
+      [toolbar]]]))

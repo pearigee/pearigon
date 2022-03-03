@@ -30,3 +30,7 @@
    :new-project new-project
    :save save
    :open open})
+
+(defn execute-action! [key]
+  (when-let [action (get action->handler key)]
+    (action)))

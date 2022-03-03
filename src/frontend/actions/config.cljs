@@ -20,8 +20,7 @@
     :when [:num-selected-gt? 0]}
 
    :export
-   {:key {:code "KeyE" :ctrl true :display "e"}
-    :display "Export"}
+   {:display "Export (SVG)"}
 
    :grab
    {:key {:code "KeyG" :display "g"}
@@ -38,7 +37,7 @@
 
    :styles-panel
    {:key {:code "KeyS" :alt true :display "s"}
-    :display "Styles (color)"}
+    :display "Styles (color and stroke)"}
 
    :path-tool
    {:display "Path Tool"
@@ -83,12 +82,10 @@
     :when [:num-selected-gt? 0]}
 
    :save
-   {:key {:code "KeyS" :ctrl true :display "s"}
-    :display "Save"}
+   {:display "Save"}
 
    :open
-   {:key {:code "KeyO" :ctrl true :display "o"}
-    :display "Open"}
+   {:display "Open"}
 
    :scale
    {:key {:code "KeyS" :display "s"}
