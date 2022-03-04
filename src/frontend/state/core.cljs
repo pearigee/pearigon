@@ -156,13 +156,15 @@
   (select-id! id (not (selected? id))))
 
 (defn select-from-mouse-event! [event]
-  (let [target-id (:target-id event)]
-    (if (str/starts-with? target-id "shape-")
-      (do (when-not (:shift event) (deselect-all!))
-          (toggle-selected! target-id))
-      (when (and (= (:target-id event) "svg-root")
-                 (not (:shift event)))
-        (deselect-all!)))))
+  ;; Only select on left click.
+  (when (= (:button event) 0)
+    (let [target-id (:target-id event)]
+      (if (str/starts-with? target-id "shape-")
+        (do (when-not (:shift event) (deselect-all!))
+            (toggle-selected! target-id))
+        (when (and (= (:target-id event) "svg-root")
+                   (not (:shift event)))
+          (deselect-all!))))))
 
 (defn move-up-draw-order! [id]
   (set-draw-order! (layers/move-up (get-draw-order) id)))
