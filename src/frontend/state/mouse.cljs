@@ -4,12 +4,19 @@
 
 (def initial-state
   {;; Mouse position in canvas coordinates
-   :mouse-pos [0 0]})
+   :mouse-pos [0 0]
+   :buttons-down {}})
 
-(def ^:dynamic *db* (r/atom initial-state))
+(def *db (r/atom initial-state))
 
 (defn pos []
-  (-> @*db* :mouse-pos))
+  (:mouse-pos @*db))
 
 (defn pos! [vec]
-  (swap! *db* assoc :mouse-pos vec))
+  (swap! *db assoc :mouse-pos vec))
+
+(defn button-down? [button]
+  (get (:buttons-down @*db) button))
+
+(defn merge-buttons-down! [map]
+  (swap! *db assoc :buttons-down (merge (:buttons-down @*db) map)))
