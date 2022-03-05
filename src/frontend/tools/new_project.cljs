@@ -20,4 +20,4 @@
       (tools/pop-tool!))))
 
 (defn new-project []
-  (tools/push-tool! (->NewProject "Are you sure?")))
+  (tools/push-tool! (->NewProject "New Project: Are you sure?")))
