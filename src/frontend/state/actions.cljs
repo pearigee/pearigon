@@ -1,23 +1,35 @@
 (ns frontend.state.actions
   (:require
    [frontend.actions.conditions :as c]
-   [frontend.actions.config :refer [actions]]
    [reagent.core :as r]))
 
-(def suggestions (r/atom #{}))
+(def initial-state {:suggestions #{}
+                    :config {}
+                    :action->handler {}})
+
+(def *db (r/atom initial-state))
+
+(defn- config []
+  (:config @*db))
+
+(defn- suggestions []
+  (:suggestions @*db))
+
+(defn- action-handler [id]
+  (-> (:action->handler @*db) (get id)))
 
 (defn- get-key
   "Get the hotkey for this action."
   [id]
-  (-> actions (get id) :key))
+  (-> (config) (get id) :key))
 
 (defn- get-key-display [id]
-  (-> actions (get id) :key :display))
+  (-> (config) (get id) :key :display))
 
 (defn get-display
   "Get the label for this action."
   [id]
-  (-> actions (get id) :display))
+  (-> (config) (get id) :display))
 
 (defn- similar?
   "A equality comparision that asserts nil to false."
@@ -44,24 +56,31 @@
   "Clear the suggestion set.
    This should be done before recording new suggestions."
   []
-  (reset! suggestions #{}))
+  (swap! *db assoc :suggestions #{}))
+
+(defn execute! [id]
+  (when-let [action (action-handler id)]
+    (action)))
 
 (defn active?
   "Is the current action active based on the pressed key?
   If we recieve the fake hotkey :record-suggestions, add this
   action to the current suggestion set. "
   [id key]
-  (when (c/valid? (:when (get actions id)))
+  (when (c/valid? (:when (get (config) id)))
     (if (= key :record-suggestions)
-      (do (swap! suggestions conj id)
+      (do (swap! *db assoc :suggestions (conj (suggestions) id))
           false)
       (key-matches? key (get-key id)))))
 
 (defn get-hotkey-suggestions
   "Get active actions sorted by hotkey."
   []
-  (->> @suggestions
+  (->> (suggestions)
        (map (fn [id] {:key-display (get-key-display id)
                       :key (get-key id)
                       :display (get-display id)}))
        (sort-by :key-display)))
+
+(defn init! [state]
+  (reset! *db (merge initial-state state)))

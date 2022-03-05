@@ -1,6 +1,6 @@
 (ns frontend.actions.config)
 
-(def actions
+(def config
   {:add
    {:key {:code "KeyA" :display "a"}
     :display "Add Shape"
