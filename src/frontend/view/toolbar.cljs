@@ -13,22 +13,22 @@
   [:div.toolbar
    [:button.button.is-primary.has-tooltip-left
     {:on-click #(execute! :new-project)
-     :data-tooltip (actions/get-display :new-project)}
+     :data-tooltip (actions/display :new-project)}
     [:span.icon.material-icons "note_add"]]
    [:button.button.is-primary.has-tooltip-left
     {:on-click #(execute! :save)
-     :data-tooltip (actions/get-display :save)}
+     :data-tooltip (actions/display :save)}
     [:span.icon.material-icons "save"]]
    [:button.button.is-primary.has-tooltip-left
     {:on-click #(execute! :open)
-     :data-tooltip (actions/get-display :open)}
+     :data-tooltip (actions/display :open)}
     [:span.icon.material-icons "folder_open"]]
    [:button.button.is-primary.has-tooltip-left
     {:on-click #(execute! :export)
-     :data-tooltip (actions/get-display :export)}
+     :data-tooltip (actions/display :export)}
     [:span.icon.material-icons "image"]]
    [:button.button.is-info.has-tooltip-left
     {:on-click #(execute! :styles-panel)
      :class (when (= (viewport/panel) :styles) "active")
-     :data-tooltip (actions/get-display :styles-panel)}
+     :data-tooltip (actions/display :styles-panel)}
     [:span.icon.material-icons "palette"]]])

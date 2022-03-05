@@ -18,15 +18,15 @@
 (defn- action-handler [id]
   (-> (:action->handler @*db) (get id)))
 
-(defn- get-key
+(defn- hotkey
   "Get the hotkey for this action."
   [id]
   (-> (config) (get id) :key))
 
-(defn- get-key-display [id]
+(defn- hotkey-display [id]
   (-> (config) (get id) :key :display))
 
-(defn get-display
+(defn display
   "Get the label for this action."
   [id]
   (-> (config) (get id) :display))
@@ -43,13 +43,13 @@
        (similar? (:shift a) (:shift b))))
 
 (defn uses-ctrl? [id]
-  (:ctrl (get-key id)))
+  (:ctrl (hotkey id)))
 
 (defn uses-alt? [id]
-  (:alt (get-key id)))
+  (:alt (hotkey id)))
 
 (defn uses-no-modifiers? [id]
-  (let [{:keys [alt ctrl] :as config} (get-key id)]
+  (let [{:keys [alt ctrl] :as config} (hotkey id)]
     (and config (not alt) (not ctrl))))
 
 (defn clear-suggestions!
@@ -71,15 +71,15 @@
     (if (= key :record-suggestions)
       (do (swap! *db assoc :suggestions (conj (suggestions) id))
           false)
-      (key-matches? key (get-key id)))))
+      (key-matches? key (hotkey id)))))
 
 (defn get-hotkey-suggestions
   "Get active actions sorted by hotkey."
   []
   (->> (suggestions)
-       (map (fn [id] {:key-display (get-key-display id)
-                      :key (get-key id)
-                      :display (get-display id)}))
+       (map (fn [id] {:key-display (hotkey-display id)
+                      :key (hotkey id)
+                      :display (display id)}))
        (sort-by :key-display)))
 
 (defn init! [state]
