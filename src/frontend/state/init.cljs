@@ -14,7 +14,7 @@
   []
   (let [active-project (ls/get-item ls/active-project-key)]
     (undo/init!)
-    (state/init! :with-state active-project)
+    (state/init! active-project)
     (actions/init! {:action->handler action-handlers/action->handler
                     :config action-config/config})
 

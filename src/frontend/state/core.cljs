@@ -181,5 +181,5 @@
   (when selected? (select-id! id))
   (when draw-order? (conj-draw-order id)))
 
-(defn init! [& {:keys [with-state]}]
-  (reset! db (merge initial-state with-state)))
+(defn init! [state]
+  (reset! db (merge initial-state state)))

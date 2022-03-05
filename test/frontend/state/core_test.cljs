@@ -8,7 +8,7 @@
 (use-fixtures :each
   {:before (fn []
              (undo/init!)
-             (state/init!))})
+             (state/init! {}))})
 
 (deftest test-get-shape
   (let [shape (p/rectangle [0 0] 40)
