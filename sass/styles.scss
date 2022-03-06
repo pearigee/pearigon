@@ -10,7 +10,7 @@ html, body {
 $selection-color: $link;
 
 @mixin transparent-background {
-  background: rgba(255,255,255, 0.75);
+  background: rgba(255,255,255, 0.9);
 }
 
 body {
@@ -86,6 +86,39 @@ body {
   flex-direction: column;
   row-gap: 5px;
   margin: 0 20px;
+}
+
+.search-overlay {
+  @include transparent-background;
+
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  min-width: 400px;
+  transform: translate(-50%,0%);
+  border: solid;
+  border-width: 1px;
+  border-color: rgb(0 0 0 / 15%);
+
+  .input-container {
+    margin: 10px;
+  }
+
+  .search-results {
+    .search-result {
+      padding: 5px 10px;
+
+      &.selected {
+        background: transparentize($link, 0.1);
+        color: white;
+      }
+
+      &:hover {
+        background: transparentize($link, 0.8);
+        color: $dark;
+      }
+    }
+  }
 }
 
 .viewport {

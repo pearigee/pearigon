@@ -4,7 +4,8 @@
   {:add
    {:key {:code "KeyA" :display "a"}
     :display "Add Shape"
-    :when [:num-selected-eq? 0]}
+    :when [:num-selected-eq? 0]
+    :searchable true}
 
    :add.circle
    {:key {:code "KeyC" :display "c"}
@@ -17,10 +18,12 @@
    :delete
    {:key {:code "KeyX" :display "x"}
     :display "Delete"
-    :when [:num-selected-gt? 0]}
+    :when [:num-selected-gt? 0]
+    :searchable true}
 
    :export
-   {:display "Export (SVG)"}
+   {:display "Export (SVG)"
+    :searchable true}
 
    :grab
    {:key {:code "KeyG" :display "g"}
@@ -29,15 +32,18 @@
 
    :undo
    {:key {:code "KeyZ" :ctrl true :display "z"}
-    :display "Undo"}
+    :display "Undo"
+    :searchable true}
 
    :redo
    {:key {:code "KeyR" :ctrl true :display "r"}
-    :display "Redo"}
+    :display "Redo"
+    :searchable true}
 
    :styles-panel
    {:key {:code "KeyS" :alt true :display "s"}
-    :display "Styles (color and stroke)"}
+    :display "Styles (color and stroke)"
+    :searchable true}
 
    :path-tool
    {:display "Path Tool"
@@ -65,16 +71,19 @@
    :move-up
    {:display "Move up"
     :key {:code "BracketRight" :display "]"}
-    :when [:num-selected-eq? 1 {:path? true}]}
+    :when [:num-selected-eq? 1 {:path? true}]
+    :searchable true}
 
    :move-down
    {:display "Move down"
     :key {:code "BracketLeft" :display "["}
-    :when [:num-selected-eq? 1 {:path? true}]}
+    :when [:num-selected-eq? 1 {:path? true}]
+    :searchable true}
 
    :new-project
    {:display "New project"
-    :key {:code "KeyN" :ctrl true :display "n"}}
+    :key {:code "KeyN" :ctrl true :display "n"}
+    :searchable true}
 
    :rotate
    {:key {:code "KeyR" :display "r"}
@@ -82,10 +91,12 @@
     :when [:num-selected-gt? 0]}
 
    :save
-   {:display "Save"}
+   {:display "Save"
+    :searchable true}
 
    :open
-   {:display "Open"}
+   {:display "Open"
+    :searchable true}
 
    :scale
    {:key {:code "KeyS" :display "s"}
@@ -99,6 +110,10 @@
    :scale.y-axis
    {:key {:code "KeyY" :display "y"}
     :display "Lock to Y axis"}
+
+   :search
+   {:key {:code "Space" :display "space"}
+    :display "Search"}
 
    :yes
    {:key {:code "KeyY" :display "y"}

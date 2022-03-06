@@ -1,6 +1,7 @@
 (ns frontend.state.actions
   (:require
    [frontend.actions.conditions :as c]
+   [clojure.string :as str]
    [reagent.core :as r]))
 
 (def initial-state {:suggestions #{}
@@ -81,6 +82,16 @@
                       :key (hotkey id)
                       :display (display id)}))
        (sort-by :key-display)))
+
+(defn search-actions [query]
+  (->> (seq (config))
+       (filter (fn [[_ config]] (str/includes?
+                                 (str/lower-case (:display config))
+                                 (str/lower-case query))))
+       (filter (fn [[_ config]] (and
+                                 (:searchable config)
+                                 (c/valid? (:when config)))))
+       (map (fn [[id config]] {:display (:display config) :id id}))))
 
 (defn init! [state]
   (reset! *db (merge initial-state state)))

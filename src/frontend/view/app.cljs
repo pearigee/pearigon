@@ -7,6 +7,7 @@
    [frontend.tools.protocol :refer [tool-render-svg ToolRenderSVG]]
    [frontend.view.key-suggestion :refer [key-suggestion]]
    [frontend.view.sidebar :refer [sidebar]]
+   [frontend.view.search :refer [search-overlay]]
    [frontend.view.toolbar :refer [toolbar]]))
 
 (defn app []
@@ -27,4 +28,6 @@
      [:div.overlay
       [key-suggestion]
       [sidebar]
-      [toolbar]]]))
+      [toolbar]]
+     (when (viewport/search-showing?)
+       [search-overlay])]))

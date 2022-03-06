@@ -1,6 +1,7 @@
 (ns frontend.actions.handlers
   (:require
    [frontend.state.core :as state]
+   [frontend.state.viewport :as viewport]
    [frontend.tools.add :refer [add]]
    [frontend.tools.delete :refer [delete]]
    [frontend.tools.draw-order :refer [move-down move-up]]
@@ -29,4 +30,5 @@
    :redo state/redo!
    :new-project new-project
    :save save
+   :search viewport/toggle-search-showing!
    :open open})
