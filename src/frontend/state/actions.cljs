@@ -59,9 +59,13 @@
   []
   (swap! *db assoc :suggestions #{}))
 
-(defn execute! [id]
-  (when-let [action (action-handler id)]
-    (action)))
+(defn execute!
+  "Executes an action by ID. Returns true if executed, false otherwise."
+  [id]
+  (if-let [action (action-handler id)]
+    (do (action)
+        true)
+    false))
 
 (defn active?
   "Is the current action active based on the pressed key?
@@ -80,7 +84,8 @@
   (->> (suggestions)
        (map (fn [id] {:key-display (hotkey-display id)
                       :key (hotkey id)
-                      :display (display id)}))
+                      :display (display id)
+                      :id id}))
        (sort-by :key-display)))
 
 (defn search-actions [query]

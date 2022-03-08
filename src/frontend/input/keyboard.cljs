@@ -15,22 +15,22 @@
         active (first (filter #(actions/active? % k) actions))]
     (when active ((get action->handler active)))))
 
-(defn- eval-root-keys [k]
+(defn- eval-root-keys! [k]
   (eval-keys-by actions/uses-no-modifiers? k))
 
-(defn- eval-ctrl-keys [k]
+(defn- eval-ctrl-keys! [k]
   (eval-keys-by actions/uses-ctrl? k))
 
-(defn- eval-alt-keys [k]
+(defn- eval-alt-keys! [k]
   (eval-keys-by actions/uses-alt? k))
 
-(defn- eval-hotkey [k]
+(defn eval-hotkey! [k]
   (let [tool (tools/get-tool)]
     (cond
-      (keyboard/just-ctrl?) (eval-ctrl-keys k)
-      (keyboard/just-alt?) (eval-alt-keys k)
+      (keyboard/just-ctrl?) (eval-ctrl-keys! k)
+      (keyboard/just-alt?) (eval-alt-keys! k)
       (satisfies? OnKeypress tool) (on-keypress tool k)
-      :else (eval-root-keys k))))
+      :else (eval-root-keys! k))))
 
 (defn- keyboard-event->key
   [event]
@@ -43,7 +43,7 @@
   "Record any actions that are polled for to populate suggestions."
   []
   (actions/clear-suggestions!)
-  (eval-hotkey :record-suggestions))
+  (eval-hotkey! :record-suggestions))
 
 (defn- bind-keys []
   (js/document.addEventListener
@@ -57,7 +57,7 @@
          (when (ctrl-codes code) (keyboard/ctrl-down?! true))
          (when (alt-codes code) (keyboard/alt-down?! true))
          (js/console.log "Keypress: " key)
-         (eval-hotkey key)
+         (eval-hotkey! key)
          (record-suggestions!)))))
   (js/document.addEventListener
    "keyup"

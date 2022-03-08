@@ -13,6 +13,12 @@ $selection-color: $link;
   background: rgba(255,255,255, 0.9);
 }
 
+@mixin clickable-mouseover {
+  background: transparentize($link, 0.8);
+  color: $dark;
+  cursor: pointer;
+}
+
 body {
   height: 100vh;
   padding: 0;
@@ -114,8 +120,7 @@ body {
       }
 
       &:hover {
-        background: transparentize($link, 0.8);
-        color: $dark;
+        @include clickable-mouseover;
       }
     }
   }
@@ -136,18 +141,29 @@ body {
 
   display: flex;
   flex-wrap: wrap;
-  row-gap: 10px;
-  column-gap: 15px;
-  padding: 10px 10px;
   align-content: flex-start;
   align-self: flex-start;
   line-height: 0;
   pointer-events: none;
   width: 100%;
-}
 
-.key-suggestion {
-  margin-right: 5px;
+  .tool {
+    margin: 8px;
+  }
+
+  .key {
+    margin-right: 5px;
+    pointer-events: all;
+  }
+
+  .action {
+    pointer-events: all;
+    padding: 8px;
+
+    &:hover {
+      @include clickable-mouseover;
+    }
+  }
 }
 
 .switch[type=checkbox] + label {
