@@ -79,14 +79,14 @@
       (key-matches? key (hotkey id)))))
 
 (defn get-hotkey-suggestions
-  "Get active actions sorted by hotkey."
+  "Get active actions sorted by display."
   []
   (->> (suggestions)
        (map (fn [id] {:key-display (hotkey-display id)
                       :key (hotkey id)
                       :display (display id)
                       :id id}))
-       (sort-by :key-display)))
+       (sort-by :display)))
 
 (defn search-actions [query]
   (->> (seq (config))
