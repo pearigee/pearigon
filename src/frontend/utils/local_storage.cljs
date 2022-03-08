@@ -5,6 +5,7 @@
    [frontend.utils.async :refer [debounce]]))
 
 (def active-project-key :active-project)
+(def viewport-key :viewport)
 
 (defn set-item! [key value]
   (js/localStorage.setItem (prn-str key) (prn-str value)))
