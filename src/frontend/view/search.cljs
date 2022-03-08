@@ -31,8 +31,6 @@
                                  (nth @*selected)
                                  :id)]
                       (actions/execute! id)
-                      ;; Check for updated suggestions
-                      (keyboard/record-suggestions!)
                       (viewport/toggle-search-showing!))
                     "Escape"
                     (viewport/toggle-search-showing!)

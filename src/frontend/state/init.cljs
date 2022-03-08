@@ -3,6 +3,7 @@
             [frontend.state.undo :as undo]
             [frontend.state.actions :as actions]
             [frontend.state.viewport :as viewport]
+            [frontend.input.keyboard :as hotkeys]
             [frontend.actions.config :as action-config]
             [frontend.actions.handlers :as action-handlers]
             [frontend.utils.local-storage :as ls]))
@@ -16,7 +17,9 @@
   (undo/init!)
   (state/init! (ls/get-item ls/active-project-key))
   (actions/init! {:action->handler action-handlers/action->handler
-                  :config action-config/config})
+                  :config action-config/config
+                  ;; Check for new suggestions after actions are executed.
+                  :after-action #(hotkeys/record-suggestions!)})
   (viewport/init! (ls/get-item ls/viewport-key))
 
   ;; Synchronize state to localstorage to preserve on refresh.

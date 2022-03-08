@@ -22,8 +22,7 @@
                   {:on-click
                    ;; Execute the action if a handler exists, otherwise
                    ;; emulate the keypress (for tools with their own hotkeys).
-                   #(do (or (actions/execute! (:id s))
-                            (hotkeys/eval-hotkey! (:key s)))
-                        (hotkeys/record-suggestions!))}
+                   #(or (actions/execute! (:id s))
+                        (hotkeys/eval-hotkey! (:key s)))}
                   [:span.tag.key (:key-display s)]
                   [:span.is-size-7 (:display s)]])]))

@@ -6,7 +6,8 @@
 
 (def initial-state {:suggestions #{}
                     :config {}
-                    :action->handler {}})
+                    :action->handler {}
+                    :after-action (fn [])})
 
 (def *db (r/atom initial-state))
 
@@ -59,11 +60,16 @@
   []
   (swap! *db assoc :suggestions #{}))
 
+(defn after-action! []
+  (when-let [after-action (:after-action @*db)]
+    (after-action)))
+
 (defn execute!
   "Executes an action by ID. Returns true if executed, false otherwise."
   [id]
   (if-let [action (action-handler id)]
     (do (action)
+        (after-action!)
         true)
     false))
 
