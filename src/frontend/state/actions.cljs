@@ -98,7 +98,9 @@
   (->> (seq (config))
        (filter (fn [[_ config]] (str/includes?
                                  (str/lower-case (:display config))
-                                 (str/lower-case query))))
+                                 (-> query
+                                     str/trim
+                                     str/lower-case))))
        (filter (fn [[_ config]] (and
                                  (:searchable config)
                                  (c/valid? (:when config)))))
