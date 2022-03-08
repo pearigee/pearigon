@@ -9,6 +9,7 @@
    [frontend.state.core :as state]
    [frontend.state.mouse :as mouse]
    [frontend.state.tools :as tools]
+   [frontend.state.viewport :as viewport]
    [frontend.tools.delete :refer [delete]]
    [frontend.tools.grab :refer [grab]]
    [frontend.tools.protocol :refer [OnClick OnKeypress ToolRenderSVG]]
@@ -93,6 +94,9 @@
           ;; If the root has been deleted, exit the tool.
           (when (nil? (state/get-shape path-id))
             (tools/pop-tool!)))
+
+      (actions/active? :search k)
+      (viewport/toggle-search-showing!)
 
       :else nil))
 
