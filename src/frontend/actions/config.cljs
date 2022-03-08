@@ -9,11 +9,11 @@
 
    :add.circle
    {:key {:code "KeyC" :display "c"}
-    :display "Circle"}
+    :display "Add Circle"}
 
    :add.rect
    {:key {:code "KeyR" :display "r"}
-    :display "Rectangle"}
+    :display "Add Rectangle"}
 
    :delete
    {:key {:code "KeyX" :display "x"}

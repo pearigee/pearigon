@@ -8,23 +8,30 @@
    [frontend.tools.grab :refer [grab]]
    [frontend.tools.protocol :refer [OnKeypress]]))
 
+(defn- add-shape [shape]
+  (state/deselect-all!)
+  (state/add-shape! shape)
+  (grab))
+
+(defn add-rect []
+  (let [[x y] (mouse/pos)]
+    (add-shape (p/rectangle [x y] 40))))
+
+(defn add-circle []
+  (let [[x y] (mouse/pos)]
+    (add-shape (p/circle [x y] 40))))
+
 (defrecord AddTool [display action]
   OnKeypress
   (on-keypress [_ k]
-    (let [[x y] (mouse/pos)
-          shape (cond
-                  (actions/active? :add.rect k)
-                  (p/rectangle [x y] 40)
+    (cond
+      (actions/active? :add.rect k)
+      (do (tools/pop-tool!)
+          (add-rect))
 
-                  (actions/active? :add.circle k)
-                  (p/circle [x y] 40)
-
-                  :else nil)]
-      (when shape
-        (state/deselect-all!)
-        (state/add-shape! shape)
-        (tools/pop-tool!)
-        (grab)))))
+      (actions/active? :add.circle k)
+      (do (tools/pop-tool!)
+          (add-circle)))))
 
 (defn add []
   (tools/push-tool! (->AddTool "Add Shape" :add)))
