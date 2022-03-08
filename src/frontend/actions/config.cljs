@@ -4,7 +4,7 @@
   {:add
    {:key {:code "KeyA" :display "a"}
     :display "Add Shape"
-    :when [:num-selected-eq? 0]
+    :when [:num-selected-eq 0]
     :searchable true}
 
    :add.circle
@@ -18,7 +18,7 @@
    :delete
    {:key {:code "KeyX" :display "x"}
     :display "Delete"
-    :when [:num-selected-gt? 0]
+    :when [:num-selected-gt 0]
     :searchable true}
 
    :export
@@ -28,7 +28,7 @@
    :grab
    {:key {:code "KeyG" :display "g"}
     :display "Grab"
-    :when [:num-selected-gt? 0]}
+    :when [:num-selected-gt 0]}
 
    :undo
    {:key {:code "KeyZ" :ctrl true :display "z"}
@@ -49,8 +49,8 @@
    {:display "Path Tool"
     :key {:code "Tab" :display "tab"}
     :when [:or
-           [:num-selected-eq? 1 {:path? true}]
-           [:num-selected-eq? 0]]}
+           [:num-selected-eq 1 {:path? true}]
+           [:num-selected-eq 0]]}
 
    :path-tool.add-point-round
    {:display "Add Round Point"
@@ -71,13 +71,13 @@
    :move-up
    {:display "Move up"
     :key {:code "BracketRight" :display "]"}
-    :when [:num-selected-eq? 1 {:path? true}]
+    :when [:num-selected-eq 1 {:path? true}]
     :searchable true}
 
    :move-down
    {:display "Move down"
     :key {:code "BracketLeft" :display "["}
-    :when [:num-selected-eq? 1 {:path? true}]
+    :when [:num-selected-eq 1 {:path? true}]
     :searchable true}
 
    :new-project
@@ -88,7 +88,7 @@
    :rotate
    {:key {:code "KeyR" :display "r"}
     :display "Rotate"
-    :when [:num-selected-gt? 0]}
+    :when [:num-selected-gt 0]}
 
    :save
    {:display "Save"
@@ -101,7 +101,7 @@
    :scale
    {:key {:code "KeyS" :display "s"}
     :display "Scale"
-    :when [:num-selected-gt? 0]}
+    :when [:num-selected-gt 0]}
 
    :scale.x-axis
    {:key {:code "KeyX" :display "x"}

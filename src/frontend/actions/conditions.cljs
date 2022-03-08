@@ -26,7 +26,7 @@
       (case f
         :and (and? args)
         :or (or? args)
-        :num-selected-eq? (num-selected-eq? args)
-        :num-selected-gt? (num-selected-gt? args)
+        :num-selected-eq (num-selected-eq? args)
+        :num-selected-gt (num-selected-gt? args)
         (js/console.error "Invalid action condition!" f args)))
     true))
