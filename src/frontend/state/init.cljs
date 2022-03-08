@@ -20,5 +20,5 @@
   (viewport/init! (ls/get-item ls/viewport-key))
 
   ;; Synchronize state to localstorage to preserve on refresh.
-  (ls/debounced-sync! state/db ls/active-project-key 250)
+  (ls/debounced-sync! state/*db ls/active-project-key 250)
   (ls/debounced-sync! viewport/*db ls/viewport-key 250))

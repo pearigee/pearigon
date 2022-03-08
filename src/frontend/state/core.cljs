@@ -21,7 +21,7 @@
    :draw-order []
    :default-styles styles/default-styles})
 
-(def db (r/atom initial-state))
+(def *db (r/atom initial-state))
 
 (defn get-shape [id]
   ;; Order matters in the multi-path below. The nested structure should
@@ -30,13 +30,13 @@
                     (sp/multi-path
                      [sp/MAP-VALS :points sp/ALL #(= id (:id %))]
                      [id])]
-                   @db))
+                   @*db))
 
 (defn get-draw-order []
-  (:draw-order @db))
+  (:draw-order @*db))
 
 (defn get-preview [id]
-  (-> @db :shape-preview-override (get id)))
+  (-> @*db :shape-preview-override (get id)))
 
 (defn get-shapes-with-override []
   (let [result (mapv #(if-let [preview (get-preview %)]
@@ -54,13 +54,13 @@
   (sp/select [:shapes
               sp/MAP-VALS
               (sp/multi-path [#(:selected %)]
-                             [:points sp/ALL #(:selected %)])] @db))
+                             [:points sp/ALL #(:selected %)])] @*db))
 
 (defn selected-paths []
   (filter :points (get-selected)))
 
 (defn default-styles []
-  (:default-styles @db))
+  (:default-styles @*db))
 
 (defn selected? [id]
   (:selected (get-shape id)))
@@ -68,12 +68,12 @@
 (defn save-state
   "Returns the data that should be persisted in project files and undo/redo."
   []
-  (dissoc @db :shape-preview-override))
+  (dissoc @*db :shape-preview-override))
 
 (defn apply-save-state!
   "Merges the state supplied with the active model."
   [state]
-  (when state (swap! db merge state)))
+  (when state (swap! *db merge state)))
 
 (defn- undoable-swap! [& args]
   (undo/push-undo! (save-state))
@@ -86,7 +86,7 @@
   (apply-save-state! (undo/redo! (save-state))))
 
 (defn- map-shapes! [f]
-  (undoable-swap! db
+  (undoable-swap! *db
                   #(sp/multi-transform
                     [:shapes
                      sp/MAP-VALS
@@ -101,15 +101,15 @@
   (map-shapes! #(if (contains? id-set (:id %)) (f %) %)))
 
 (defn map-selected-shapes-preview! [f]
-  (swap! db assoc :shape-preview-override
+  (swap! *db assoc :shape-preview-override
          (let [shapes (map f (get-selected))]
            (reduce #(assoc %1 (:id %2) %2) {} shapes))))
 
 (defn clear-shape-preview! []
-  (swap! db assoc :shape-preview-override {}))
+  (swap! *db assoc :shape-preview-override {}))
 
 (defn set-draw-order! [order]
-  (undoable-swap! db assoc :draw-order (vec order)))
+  (undoable-swap! *db assoc :draw-order (vec order)))
 
 (defn conj-draw-order [id]
   (set-draw-order! (conj (get-draw-order) id)))
@@ -118,7 +118,7 @@
   ;; Order matters in this multi-path. We must search the nested structure
   ;; before deleting the parent.
   (undoable-swap!
-   db
+   *db
    (fn [db] (sp/multi-transform
              [:shapes
               sp/MAP-VALS
@@ -143,7 +143,7 @@
   (map-shapes! #(assoc % :selected false)))
 
 (defn default-styles! [styles]
-  (undoable-swap! db assoc :default-styles styles))
+  (undoable-swap! *db assoc :default-styles styles))
 
 (defn select-id!
   ([id selected?]
@@ -176,10 +176,10 @@
   [{:keys [id] :as shape} & {:keys [selected? draw-order?]
                              :or {selected? true
                                   draw-order? true}}]
-  (undoable-swap! db update-in [:shapes] assoc id
+  (undoable-swap! *db update-in [:shapes] assoc id
                   (merge shape {:styles (default-styles)}))
   (when selected? (select-id! id))
   (when draw-order? (conj-draw-order id)))
 
 (defn init! [state]
-  (reset! db (merge initial-state state)))
+  (reset! *db (merge initial-state state)))
