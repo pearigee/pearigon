@@ -49,16 +49,28 @@
    {:display "Path Tool"
     :key {:code "Tab" :display "tab"}
     :when [:or
-           [:num-selected-eq 1 {:path? true}]
+           [:num-selected-eq 1 {:path true}]
            [:num-selected-eq 0]]}
 
    :path-tool.add-point-round
-   {:display "Add Round Point"
-    :key {:code "KeyQ" :display "q"}}
+   {:display "Add round point"
+    :key {:code "KeyQ" :display "q"}
+    :when [:num-selected-eq 0]}
 
    :path-tool.add-point-sharp
-   {:display "Add Sharp Point"
-    :key {:code "KeyW" :display "w"}}
+   {:display "Add sharp point"
+    :key {:code "KeyW" :display "w"}
+    :when [:num-selected-eq 0]}
+
+   :path-tool.make-point-round
+   {:display "Make point round"
+    :key {:code "KeyQ" :display "q"}
+    :when [:num-selected-gt 0 {:point true}]}
+
+   :path-tool.make-point-sharp
+   {:display "Make point sharp"
+    :key {:code "KeyW" :display "w"}
+    :when [:num-selected-gt 0 {:point true}]}
 
    :path-tool.quit
    {:display "Quit"
@@ -71,13 +83,13 @@
    :move-up
    {:display "Move up"
     :key {:code "BracketRight" :display "]"}
-    :when [:num-selected-eq 1 {:path? true}]
+    :when [:num-selected-eq 1 {:path true}]
     :searchable true}
 
    :move-down
    {:display "Move down"
     :key {:code "BracketLeft" :display "["}
-    :when [:num-selected-eq 1 {:path? true}]
+    :when [:num-selected-eq 1 {:path true}]
     :searchable true}
 
    :new-project

@@ -2,16 +2,25 @@
   (:require
    [frontend.state.core :as state]))
 
-;; Forward declaratoin of valid so it can be used recursively below.
 (declare valid?)
 
-(defn- num-selected-eq? [[num {:keys [path?] :or {path? false}}]]
-  (if path?
-    (= num (count (filter :points (state/get-selected))))
-    (= num (count (state/get-selected)))))
+(defn- get-selected [{:keys [point path]
+                      :or {point false
+                           path false}}]
+  (cond path
+        (filter :points (state/get-selected))
 
-(defn- num-selected-gt? [[num]]
-  (> (count (state/get-selected)) num))
+        point
+        (filter (fn [s] (#{:sharp :round} (:type s))) (state/get-selected))
+
+        :else
+        (state/get-selected)))
+
+(defn- num-selected-eq? [[num config]]
+  (= num (count (get-selected config))))
+
+(defn- num-selected-gt? [[num config]]
+  (> (count (get-selected config)) num))
 
 (defn- and? [args]
   (every? true? (map valid? args)))

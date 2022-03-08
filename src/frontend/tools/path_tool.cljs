@@ -55,15 +55,8 @@
       (or (actions/active? :path-tool.add-point-sharp k)
           (actions/active? :path-tool.add-point-round k))
       (let [type (key->point-type k)
-            selection (state/get-selected)
             mpos (mouse/pos)]
-        (cond (and
-               (seq selection)
-               ;; TODO Replace with #(satisfies? Point %) when CLJS 1.11 drops
-               (every? #(#{:sharp :round} (:type %)) selection))
-              (state/map-selected-shapes! #(assoc % :type type))
-
-              (nil? path-id)
+        (cond (nil? path-id)
               (let [{:keys [id] :as shape} (path)]
                 (state/add-shape! shape :selected? false)
                 (add-point-at-pos shape mpos type)
@@ -72,6 +65,12 @@
               path-id
               (let [shape (state/get-shape path-id)]
                 (add-point-at-pos shape mpos type))))
+
+      (actions/active? :path-tool.make-point-round k)
+      (state/map-selected-shapes! #(assoc % :type :round))
+
+      (actions/active? :path-tool.make-point-sharp k)
+      (state/map-selected-shapes! #(assoc % :type :sharp))
 
       (actions/active? :path-tool.toggle-closed k)
       (let [{:keys [closed?]} (state/get-shape path-id)]
