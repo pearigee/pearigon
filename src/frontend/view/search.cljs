@@ -39,24 +39,22 @@
                     nil))]
     (let [selected @*selected
           results @*results]
-      [:div.search-overlay
-       [:div.input-container
-        [:input.input {:auto-focus true
-                       :on-key-down #(on-keydown (.-code %))
-                       :on-blur #(js/setTimeout
-                                  (fn []
-                                    (when (viewport/search-showing?)
-                                      (viewport/toggle-search-showing!)))
-                                  100)
-                       :on-change #(search (-> % .-target .-value))}]]
-       [:div.search-results
-        (doall (map-indexed
-                (fn [i r]
-                  ^{:key (:id r)}
-                  [:div.search-result
-                   {:class (when (= i selected) "selected")
-                    :on-click (fn []
-                                (reset! *selected i)
-                                (on-keydown "Enter"))}
-                   (:display r)])
-                results))]])))
+      [:<>
+       [:div.search-backdrop {:on-click #(viewport/toggle-search-showing!)}]
+       [:div.search-overlay
+        [:div.input-container
+         [:input.input {:auto-focus true
+                        :on-key-down #(on-keydown (.-code %))
+                        :on-change #(search (-> % .-target .-value))}]]
+        [:div.search-results
+         (doall (map-indexed
+                 (fn [i r]
+                   ^{:key (:id r)}
+                   [:div.search-result
+                    {:class (when (= i selected) "selected")
+                     :on-click (fn []
+                                 (js/console.log "on click!")
+                                 (reset! *selected i)
+                                 (on-keydown "Enter"))}
+                    (:display r)])
+                 results))]]])))
