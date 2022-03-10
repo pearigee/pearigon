@@ -172,14 +172,27 @@
 (defn move-down-draw-order! [id]
   (set-draw-order! (layers/move-down (get-draw-order) id)))
 
+(defn- shape-id []
+  (str "shape-" (random-uuid)))
+
+(defn- shape-with-new-ids [shape]
+  (let [points (:points shape)
+        points-with-id (when points
+                         (map #(assoc % :id (shape-id)) points))]
+    (merge shape
+           {:id (shape-id)}
+           (when points-with-id {:points points-with-id}))))
+
 (defn add-shape!
-  [{:keys [id] :as shape} & {:keys [selected? draw-order?]
-                             :or {selected? true
-                                  draw-order? true}}]
-  (undoable-swap! *db update-in [:shapes] assoc id
-                  (merge shape {:styles (default-styles)}))
-  (when selected? (select-id! id))
-  (when draw-order? (conj-draw-order id)))
+  [shape & {:keys [selected? draw-order?]
+            :or {selected? true
+                 draw-order? true}}]
+  (let [{:keys [id] :as shape} (shape-with-new-ids shape)]
+    (undoable-swap! *db update-in [:shapes] assoc id
+                    (merge shape {:styles (default-styles)}))
+    (when selected? (select-id! id))
+    (when draw-order? (conj-draw-order id))
+    shape))
 
 (defn init! [state]
   (reset! *db (merge initial-state state)))

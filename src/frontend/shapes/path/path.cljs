@@ -31,8 +31,8 @@
                        styles)]]))))
 
 (defn path
-  ([] (->Path (utils/new-shape-id) :default [] true))
-  ([points] (->Path (utils/new-shape-id) :default points true)))
+  ([] (->Path "" :default [] true))
+  ([points] (->Path "" :default points true)))
 
 (defn circle [pos size]
   (path

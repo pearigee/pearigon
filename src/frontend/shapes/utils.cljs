@@ -5,6 +5,3 @@
   (if (:selected shape)
     (str class " selected")
     class))
-
-(defn new-shape-id []
-  (str "shape-" (random-uuid)))
