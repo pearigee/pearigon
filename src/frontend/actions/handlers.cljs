@@ -8,6 +8,7 @@
    [frontend.tools.export :refer [export]]
    [frontend.tools.grab :refer [grab]]
    [frontend.tools.open :refer [open]]
+   [frontend.tools.duplicate :refer [duplicate]]
    [frontend.tools.new-project :refer [new-project]]
    [frontend.tools.path-tool :refer [path-tool]]
    [frontend.tools.rotate :refer [rotate]]
@@ -22,6 +23,7 @@
    :rotate rotate
    :path-tool path-tool
    :delete delete
+   :duplicate duplicate
    :export export
    :move-up move-up
    :move-down move-down

@@ -21,6 +21,12 @@
     :when [:num-selected-gt 0]
     :searchable true}
 
+   :duplicate
+   {:key {:code "KeyD" :display "d"}
+    :display "Duplicate"
+    :when [:num-selected-gt 0]
+    :searchable true}
+
    :export
    {:display "Export (SVG)"
     :searchable true}

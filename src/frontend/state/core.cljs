@@ -184,12 +184,15 @@
            (when points-with-id {:points points-with-id}))))
 
 (defn add-shape!
-  [shape & {:keys [selected? draw-order?]
+  [shape & {:keys [selected? draw-order? default-styles?]
             :or {selected? true
-                 draw-order? true}}]
+                 draw-order? true
+                 default-styles? true}}]
   (let [{:keys [id] :as shape} (shape-with-new-ids shape)]
     (undoable-swap! *db update-in [:shapes] assoc id
-                    (merge shape {:styles (default-styles)}))
+                    (merge shape
+                           (when default-styles?
+                             {:styles (default-styles)})))
     (when selected? (select-id! id))
     (when draw-order? (conj-draw-order id))
     shape))
