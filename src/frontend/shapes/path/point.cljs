@@ -2,7 +2,8 @@
   (:require
    [frontend.math :as m]
    [frontend.shapes.protocol :refer [RenderSVG Transform]]
-   [frontend.shapes.utils :as utils]))
+   [frontend.utils.styles :as styles]
+   [frontend.utils.ids :as ids]))
 
 (defrecord Point [id pos type r]
 
@@ -14,10 +15,10 @@
   (render-svg [shape]
     (let [[x y] pos]
       [:circle {:id id
-                :class (utils/apply-selected-style shape "point")
+                :class (styles/apply-selected-style shape "point")
                 :cx x
                 :cy y
                 :r r}])))
 
 (defn point [pos type]
-  (->Point "" pos type 5))
+  (->Point (ids/shape-id) pos type 5))

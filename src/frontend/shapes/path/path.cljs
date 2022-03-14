@@ -4,9 +4,8 @@
    [frontend.shapes.path.point :refer [point]]
    [frontend.shapes.path.svg :refer [points->svg]]
    [frontend.shapes.protocol :refer [OnSelect RenderSVG Transform]]
-   [frontend.shapes.utils :as utils]
    [frontend.state.core :as state]
-   [frontend.utils.styles :refer [styles->svg-attr]]))
+   [frontend.utils.styles :as styles]))
 
 (defrecord Path [id mat-id points closed?]
 
@@ -22,11 +21,11 @@
   RenderSVG
   (render-svg [shape]
     (when-not (empty? points)
-      (let [styles (styles->svg-attr (:styles shape))
+      (let [styles (styles/styles->svg-attr (:styles shape))
             ps (state/get-shapes-by-id-with-override (map :id points))]
         [:g
          [:path (merge {:id id
-                        :class (utils/apply-selected-style shape "")
+                        :class (styles/apply-selected-style shape "")
                         :d (points->svg ps closed?)}
                        styles)]]))))
 

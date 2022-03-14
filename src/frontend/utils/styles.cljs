@@ -1,5 +1,11 @@
 (ns frontend.utils.styles)
 
+(defn apply-selected-style
+  [shape class]
+  (if (:selected shape)
+    (str class " selected")
+    class))
+
 (def default-styles {:fill? true
                      :fill "#000000"
                      :fill-opacity 1.0

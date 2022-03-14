@@ -11,6 +11,7 @@
    [frontend.state.undo :as undo]
    [frontend.utils.layers :as layers]
    [frontend.utils.styles :as styles]
+   [frontend.utils.ids :as ids]
    [reagent.core :as r]))
 
 (def initial-state
@@ -172,15 +173,12 @@
 (defn move-down-draw-order! [id]
   (set-draw-order! (layers/move-down (get-draw-order) id)))
 
-(defn- shape-id []
-  (str "shape-" (random-uuid)))
-
 (defn- shape-with-new-ids [shape]
   (let [points (:points shape)
         points-with-id (when points
-                         (map #(assoc % :id (shape-id)) points))]
+                         (map #(assoc % :id (ids/shape-id)) points))]
     (merge shape
-           {:id (shape-id)}
+           {:id (ids/shape-id)}
            (when points-with-id {:points points-with-id}))))
 
 (defn add-shape!
