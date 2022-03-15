@@ -1,7 +1,6 @@
 {
     "scripts": {
-        "build": "shadow-cljs release app && sass --no-source-map --style=compressed sass/styles.scss:public/css/styles.css",
-        "test": "shadow-cljs compile node-test && node out/node/node_tests.js"
+        "build": "clj -M:shadow-cljs release app && sass --no-source-map --style=compressed sass/styles.scss:public/css/styles.css"
     },
     "devDependencies": {
         "@creativebulma/bulma-tooltip": "^1.2.0",
