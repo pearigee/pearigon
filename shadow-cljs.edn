@@ -4,6 +4,7 @@
                 [com.rpl/specter "1.1.3"]
                 [nrepl "0.8.3"]
                 [cider/cider-nrepl "0.28.0"]
+                [org.babashka/sci "0.3.2"]
                 [reagent "1.1.0"]]
 
  :builds       {:app {:target     :browser

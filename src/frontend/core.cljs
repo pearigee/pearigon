@@ -6,7 +6,9 @@
    [frontend.state.init :refer [init-state!]]
    [frontend.state.viewport :as viewport]
    [frontend.view.app :refer [app]]
-   [reagent.dom :as d]))
+   [reagent.dom :as d]
+   ;; Require to expose in dev tools.
+   [api.core]))
 
 (defn mount-root
   []
