@@ -18,6 +18,7 @@
   (state/init! (ls/get-item ls/active-project-key))
   (actions/init! {:action->handler action-handlers/action->handler
                   :config action-config/config
+                  :eval-hotkey hotkeys/eval-hotkey!
                   ;; Check for new suggestions after actions are executed.
                   :after-action #(hotkeys/record-suggestions!)})
   (viewport/init! (ls/get-item ls/viewport-key))

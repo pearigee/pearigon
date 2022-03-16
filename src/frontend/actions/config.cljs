@@ -4,8 +4,7 @@
   {:add
    {:key {:code "KeyA" :display "a"}
     :display "Add Shape"
-    :when [:num-selected-eq 0]
-    :searchable true}
+    :when [:num-selected-eq 0]}
 
    :add.circle
    {:key {:code "KeyC" :display "c"}
@@ -17,24 +16,20 @@
 
    :code
    {:key {:code "KeyC" :alt true :display "c"}
-    :display "Code"
-    :searchable true}
+    :display "Code"}
 
    :delete
    {:key {:code "KeyX" :display "x"}
     :display "Delete"
-    :when [:num-selected-gt 0]
-    :searchable true}
+    :when [:num-selected-gt 0]}
 
    :duplicate
    {:key {:code "KeyD" :display "d"}
     :display "Duplicate"
-    :when [:num-selected-gt 0]
-    :searchable true}
+    :when [:num-selected-gt 0]}
 
    :export
-   {:display "Export (SVG)"
-    :searchable true}
+   {:display "Export (SVG)"}
 
    :grab
    {:key {:code "KeyG" :display "g"}
@@ -43,18 +38,15 @@
 
    :undo
    {:key {:code "KeyZ" :ctrl true :display "z"}
-    :display "Undo"
-    :searchable true}
+    :display "Undo"}
 
    :redo
    {:key {:code "KeyR" :ctrl true :display "r"}
-    :display "Redo"
-    :searchable true}
+    :display "Redo"}
 
    :styles-panel
    {:key {:code "KeyS" :alt true :display "s"}
-    :display "Styles (color and stroke)"
-    :searchable true}
+    :display "Styles (color and stroke)"}
 
    :path-tool
    {:display "Path Tool"
@@ -94,19 +86,16 @@
    :move-up
    {:display "Move up"
     :key {:code "BracketRight" :display "]"}
-    :when [:num-selected-eq 1 {:path true}]
-    :searchable true}
+    :when [:num-selected-eq 1 {:path true}]}
 
    :move-down
    {:display "Move down"
     :key {:code "BracketLeft" :display "["}
-    :when [:num-selected-eq 1 {:path true}]
-    :searchable true}
+    :when [:num-selected-eq 1 {:path true}]}
 
    :new-project
    {:display "New project"
-    :key {:code "KeyN" :ctrl true :display "n"}
-    :searchable true}
+    :key {:code "KeyN" :ctrl true :display "n"}}
 
    :rotate
    {:key {:code "KeyR" :display "r"}
@@ -114,16 +103,13 @@
     :when [:num-selected-gt 0]}
 
    :reset-zoom
-   {:display "Reset zoom"
-    :searchable true}
+   {:display "Reset zoom"}
 
    :save
-   {:display "Save"
-    :searchable true}
+   {:display "Save"}
 
    :open
-   {:display "Open"
-    :searchable true}
+   {:display "Open"}
 
    :scale
    {:key {:code "KeyS" :display "s"}

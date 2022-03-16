@@ -2,8 +2,7 @@
   (:require
    [frontend.state.actions :as actions]
    [frontend.state.keyboard :as keyboard]
-   [frontend.state.tools :as tools]
-   [frontend.input.keyboard :as hotkeys]))
+   [frontend.state.tools :as tools]))
 
 (defn key-suggestion []
   (let [tool (tools/get-tool)
@@ -19,10 +18,6 @@
        [:div.tool.tag.is-primary.is-light "No Tool"])
      (for [s suggestions]
        ^{:key s} [:div.action
-                  {:on-click
-                   ;; Execute the action if a handler exists, otherwise
-                   ;; emulate the keypress (for tools with their own hotkeys).
-                   #(or (actions/execute! (:id s))
-                        (hotkeys/eval-hotkey! (:key s)))}
+                  {:on-click #(actions/execute! (:id s))}
                   [:span.tag.key (:key-display s)]
                   [:span.is-size-7 (:display s)]])]))

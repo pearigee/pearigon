@@ -7,6 +7,7 @@
 (def initial-state {:suggestions #{}
                     :config {}
                     :action->handler {}
+                    :eval-hotkey (fn [_])
                     :after-action (fn [])})
 
 (def *db (r/atom initial-state))
@@ -64,14 +65,20 @@
   (when-let [after-action (:after-action @*db)]
     (after-action)))
 
+(defn eval-hotkey! [key]
+  ((:eval-hotkey @*db) key))
+
 (defn execute!
-  "Executes an action by ID. Returns true if executed, false otherwise."
+  "Executes the action by ID.
+
+  If the action ID isn't associated with a handler it will emulate
+  a keypress. This enable tools with interactive actions to be searchable."
   [id]
-  (if-let [action (action-handler id)]
-    (do (action)
-        (after-action!)
-        true)
-    false))
+  (let [action (action-handler id)]
+    (if action
+      (action)
+      (eval-hotkey! (hotkey id)))
+    (after-action!)))
 
 (defn active?
   "Is the current action active based on the pressed key?
@@ -95,16 +102,22 @@
        (sort-by :display)))
 
 (defn search-actions [query]
-  (->> (seq (config))
-       (filter (fn [[_ config]] (str/includes?
-                                 (str/lower-case (:display config))
-                                 (-> query
-                                     str/trim
-                                     str/lower-case))))
-       (filter (fn [[_ config]] (and
-                                 (:searchable config)
-                                 (c/valid? (:when config)))))
-       (map (fn [[id config]] {:display (:display config) :id id}))))
+  (let [suggested-ids (suggestions)]
+    (->> (seq (config))
+         (filter (fn [[_ config]] (str/includes?
+                                   (str/lower-case (:display config))
+                                   (-> query
+                                       str/trim
+                                       str/lower-case))))
+         (filter (fn [[id config]]
+                   ;; Has a handler and is valid OR is currently suggested.
+                   ;; Suggested actions include hotkeys that tools may be
+                   ;; listening for (but that don't have handlers).
+                   (or (and
+                        (action-handler id)
+                        (c/valid? (:when config)))
+                       (contains? suggested-ids id))))
+         (map (fn [[id config]] {:display (:display config) :id id})))))
 
 (defn init! [state]
   (reset! *db (merge initial-state state)))
