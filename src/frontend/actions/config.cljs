@@ -113,6 +113,10 @@
     :display "Rotate"
     :when [:num-selected-gt 0]}
 
+   :reset-zoom
+   {:display "Reset zoom"
+    :searchable true}
+
    :save
    {:display "Save"
     :searchable true}

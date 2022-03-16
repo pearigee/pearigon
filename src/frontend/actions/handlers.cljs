@@ -31,6 +31,7 @@
    :styles-panel styles-panel
    :undo state/undo!
    :redo state/redo!
+   :reset-zoom viewport/reset-zoom!
    :new-project new-project
    :save save
    :search viewport/toggle-search-showing!

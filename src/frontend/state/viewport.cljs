@@ -69,6 +69,9 @@
 (defn zoom! [delta]
   (swap! *db assoc :zoom (+ (:zoom @*db) (/ delta 100))))
 
+(defn reset-zoom! []
+  (swap! *db assoc :zoom 1))
+
 (defn toggle-search-showing! []
   (swap! *db assoc :search-showing (not (search-showing?))))
 
