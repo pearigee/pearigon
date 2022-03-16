@@ -18,6 +18,7 @@
 
 (def action->handler
   {:add add
+   :code viewport/toggle-code-showing!
    :scale scale
    :grab grab
    :rotate rotate

@@ -25,4 +25,10 @@
     {:on-click #(actions/execute! :styles-panel)
      :class (when (= (viewport/panel) :styles) "active")
      :data-tooltip (actions/display :styles-panel)}
-    [:span.icon.material-icons "palette"]]])
+    [:span.icon.material-icons "palette"]]
+   [:div.seperator]
+   [:button.button.is-info.has-tooltip-left
+    {:on-click #(actions/execute! :code)
+     :class (when (viewport/code-showing?) "active")
+     :data-tooltip (actions/display :code)}
+    [:span.icon.material-icons "code"]]])

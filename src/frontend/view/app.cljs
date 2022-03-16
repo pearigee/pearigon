@@ -8,7 +8,8 @@
    [frontend.view.key-suggestion :refer [key-suggestion]]
    [frontend.view.sidebar :refer [sidebar]]
    [frontend.view.search :refer [search-overlay]]
-   [frontend.view.toolbar :refer [toolbar]]))
+   [frontend.view.toolbar :refer [toolbar]]
+   [frontend.view.code-editor :refer [code-editor]]))
 
 (defn app []
   (let [shapes (state/get-shapes-with-override)
@@ -26,7 +27,10 @@
          (when (satisfies? ToolRenderSVG t)
            ^{:key (:action t)} [tool-render-svg t]))]]
      [:div.overlay
-      [key-suggestion]
+      [:div.overlay-center-pane
+       [key-suggestion]
+       (when (viewport/code-showing?)
+         [code-editor])]
       [sidebar]
       [toolbar]]
      (when (viewport/search-showing?)

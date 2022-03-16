@@ -6,7 +6,8 @@
 (def ^:private initial-state {:pos [0 0]
                               :dim [0 0]
                               :zoom 1
-                              :search-showing? false
+                              :search-showing false
+                              :code-showing false
                               :panel nil})
 
 (def *db (r/atom initial-state))
@@ -24,7 +25,10 @@
   (:panel @*db))
 
 (defn search-showing? []
-  (:search-showing? @*db))
+  (:search-showing @*db))
+
+(defn code-showing? []
+  (:code-showing @*db))
 
 (defn pos-with-zoom []
   (let [[vx vy] (pos)
@@ -66,7 +70,10 @@
   (swap! *db assoc :zoom (+ (:zoom @*db) (/ delta 100))))
 
 (defn toggle-search-showing! []
-  (swap! *db assoc :search-showing? (not (search-showing?))))
+  (swap! *db assoc :search-showing (not (search-showing?))))
+
+(defn toggle-code-showing! []
+  (swap! *db assoc :code-showing (not (code-showing?))))
 
 (defn init! [state]
   (reset! *db (merge initial-state state)))

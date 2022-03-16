@@ -15,6 +15,11 @@
    {:key {:code "KeyR" :display "r"}
     :display "Add Rectangle"}
 
+   :code
+   {:key {:code "KeyC" :alt true :display "c"}
+    :display "Code"
+    :searchable true}
+
    :delete
    {:key {:code "KeyX" :display "x"}
     :display "Delete"

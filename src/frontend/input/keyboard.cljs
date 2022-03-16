@@ -49,8 +49,9 @@
   (js/document.addEventListener
    "keydown"
    (fn [event]
-      ;; Don't capture input events from text inputs.
-     (when (not= (.-tagName js/document.activeElement) "INPUT")
+      ;; Don't capture input events from inputs or the code editor.
+     (when (and (not= (.-tagName js/document.activeElement) "INPUT")
+                (nil? (-> event .-target .-cmView)))
         ;; Prevent Tab from leaving the page.
        (.preventDefault event)
        (let [{:keys [code] :as key} (keyboard-event->key event)]

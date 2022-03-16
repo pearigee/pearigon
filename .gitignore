@@ -13,7 +13,7 @@ pom.xml.asc
 /.nrepl-port
 /resources/public/js
 /public/js
-/public/css
+/public/css/styles.css
 /out
 /.repl
 *.log

@@ -5,6 +5,10 @@
         nrepl/nrepl {:mvn/version "0.9.0"}
         cider/cider-nrepl {:mvn/version "0.28.3"}
         org.babashka/sci {:mvn/version "0.3.2"}
-        reagent/reagent {:mvn/version "1.1.1"}}
+        reagent/reagent {:mvn/version "1.1.1"}
+        applied-science/js-interop {:mvn/version "0.3.3"}
+        nextjournal.clojure-mode/nextjournal.clojure-mode
+        {:git/url "https://github.com/nextjournal/clojure-mode"
+         :sha "699a445ebf2767f41fd0b6eeed5a008511702be6"}}
  :aliases {:shadow-cljs
            {:main-opts ["-m" "shadow.cljs.devtools.cli"]}}}

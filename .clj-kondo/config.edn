@@ -3,5 +3,5 @@
            com.rpl.specter/defmacroalias clojure.core/def
            com.rpl.specter/defnav clojure.core/defn
            com.rpl.specter/defrichnav clojure.core/defn
-
+           applied-science.js-interop/defn clojure.core/defn
            reagent.core/with-let clojure.core/let}}
