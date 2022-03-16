@@ -33,6 +33,10 @@ The live execution is powered by @borkdude's amazing project [Sci](https://githu
 The editor itself is CodeMirror with [Clojure Mode](https://github.com/nextjournal/clojure-mode)
 by the lovely folks at NextJournal.
 
+### SVG Export
+
+Export your project as an SVG so it can be used in all your favorite tools!
+
 ## Local Development
 
 You will need to have the following installed:
