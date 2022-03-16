@@ -1,7 +1,7 @@
 # Pearigon
 > Minimal UI. Hotkey Driven. Hackable.
 
-** This project is work in progress! Expect a bit of turbulence! **
+**This project is a work in progress! Expect a bit of turbulence!**
 
 ## Features
 
