@@ -1,8 +1,9 @@
 (ns frontend.tools.new-project
-  (:require [frontend.tools.protocol :refer [OnKeypress]]
-            [frontend.state.actions :as actions]
-            [frontend.state.tools :as tools]
-            [frontend.utils.local-storage :as ls]))
+  (:require
+   [frontend.state.actions :as actions]
+   [frontend.state.tools :as tools]
+   [frontend.tools.protocol :refer [OnKeypress]]
+   [frontend.utils.local-storage :as ls]))
 
 (defn clear-and-reload []
   (ls/set-item! ls/active-project-key {})

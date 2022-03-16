@@ -2,8 +2,8 @@
   (:require
    [frontend.math :as m]
    [frontend.shapes.protocol :refer [RenderSVG Transform]]
-   [frontend.utils.styles :as styles]
-   [frontend.utils.ids :as ids]))
+   [frontend.utils.ids :as ids]
+   [frontend.utils.styles :as styles]))
 
 (defrecord Point [id pos type r]
 

@@ -1,14 +1,13 @@
 (ns frontend.core
   (:require
+   [api.core] ;; Require to expose in dev tools.
    [frontend.input.keyboard :as keyboard]
    [frontend.input.mouse :as mouse]
    [frontend.input.resize :as resize]
    [frontend.state.init :refer [init-state!]]
    [frontend.state.viewport :as viewport]
    [frontend.view.app :refer [app]]
-   [reagent.dom :as d]
-   ;; Require to expose in dev tools.
-   [api.core]))
+   [reagent.dom :as d]))
 
 (defn mount-root
   []

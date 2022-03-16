@@ -1,9 +1,8 @@
 (ns frontend.view.search
   (:require
-   [reagent.core :as r]
+   [frontend.state.actions :as actions]
    [frontend.state.viewport :as viewport]
-   [frontend.input.keyboard :as keyboard]
-   [frontend.state.actions :as actions]))
+   [reagent.core :as r]))
 
 (def max-result-size 15)
 

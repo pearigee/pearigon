@@ -5,11 +5,11 @@
    [frontend.state.tools :as tools]
    [frontend.state.viewport :as viewport]
    [frontend.tools.protocol :refer [tool-render-svg ToolRenderSVG]]
+   [frontend.view.code-editor :refer [code-editor]]
    [frontend.view.key-suggestion :refer [key-suggestion]]
-   [frontend.view.sidebar :refer [sidebar]]
    [frontend.view.search :refer [search-overlay]]
-   [frontend.view.toolbar :refer [toolbar]]
-   [frontend.view.code-editor :refer [code-editor]]))
+   [frontend.view.sidebar :refer [sidebar]]
+   [frontend.view.toolbar :refer [toolbar]]))
 
 (defn app []
   (let [shapes (state/get-shapes-with-override)

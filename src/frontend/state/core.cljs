@@ -9,9 +9,9 @@
    [com.rpl.specter :as sp :include-macros true]
    [frontend.shapes.protocol :refer [on-select OnSelect]]
    [frontend.state.undo :as undo]
+   [frontend.utils.ids :as ids]
    [frontend.utils.layers :as layers]
    [frontend.utils.styles :as styles]
-   [frontend.utils.ids :as ids]
    [reagent.core :as r]))
 
 (def initial-state

@@ -1,8 +1,8 @@
 (ns frontend.utils.local-storage
   (:require
-   [frontend.utils.edn :as edn]
    [clojure.core.async :refer [<! >! chan go go-loop]]
-   [frontend.utils.async :refer [debounce]]))
+   [frontend.utils.async :refer [debounce]]
+   [frontend.utils.edn :as edn]))
 
 (def active-project-key :active-project)
 (def viewport-key :viewport)

@@ -1,5 +1,6 @@
 (ns api.shapes
-  (:require [frontend.shapes.path.path :as path]))
+  (:require
+   [frontend.shapes.path.path :as path]))
 
 (defn circle [pos r]
   (path/circle pos r))

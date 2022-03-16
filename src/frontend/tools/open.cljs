@@ -1,7 +1,7 @@
 (ns frontend.tools.open
   (:require
-   [frontend.utils.edn :as edn]
    [frontend.state.core :as state]
+   [frontend.utils.edn :as edn]
    [frontend.utils.file-system :as fs]))
 
 (defn open []

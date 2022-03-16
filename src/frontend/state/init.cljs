@@ -1,12 +1,13 @@
 (ns frontend.state.init
-  (:require [frontend.state.core :as state]
-            [frontend.state.undo :as undo]
-            [frontend.state.actions :as actions]
-            [frontend.state.viewport :as viewport]
-            [frontend.input.keyboard :as hotkeys]
-            [frontend.actions.config :as action-config]
-            [frontend.actions.handlers :as action-handlers]
-            [frontend.utils.local-storage :as ls]))
+  (:require
+   [frontend.actions.config :as action-config]
+   [frontend.actions.handlers :as action-handlers]
+   [frontend.input.keyboard :as hotkeys]
+   [frontend.state.actions :as actions]
+   [frontend.state.core :as state]
+   [frontend.state.undo :as undo]
+   [frontend.state.viewport :as viewport]
+   [frontend.utils.local-storage :as ls]))
 
 (defn init-state!
   "Initialize application state.

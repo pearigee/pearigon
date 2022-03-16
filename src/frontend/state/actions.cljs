@@ -1,7 +1,7 @@
 (ns frontend.state.actions
   (:require
-   [frontend.actions.conditions :as c]
    [clojure.string :as str]
+   [frontend.actions.conditions :as c]
    [reagent.core :as r]))
 
 (def initial-state {:suggestions #{}

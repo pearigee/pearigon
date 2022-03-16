@@ -2,11 +2,11 @@
   (:require
    [frontend.math :as m]
    [frontend.shapes.protocol :as shape]
+   [frontend.state.actions :as actions]
    [frontend.state.core :as state]
    [frontend.state.mouse :as mouse]
    [frontend.state.tools :as tools]
-   [frontend.state.actions :as actions]
-   [frontend.tools.protocol :refer [OnClick OnMouseMove OnKeypress]]))
+   [frontend.tools.protocol :refer [OnClick OnKeypress OnMouseMove]]))
 
 (defn- compute-transform [pos init-mouse-pos axis]
   (let [[x y] (m/v- pos init-mouse-pos)]

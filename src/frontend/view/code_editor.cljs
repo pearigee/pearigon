@@ -1,16 +1,16 @@
 (ns frontend.view.code-editor
-  (:require ["@codemirror/fold" :as fold]
-            ["@codemirror/highlight" :as highlight]
-            ["@codemirror/history" :refer [history historyKeymap]]
-            ["@codemirror/state" :refer [EditorState]]
-            ["@codemirror/view" :as view :refer [EditorView]]
-
-            [applied-science.js-interop :as j]
-            [nextjournal.clojure-mode :as cm-clj]
-            [api.core :as api]
-            [nextjournal.clojure-mode.extensions.eval-region :as eval-region]
-            [nextjournal.clojure-mode.test-utils :as test-utils]
-            [reagent.core :as r]))
+  (:require
+   ["@codemirror/fold" :as fold]
+   ["@codemirror/highlight" :as highlight]
+   ["@codemirror/history" :refer [history historyKeymap]]
+   ["@codemirror/state" :refer [EditorState]]
+   ["@codemirror/view" :as view :refer [EditorView]]
+   [api.core :as api]
+   [applied-science.js-interop :as j]
+   [nextjournal.clojure-mode :as cm-clj]
+   [nextjournal.clojure-mode.extensions.eval-region :as eval-region]
+   [nextjournal.clojure-mode.test-utils :as test-utils]
+   [reagent.core :as r]))
 
 (defn eval-string [source]
   (try (api/eval-string source)

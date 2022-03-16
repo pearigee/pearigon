@@ -1,7 +1,8 @@
 (ns api.core
-  (:require [sci.core :as sci]
-            [api.state :as state]
-            [api.shapes :as shapes]))
+  (:require
+   [api.shapes :as shapes]
+   [api.state :as state]
+   [sci.core :as sci]))
 
 (def opts
   {:namespaces
