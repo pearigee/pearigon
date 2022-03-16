@@ -116,11 +116,11 @@
     :display "Scale"
     :when [:num-selected-gt 0]}
 
-   :scale.x-axis
+   :lock-x-axis
    {:key {:code "KeyX" :display "x"}
     :display "Lock to X axis"}
 
-   :scale.y-axis
+   :lock-y-axis
    {:key {:code "KeyY" :display "y"}
     :display "Lock to Y axis"}
 

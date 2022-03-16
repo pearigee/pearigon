@@ -55,10 +55,9 @@
   OnKeypress
   (on-keypress [t k]
     (let [axis (cond
-                 (actions/active? :scale.x-axis k) :x
-                 (actions/active? :scale.y-axis k) :y
+                 (actions/active? :lock-x-axis k) :x
+                 (actions/active? :lock-y-axis k) :y
                  :else nil)]
-      (js/console.log "Setting scale axis:" axis k)
       (when axis
         (tools/update-tool! (merge t {:axis axis}))))))
 
