@@ -3,6 +3,8 @@
 
 **This project is a work in progress! Expect a bit of turbulence!**
 
+![Screenshot](docs/images/screenshot.png)
+
 ## Features
 
 ### Hotkey suggestions
