@@ -1,13 +1,15 @@
 (ns pearigon.api.core
   (:require
    [pearigon.api.shapes :as shapes]
-   [pearigon.api.canvas :as state]
+   [pearigon.api.canvas :as canvas]
    [sci.core :as sci]))
 
 (def opts
   {:namespaces
-   {'clojure.core (merge state/ns-map
-                         shapes/ns-map)}})
+   {'clojure.core (merge canvas/ns-map
+                         shapes/ns-map)
+    'pearigon.api.canvas canvas/ns-map
+    'pearigon.api.shapes shapes/ns-map}})
 
 (defonce ctx (sci/init opts))
 
