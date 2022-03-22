@@ -5,7 +5,7 @@
    ["@codemirror/history" :refer [history historyKeymap]]
    ["@codemirror/state" :refer [EditorState]]
    ["@codemirror/view" :as view :refer [EditorView]]
-   [api.core :as api]
+   [pearigon.api.core :as api]
    [applied-science.js-interop :as j]
    [nextjournal.clojure-mode :as cm-clj]
    [nextjournal.clojure-mode.extensions.eval-region :as eval-region]

@@ -1,7 +1,7 @@
-(ns api.core
+(ns pearigon.api.core
   (:require
-   [api.shapes :as shapes]
-   [api.state :as state]
+   [pearigon.api.shapes :as shapes]
+   [pearigon.api.state :as state]
    [sci.core :as sci]))
 
 (def opts

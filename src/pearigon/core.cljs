@@ -1,6 +1,6 @@
 (ns pearigon.core
   (:require
-   [api.core] ;; Require to expose in dev tools.
+   [pearigon.api.core] ;; Require to expose in dev tools.
    [pearigon.input.keyboard :as keyboard]
    [pearigon.input.mouse :as mouse]
    [pearigon.input.resize :as resize]

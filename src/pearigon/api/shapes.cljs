@@ -1,4 +1,4 @@
-(ns api.shapes
+(ns pearigon.api.shapes
   (:require
    [pearigon.shapes.path.path :as path]))
 
