@@ -1,6 +1,6 @@
 (ns api.state
   (:require
-   [frontend.state.core :as state]))
+   [pearigon.state.core :as state]))
 
 (defn add-shape!
   ([shape] (state/add-shape! shape))

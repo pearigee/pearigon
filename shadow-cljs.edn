@@ -2,10 +2,10 @@
  :builds {:app {:target     :browser
                 :output-dir "public/js"
                 :asset-path "/js"
-                :modules    {:app {:entries [frontend.core]}}
+                :modules    {:app {:entries [pearigon.core]}}
                 :devtools   {:http-port 3000
                              :http-root "public"
-                             :after-load frontend.core/mount-root}}
+                             :after-load pearigon.core/mount-root}}
           :node-test {:target :node-test
                       :output-to "out/node/node_tests.js"}
           :browser-test {:target :browser-test
