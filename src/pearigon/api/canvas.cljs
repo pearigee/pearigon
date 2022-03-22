@@ -1,4 +1,4 @@
-(ns pearigon.api.state
+(ns pearigon.api.canvas
   (:require
    [pearigon.state.core :as state]))
 
