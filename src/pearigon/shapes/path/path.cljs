@@ -15,8 +15,8 @@
 
   OnSelect
   (on-select [_]
-    (state/map-shape-ids! (into #{} (map :id points))
-                          #(assoc % :selected true)))
+    (doseq [id (into #{} (map :id points))]
+      (state/select-id! id)))
 
   RenderSVG
   (render-svg [shape]
@@ -25,7 +25,9 @@
             ps (state/get-shapes-by-id-with-override (map :id points))]
         [:g
          [:path (merge {:id id
-                        :class (styles/apply-selected-style shape "")
+                        :class (styles/apply-selected-style
+                                (state/selected? id)
+                                "")
                         :d (points->svg ps closed?)}
                        styles)]]))))
 

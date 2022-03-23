@@ -12,6 +12,7 @@
    [pearigon.utils.ids :as ids]
    [pearigon.utils.layers :as layers]
    [pearigon.utils.styles :as styles]
+   [medley.core :refer [find-first]]
    [reagent.core :as r]))
 
 (def initial-state
@@ -19,19 +20,21 @@
    ;; When a shape ID is present in this map, it is rendered
    ;; in place of the original. This is intended for tool previews.
    :shape-preview-override {}
+   :selected #{}
    :draw-order []
    :default-styles styles/default-styles})
 
 (def *db (r/atom initial-state))
 
 (defn get-shape [id]
-  ;; Order matters in the multi-path below. The nested structure should
-  ;; be searched first.
-  (sp/select-first [:shapes
-                    (sp/multi-path
-                     [sp/MAP-VALS :points sp/ALL #(= id (:id %))]
-                     [id])]
-                   @*db))
+  (let [path (str/split id #":")]
+   (case (count path)
+     1 (get (:shapes @*db) (first path))
+     2 (as-> @*db v
+         (:shapes v)
+         (get v (first path))
+         (:points v)
+         (find-first #(= (:id %) id) v)))))
 
 (defn get-draw-order []
   (:draw-order @*db))
@@ -52,10 +55,7 @@
            (get-shape %)) ids))
 
 (defn get-selected []
-  (sp/select [:shapes
-              sp/MAP-VALS
-              (sp/multi-path [#(:selected %)]
-                             [:points sp/ALL #(:selected %)])] @*db))
+  (map #(get-shape %) (:selected @*db)))
 
 (defn selected-paths []
   (filter :points (get-selected)))
@@ -64,7 +64,7 @@
   (:default-styles @*db))
 
 (defn selected? [id]
-  (:selected (get-shape id)))
+  (contains? (:selected @*db) id))
 
 (defn save-state
   "Returns the data that should be persisted in project files and undo/redo."
@@ -96,7 +96,7 @@
                     %1)))
 
 (defn map-selected-shapes! [f]
-  (map-shapes! #(if (:selected %) (f %) %)))
+  (map-shapes! #(if (selected? (:id %)) (f %) %)))
 
 (defn map-shape-ids! [id-set f]
   (map-shapes! #(if (contains? id-set (:id %)) (f %) %)))
@@ -141,15 +141,17 @@
   (set-shape! sid (merge (get-shape sid) partial-shape)))
 
 (defn deselect-all! []
-  (map-shapes! #(assoc % :selected false)))
+  (undoable-swap! *db assoc :selected #{}))
 
 (defn default-styles! [styles]
   (undoable-swap! *db assoc :default-styles styles))
 
 (defn select-id!
-  ([id selected?]
+  ([id selected]
    (when-let [shape (get-shape id)]
-     (set-shape! id (merge shape {:selected selected?}))
+     (if selected
+       (undoable-swap! *db assoc :selected (conj (:selected @*db) id))
+       (undoable-swap! *db assoc :selected (disj (:selected @*db) id)))
      (when (satisfies? OnSelect shape) (on-select shape))))
   ([id] (select-id! id true)))
 
@@ -174,11 +176,12 @@
   (set-draw-order! (layers/move-down (get-draw-order) id)))
 
 (defn- shape-with-new-ids [shape]
-  (let [points (:points shape)
+  (let [id (ids/shape-id)
+        points (:points shape)
         points-with-id (when points
-                         (map #(assoc % :id (ids/shape-id)) points))]
+                         (map #(assoc % :id (ids/point-id id)) points))]
     (merge shape
-           {:id (ids/shape-id)}
+           {:id id}
            (when points-with-id {:points points-with-id}))))
 
 (defn add-shape!

@@ -1,8 +1,8 @@
 (ns pearigon.utils.styles)
 
 (defn apply-selected-style
-  [shape class]
-  (if (:selected shape)
+  [selected class]
+  (if selected
     (str class " selected")
     class))
 

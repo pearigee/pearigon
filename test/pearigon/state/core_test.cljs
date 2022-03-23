@@ -32,7 +32,7 @@
                1)))
 
       (testing "selects shape by default"
-        (is (= (:selected (state/get-shape sid))
+        (is (= (state/selected? sid)
                true)))
 
       (testing "appends the shape to the draw-order"
@@ -41,7 +41,7 @@
 
     (let [{sid :id} (state/add-shape! shape :selected? false)]
       (testing "doesn't select shape when disabled by config"
-        (is (contains? #{nil false} (:selected (state/get-shape sid))))))))
+        (is (contains? #{nil false} (state/selected? (state/get-shape sid))))))))
 
 (deftest test-map-shape-ids!
   (let [shape (p/rectangle [0 0] 10)

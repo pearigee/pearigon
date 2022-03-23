@@ -23,14 +23,14 @@
    id
    {:points (sp/setval (sp/before-index index) point points)}))
 
-(defn add-point-at-pos [{:keys [points] :as shape}
+(defn add-point-at-pos [{:keys [points id] :as shape}
                         pos
                         type
                         & {:keys [index selected? deselect-all?]
                            :or {index (count points)
                                 selected? false
                                 deselect-all? false}}]
-  (let [np (point pos type)]
+  (let [np (point pos type id)]
     (add-point shape np :index index)
     (when deselect-all? (state/deselect-all!))
     (when selected? (state/select-id! (:id np)))))
