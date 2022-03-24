@@ -190,7 +190,7 @@
                  draw-order? true
                  default-styles? true}}]
   (let [{:keys [id] :as shape} (shape-with-new-ids shape)]
-    (undoable-swap! *db update-in [:shapes] assoc id
+    (undoable-swap! *db assoc-in [:shapes id]
                     (merge shape
                            (when default-styles?
                              {:styles (default-styles)})))
