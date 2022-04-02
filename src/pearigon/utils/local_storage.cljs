@@ -1,6 +1,6 @@
 (ns pearigon.utils.local-storage
   (:require
-   [clojure.core.async :refer [<! >! chan go go-loop]]
+   [clojure.core.async :refer [<! >! chan go go-loop sliding-buffer]]
    [pearigon.utils.async :refer [debounce]]
    [pearigon.utils.edn :as edn]))
 
@@ -14,7 +14,7 @@
   (edn/read-string (js/localStorage.getItem (prn-str key))))
 
 (defn debounced-sync! [a key interval]
-  (let [input (chan)
+  (let [input (chan (sliding-buffer 1))
         output (debounce input interval)]
     (go-loop [val (<! output)]
       (set-item! key val)

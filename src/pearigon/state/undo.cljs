@@ -1,6 +1,6 @@
 (ns pearigon.state.undo
   (:require
-   [clojure.core.async :refer [<! >! chan go go-loop]]
+   [clojure.core.async :refer [<! >! chan go go-loop sliding-buffer]]
    [pearigon.utils.async :refer [debounce]]
    [reagent.core :as r]))
 
@@ -50,7 +50,7 @@
 (defn init! [& {:keys [debounce? debounce-ms]
                 :or {debounce? true
                      debounce-ms 250}}]
-  (let [undo-chan (chan)
+  (let [undo-chan (chan (sliding-buffer 1))
         initial-state {:undo []
                        :redo []
                        :undo-chan undo-chan}]
