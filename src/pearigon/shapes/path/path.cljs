@@ -7,7 +7,7 @@
    [pearigon.state.core :as state]
    [pearigon.utils.styles :as styles]))
 
-(defrecord Path [id mat-id points closed?]
+(defrecord Path [id points closed?]
 
   Transform
   (transform [shape _]
@@ -32,8 +32,8 @@
                        styles)]]))))
 
 (defn path
-  ([] (->Path "" :default [] true))
-  ([points] (->Path "" :default points true)))
+  ([] (->Path "" [] true))
+  ([points] (->Path "" points true)))
 
 (defn circle [pos size]
   (path
