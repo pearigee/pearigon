@@ -26,12 +26,15 @@
 
 (def *db (r/atom initial-state))
 
+(defn get-shapes []
+  (:shapes @*db))
+
 (defn get-shape [id]
   (let [path (str/split id #":")]
    (case (count path)
-     1 (get (:shapes @*db) (first path))
+     1 (get (get-shapes) (first path))
      2 (as-> @*db v
-         (:shapes v)
+         (get-shapes)
          (get v (first path))
          (:points v)
          (find-first #(= (:id %) id) v)))))

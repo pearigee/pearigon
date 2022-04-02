@@ -5,9 +5,9 @@
 (defn circle [pos r]
   (path/circle pos r))
 
-(defn square [pos size]
+(defn rectangle [pos size]
   (path/rectangle pos size))
 
 (def ns-map
   {'circle circle
-   'square square})
+   'rectangle rectangle})
