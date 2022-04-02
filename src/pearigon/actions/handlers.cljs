@@ -3,6 +3,7 @@
    [pearigon.state.core :as state]
    [pearigon.state.viewport :as viewport]
    [pearigon.tools.add :refer [add]]
+   [pearigon.tools.append-to-project :refer [append-to-project]]
    [pearigon.tools.delete :refer [delete]]
    [pearigon.tools.draw-order :refer [move-down move-up]]
    [pearigon.tools.duplicate :refer [duplicate]]
@@ -18,6 +19,7 @@
 
 (def action->handler
   {:add add
+   :append-to-project append-to-project
    :code viewport/toggle-code-showing!
    :scale scale
    :grab grab

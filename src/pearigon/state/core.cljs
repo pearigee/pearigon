@@ -192,14 +192,15 @@
             :or {selected? true
                  draw-order? true
                  default-styles? true}}]
-  (let [{:keys [id] :as shape} (shape-with-new-ids shape)]
+  (let [{:keys [id] :as shape} (shape-with-new-ids shape)
+        shape-with-styles (merge shape
+                                 (when default-styles?
+                                   {:styles (default-styles)}))]
     (undoable-swap! *db assoc-in [:shapes id]
-                    (merge shape
-                           (when default-styles?
-                             {:styles (default-styles)})))
+                    shape-with-styles)
     (when selected? (select-id! id))
     (when draw-order? (conj-draw-order id))
-    shape))
+    shape-with-styles))
 
 (defn init! [state]
   (reset! *db (merge initial-state state)))

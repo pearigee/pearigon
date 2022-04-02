@@ -3,18 +3,25 @@
    [pearigon.state.core :as state]))
 
 (defn add-shape!
-  ([shape] (state/add-shape! shape))
-  ([shape {:keys [selected default-styles]
-           :or {selected true default-styles true}}]
+  ([shape] (add-shape! shape {}))
+  ([shape {:keys [selected]
+           :or {selected true}}]
    (state/add-shape! shape
                      :selected? selected
-                     :default-styles? default-styles)))
+                     ;; Only apply defaults if no existing styles are defined.
+                     :default-styles? (nil? (:styles shape)))))
 
 (defn selected? [sid]
   (state/selected? sid))
 
 (defn draw-order []
   (state/get-draw-order))
+
+(defn default-styles []
+  (state/default-styles))
+
+(defn default-styles! [styles]
+  (state/default-styles! styles))
 
 (defn shapes
   ([] (shapes {}))
@@ -27,4 +34,6 @@
   {'add-shape! add-shape!
    'selected? selected?
    'draw-order draw-order
+   'default-styles default-styles
+   'default-styles! default-styles!
    'shapes shapes})

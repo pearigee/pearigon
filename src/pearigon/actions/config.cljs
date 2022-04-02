@@ -14,6 +14,9 @@
    {:key {:code "KeyR" :display "r"}
     :display "Add Rectangle"}
 
+   :append-to-project
+   {:display "Append to project"}
+
    :code
    {:key {:code "KeyC" :alt true :display "c"}
     :display "Code"}
